@@ -51,6 +51,9 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
           <p>
             <PhoneLink />
           </p>
+          <p>
+            <MessengerLink kind="viber">Viber</MessengerLink> · <MessengerLink kind="telegram">Telegram</MessengerLink>
+          </p>
         </div>
         <nav aria-label={d.footerInfo}>
           <strong>{d.footerInfo}</strong>

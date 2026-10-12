@@ -54,7 +54,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .btn {
   display: inline-block; padding: 12px 20px; border-radius: var(--radius);
   background: var(--accent); color: var(--accent-fg); text-decoration: none;
-  font-weight: 600; border: 2px solid var(--accent);
+  font-weight: 600; border: 2px solid var(--accent); text-align: center;
 }
 .btn-outline { background: transparent; color: var(--accent); }
 .btn-small { padding: 6px 12px; }
@@ -133,9 +133,14 @@ select {
   display: flex; flex-direction: column; justify-content: center; gap: 8px;
   padding: 24px; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--border);
 }
+/* Call button on its own row, messengers split the row below */
+.calc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.calc-actions .btn { flex: 1; }
+.calc-actions .btn:first-child { flex-basis: 100%; }
 .total-value { font-size: 2rem; color: var(--accent); animation: pop 0.25s ease-out; }
 @keyframes pop { from { transform: scale(0.94); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
 .muted { color: var(--muted); }
+.nowrap { white-space: nowrap; }
 .small { font-size: 0.85rem; }
 
 /* Shipping steps */
