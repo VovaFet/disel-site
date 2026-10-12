@@ -24,16 +24,27 @@ export function MouseBackground() {
       el.style.setProperty("--my", `${pos.y}px`);
       frame = Math.abs(target.x - pos.x) + Math.abs(target.y - pos.y) > 0.5 ? requestAnimationFrame(tick) : 0;
     };
-    const onMove = (e: PointerEvent) => {
-      target.x = e.clientX;
-      target.y = e.clientY;
+    const moveTo = (x: number, y: number) => {
+      target.x = x;
+      target.y = y;
       el.classList.add("is-active");
       if (!frame) frame = requestAnimationFrame(tick);
     };
+    const onPointer = (e: PointerEvent) => moveTo(e.clientX, e.clientY);
+    // while a finger scrolls the page the browser stops sending pointer events,
+    // so follow touches separately
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) moveTo(t.clientX, t.clientY);
+    };
 
-    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointermove", onPointer, { passive: true });
+    window.addEventListener("touchstart", onTouch, { passive: true });
+    window.addEventListener("touchmove", onTouch, { passive: true });
     return () => {
-      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointermove", onPointer);
+      window.removeEventListener("touchstart", onTouch);
+      window.removeEventListener("touchmove", onTouch);
       cancelAnimationFrame(frame);
     };
   }, []);
