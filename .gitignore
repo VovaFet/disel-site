@@ -42,3 +42,6 @@ next-env.d.ts
 
 # keep the example env file (no secrets)
 !.env.example
+
+# local Claude preview config
+.claude/
