@@ -1,4 +1,4 @@
-# DieselMedic — website
+# Diesel Service — website
 
 Static Next.js site (`output: "export"`) in Ukrainian (`/`), Russian (`/ru/`) and English (`/en/`).
 

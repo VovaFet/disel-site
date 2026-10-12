@@ -18,7 +18,7 @@ export const defaultConfig: SiteConfig = {
     { days: [6], from: "09:00", to: "14:00" },
   ],
   texts: {
-    name: { uk: "DieselMedic", ru: "DieselMedic", en: "DieselMedic" },
+    name: { uk: "Дизель Сервіс", ru: "Дизель Сервис", en: "Diesel Service" },
     city: { uk: "Одеса", ru: "Одесса", en: "Odesa" },
     cityIn: { uk: "в Одесі", ru: "в Одессе", en: "in Odesa" },
     street: { uk: "вул. Прикладна, 1", ru: "ул. Примерная, 1", en: "1 Prykladna St" },
