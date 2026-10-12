@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import { JsonLd } from "@/components/JsonLd";
 import { LiveConfigProvider } from "@/components/LiveConfig";
+import { MouseBackground } from "@/components/MouseBackground";
 import { SiteFooter, SiteHeader } from "@/components/SiteHeader";
 import { getConfig, sheetId } from "@/config";
 import { toLive, type Locale } from "@/config/types";
@@ -40,6 +41,7 @@ export async function RootShell({ lang, children }: { lang: Locale; children: Re
   return (
     <html lang={lang} className={inter.className}>
       <body>
+        <MouseBackground />
         <JsonLd data={businessSchema(config, lang)} />
         <LiveConfigProvider initial={toLive(config)} lang={lang} sheetId={sheetId}>
           <SiteHeader lang={lang} config={config} />
