@@ -1,0 +1,11 @@
+// Cloudflare Workers static assets deploy: the site is a pure static export (next build -> out/),
+// so no OpenNext/server runtime is needed.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "disel-site",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
