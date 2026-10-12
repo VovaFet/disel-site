@@ -1,0 +1,11 @@
+#!/bin/sh
+# Blocks direct pushes to main: work in dev and merge via a pull request on GitHub.
+# GitHub can't enforce branch rules on this private repo (free plan), so this is the local guard.
+# Enable once per clone:  git config core.hooksPath .githooks
+while read local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "Push to main is blocked. Push to dev and open a pull request instead." >&2
+    exit 1
+  fi
+done
+exit 0
