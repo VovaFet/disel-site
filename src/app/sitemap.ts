@@ -7,7 +7,17 @@ export const dynamic = "force-static";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const c = await getConfig();
-  const paths = ["/", "/poslugy/", "/kontakty/", "/dostavka/", "/pro-nas/", ...c.services.map((s) => `/poslugy/${s.slug}/`)];
+  const paths = [
+    "/",
+    "/poslugy/",
+    "/kontakty/",
+    "/dostavka/",
+    "/pro-nas/",
+    ...c.services.map((s) => `/poslugy/${s.slug}/`),
+    // Brand/series and vehicle sections only once they have pages
+    ...new Set(c.landings.map((l) => `/${l.section}/`)),
+    ...c.landings.map((l) => `/${l.section}/${l.slug}/`),
+  ];
   const abs = (lang: (typeof locales)[number], path: string) => `${c.url}${localePath(lang, path)}`;
   // One entry per language version, each listing all its hreflang alternates
   return paths.flatMap((path) =>
