@@ -502,4 +502,7 @@ export const defaultConfig: SiteConfig = {
 
   // Filled from the sheet only: these blocks stay hidden until there is real data
   trust: { brands: [], heroImage: "", protocolImage: "", stats: [], reviews: [] },
+
+  // Brand/series and vehicle pages come from the sheet only (tabs series, vehicles)
+  landings: [],
 };

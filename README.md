@@ -4,7 +4,8 @@ Static Next.js site (`output: "export"`) in Ukrainian (`/`), Russian (`/ru/`) an
 
 ## Content: Google Sheet
 
-All business data lives in a Google Sheet (tabs `settings`, `texts`, `schedule`, `services`, `faq`, `addons`, `pages`, and the optional `stats`, `reviews`;
+All business data lives in a Google Sheet (tabs `settings`, `texts`, `schedule`, `services`, `faq`, `addons`, `pages`, and the optional `stats`, `reviews`,
+`series` (pages under `/marky/`), `vehicles` (pages under `/avto/`);
 the column format is described at the top of `src/config/sheet.ts`).
 
 - **Build time**: the whole sheet is read and baked into the HTML (what search engines index).

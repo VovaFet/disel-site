@@ -35,6 +35,25 @@ export type InfoPage = { slug: InfoPageSlug; title: L10n; description: L10n; bod
 
 export type Addon = { id: string; price: number; label: L10n };
 
+// Search landing pages (content plan stages 2 and 3): /marky/ for brands and series
+// (Bosch CP3, VP44, Denso...), /avto/ for vehicles and engines (Sprinter 2.2 CDI...).
+// Same fields as services, plus the services they belong to (the first one gives the price
+// and the calculator default) and an optional quantity, e.g. 6 injectors on that engine.
+export const landingSections = ["marky", "avto"] as const;
+export type LandingSection = (typeof landingSections)[number];
+export type Landing = {
+  section: LandingSection;
+  slug: string;
+  services: string[];
+  units?: number;
+  title: L10n;
+  h1: L10n;
+  short: L10n;
+  description: L10n;
+  body: L10n;
+  faq: Faq[];
+};
+
 // Recipient details customers type into the Nova Poshta app when sending parts in
 export type NovaPoshta = { recipient: string; phone: string; branch: string };
 
@@ -80,6 +99,7 @@ export type SiteConfig = {
   pages: InfoPage[];
   addons: Addon[];
   trust: Trust;
+  landings: Landing[];
 };
 
 // Trust blocks on the home page. They come from the sheet only, with no bundled examples

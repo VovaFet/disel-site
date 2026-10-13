@@ -17,6 +17,11 @@
 //   settings  brands (comma-separated), heroImage, protocolImage (an image URL or a /path from public/)
 //   stats     value | label_uk | label_ru | label_en          ("12" | "років досвіду")
 //   reviews   name | car | rating | text                      (rating 1–5, may be empty; text as written)
+//   Landing pages (optional; empty tab = no section): series → /marky/<slug>/, vehicles → /avto/<slug>/
+//   series, vehicles   slug | services | units | <field>_uk | <field>_ru | <field>_en ...
+//             services: related service slugs, comma-separated (the first gives price and calculator)
+//             units: calculator quantity, e.g. 6 injectors; fields: title, h1, short, description, body
+//             FAQ for these pages goes to the faq tab with the page slug
 import { defaultConfig } from "./default";
 import {
   infoPageSlugs,
@@ -26,6 +31,8 @@ import {
   type Faq,
   type InfoPage,
   type L10n,
+  type Landing,
+  type LandingSection,
   type LiveConfig,
   type NovaPoshta,
   type ScheduleEntry,
@@ -164,6 +171,30 @@ const toTrust = (s: Record<string, string>, stats: Row[], reviews: Row[]): Trust
     })),
 });
 
+function toLandings(section: LandingSection, rows: Row[], faqRows: Row[], serviceSlugs: string[]): Landing[] {
+  return rows
+    .filter((r) => r.slug && r.title_uk)
+    .map((r) => {
+      const services = (r.services ?? "").split(",").map((x) => x.trim()).filter(Boolean);
+      const unknown = services.filter((x) => !serviceSlugs.includes(x));
+      if (unknown.length) console.warn(`[config] ${section}/${r.slug}: unknown services ${unknown.join(", ")}`);
+      const title = l10n(r, "title");
+      const h1 = l10n(r, "h1");
+      return {
+        section,
+        slug: r.slug,
+        services: services.filter((x) => serviceSlugs.includes(x)),
+        units: r.units && Number(r.units) > 0 ? Math.round(Number(r.units)) : undefined,
+        title,
+        h1: h1.uk ? h1 : title,
+        short: l10n(r, "short"),
+        description: l10n(r, "description"),
+        body: l10n(r, "body"),
+        faq: faqRows.filter((f) => f.slug === r.slug).map(toFaq),
+      };
+    });
+}
+
 function toServices(rows: Row[], faqRows: Row[]): Service[] {
   // A row without a slug has no page address (e.g. a service still being filled in): skip it
   const withSlug = rows.filter((r) => {
@@ -202,8 +233,14 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     fetchOptionalTab(sheetId, "stats", ["value", "label_uk"]),
     fetchOptionalTab(sheetId, "reviews", ["name", "text"]),
   ]);
+  const [series, vehicles] = await Promise.all([
+    fetchOptionalTab(sheetId, "series", ["slug", "title_uk"]),
+    fetchOptionalTab(sheetId, "vehicles", ["slug", "title_uk"]),
+  ]);
   const s = toSettings(settingsRows);
   const d = defaultConfig;
+  const svc = services.length ? toServices(services, faq) : d.services;
+  const svcSlugs = svc.map((x) => x.slug);
   const text = (key: keyof SiteConfig["texts"]): L10n => {
     const row = texts.find((r) => r.key === key);
     if (!row?.uk) return d.texts[key];
@@ -230,12 +267,13 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
       description: text("description"),
       shipping: text("shipping"),
     },
-    services: services.length ? toServices(services, faq) : d.services,
+    services: svc,
     commonFaq: faq.some((f) => f.slug === "*") ? faq.filter((f) => f.slug === "*").map(toFaq) : d.commonFaq,
     // Missing pages in the sheet fall back to the bundled text
     pages: d.pages.map((p) => toPages(pages).find((x) => x.slug === p.slug) ?? p),
     addons: addons.length ? toAddons(addons) : d.addons,
     trust: toTrust(s, stats, reviews),
+    landings: [...toLandings("marky", series, faq, svcSlugs), ...toLandings("avto", vehicles, faq, svcSlugs)],
   };
 }
 

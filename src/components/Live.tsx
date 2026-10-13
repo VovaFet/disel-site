@@ -12,6 +12,13 @@ export function Price({ slug, prefix = true }: { slug: string; prefix?: boolean 
   return <>{`${prefix ? `${t(lang).from} ` : ""}${formatPrice(lang, price)}`}</>;
 }
 
+// "From" price for several items of a service, e.g. the set of 6 injectors on one engine
+export function SetPrice({ slug, units }: { slug: string; units: number }) {
+  const { live, lang } = useLive();
+  const d = t(lang);
+  return <>{`${d.from} ${formatPrice(lang, (live.prices[slug] ?? 0) * units)} ${d.forUnits(units)}`}</>;
+}
+
 export function PhoneLink({ className, children }: { className?: string; children?: ReactNode }) {
   const { live } = useLive();
   return (
