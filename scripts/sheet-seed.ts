@@ -23,6 +23,9 @@ const tabs: Record<string, (string | number)[][]> = {
     ["npRecipient", c.novaPoshta.recipient],
     ["npPhone", c.novaPoshta.phone],
     ["npBranch", c.novaPoshta.branch],
+    ["brands", c.trust.brands.join(", ")],
+    ["heroImage", c.trust.heroImage],
+    ["protocolImage", c.trust.protocolImage],
     ["lat", c.geo.lat],
     ["lng", c.geo.lng],
     ["postalCode", c.postalCode],
@@ -52,6 +55,8 @@ const tabs: Record<string, (string | number)[][]> = {
     ...c.pages.map((p) => [p.slug, ...(["title", "description", "body"] as const).flatMap((f) => locales.map((l) => p[f][l]))]),
   ],
   addons: [["id", "price", ...l10nCols("label")], ...c.addons.map((a) => [a.id, a.price, ...locales.map((l) => a.label[l])])],
+  stats: [["value", ...l10nCols("label")], ...c.trust.stats.map((s) => [s.value, ...locales.map((l) => s.label[l])])],
+  reviews: [["name", "car", "rating", "text"], ...c.trust.reviews.map((r) => [r.name, r.car, r.rating || "", r.text])],
 };
 
 console.log(JSON.stringify(tabs));
