@@ -27,11 +27,20 @@ npm run dev     # local dev server
 npm run build   # static site in ./out
 ```
 
+## Branches
+
+Each change goes to its own branch off `dev`, then a pull request into `dev`; `dev` goes to `main` by a pull
+request. Direct pushes to `main` are stopped by the `.githooks/pre-push` hook (`git config core.hooksPath .githooks`)
+and by GitHub; the `from-dev` check fails pull requests into `main` from any other branch.
+
 ## Deploy
 
 Cloudflare Workers Builds deploys `main` as static assets from `out/` (see `wrangler.jsonc`); other branches
 get preview builds.
 
+- 404 pages: Cloudflare serves the nearest `404.html`. The root one is Ukrainian (`app/global-not-found.tsx`);
+  `/ru/404/` and `/en/404/` are copied to `ru/404.html` and `en/404.html` by `scripts/localized-404-adapter.mjs`
+  at the end of `next build`, so a missing `/ru/...` page gets the Russian header and text.
 - `NEXT_PUBLIC_SHEET_ID` must be set as a build variable of the Worker (Settings → Builds). Without it the site
   ignores the sheet and shows the defaults.
 - **Rebuild after sheet edits**: GitHub → Actions → **Rebuild site** → Run workflow. It calls a Cloudflare

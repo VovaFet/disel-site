@@ -1,0 +1,29 @@
+# Pull requests into main must come from dev (features go feature/* → dev → main).
+# Rulesets can't restrict the source branch, so this check fails for any other branch.
+# To block the merge button, add "from-dev" as a required status check in the
+# "protect-main" ruleset (Settings → Rules → Rulesets).
+name: Main only from dev
+
+on:
+  pull_request:
+    branches: [main]
+    # "edited" also fires when an existing pull request is retargeted to main
+    types: [opened, reopened, synchronize, edited]
+
+permissions: {}
+
+jobs:
+  from-dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check the source branch
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+          FROM_THIS_REPO: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+        run: |
+          if [ "$HEAD_BRANCH" != "dev" ] || [ "$FROM_THIS_REPO" != "true" ]; then
+            echo "::error::Pull requests into main must come from dev of this repository (this one is from \"$HEAD_BRANCH\"). Merge into dev first."
+            exit 1
+          fi
+          echo "OK: the pull request comes from dev"

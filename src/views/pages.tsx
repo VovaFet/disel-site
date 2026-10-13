@@ -65,12 +65,14 @@ export async function HomePage({ lang }: { lang: Locale }) {
         <ServiceList lang={lang} services={c.services} />
       </section>
 
-      <section id="calculator" className="container section">
-        <h2>{d.calculatorHeading}</h2>
-        <Reveal>
-          <PriceCalculator items={calcItems(c, lang)} />
-        </Reveal>
-      </section>
+      {c.services.length > 0 && (
+        <section id="calculator" className="container section">
+          <h2>{d.calculatorHeading}</h2>
+          <Reveal>
+            <PriceCalculator items={calcItems(c, lang)} />
+          </Reveal>
+        </section>
+      )}
 
       <section className="container section">
         <h2>{d.shippingHeading}</h2>
