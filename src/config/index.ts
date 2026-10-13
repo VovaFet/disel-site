@@ -10,10 +10,16 @@ let cached: Promise<SiteConfig> | undefined;
 // otherwise (or on error) from the bundled defaults, so the build never breaks.
 export function getConfig(): Promise<SiteConfig> {
   cached ??= sheetId
-    ? loadSiteConfig(sheetId).catch((e: unknown) => {
-        console.warn(`[config] Google Sheet unavailable, using defaults: ${String(e)}`);
-        return defaultConfig;
-      })
+    ? loadSiteConfig(sheetId).then(
+        (c) => {
+          console.info("[config] Loaded from the Google Sheet");
+          return c;
+        },
+        (e: unknown) => {
+          console.warn(`[config] Google Sheet unavailable, using defaults: ${String(e)}`);
+          return defaultConfig;
+        },
+      )
     : Promise.resolve(defaultConfig);
   return cached;
 }

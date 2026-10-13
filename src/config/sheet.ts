@@ -75,7 +75,13 @@ const toObjects = (table: string[][]): Row[] => {
 
 async function fetchTab(sheetId: string, tab: string): Promise<Row[]> {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(tab)}`;
-  const res = await fetch(url, { cache: "no-store" });
+  // The browser skips its HTTP cache so live values are fresh. At build time "no-store" would make
+  // the static export fail (the build used to fall back to the bundled defaults without a word);
+  // instead the per-build stamp from next.config.ts keeps Next from reusing an older build's response.
+  const res =
+    typeof window === "undefined"
+      ? await fetch(`${url}&build=${process.env.SHEET_BUILD_STAMP}`)
+      : await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`Sheet tab "${tab}": HTTP ${res.status}`);
   return toObjects(parseCsv(await res.text()));
 }
@@ -125,6 +131,8 @@ function toServices(rows: Row[], faqRows: Row[]): Service[] {
   return rows.map((r) => {
     const includes = l10n(r, "includes");
     const options = r.perUnitOptions ? r.perUnitOptions.split(",").map((x) => Number(x.trim())) : undefined;
+    // An empty price usually means mixed number/text cells in the column: Google then blanks one kind
+    if (!r.priceFrom || Number.isNaN(Number(r.priceFrom))) console.warn(`[config] services: no valid priceFrom for "${r.slug}"`);
     return {
       slug: r.slug,
       group: (serviceGroups as readonly string[]).includes(r.group) ? (r.group as ServiceGroup) : "injectors",

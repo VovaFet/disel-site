@@ -12,8 +12,10 @@ the column format is described at the top of `src/config/sheet.ts`).
   so those edits are live immediately. Everything else (texts, services, FAQ, pages) appears after a rebuild:
   run the **Rebuild site** action (see Deploy). Prices in page titles and link previews also refresh then.
 - If the sheet is unreachable, `src/config/default.ts` is used (the build never fails).
-- The `value` column of `settings` is formatted as plain text, so phone numbers like `+38 (0..) ...`
-  are not turned into formulas (`#ERROR!`) or numbers that lose the `+`.
+- Keep the cells formatted as plain text (`settings` and `services` already are). Phone numbers like
+  `+38 (0..) ...` otherwise turn into formulas (`#ERROR!`) or lose the `+`, and a column that mixes numbers
+  with text comes back from Google with one kind blanked (e.g. some prices empty). The build log warns
+  about empty prices and says `[config] Loaded from the Google Sheet` when the sheet was read.
 
 Setup: copy `.env.example` to `.env.local`, share the sheet as "Anyone with the link: Viewer".
 To refill the sheet from the defaults: `npx tsx scripts/sheet-seed.ts` prints the rows per tab.
