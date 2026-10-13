@@ -2,7 +2,8 @@
 // Used at build time (content baked into HTML) and in the browser (live prices/contacts/hours).
 //
 // Tabs (first row = headers):
-//   settings  key | value                       (url, phone, phoneDisplay, telegram, viber, timeZone, lat, lng, postalCode, country)
+//   settings  key | value                       (url, phone, phoneDisplay, telegram, viber, timeZone, lat, lng, postalCode, country,
+//                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in)
 //   texts     key | uk | ru | en                (name, city, cityIn, street, region, description, shipping)
 //   schedule  days | from | to                  (days: "1-5", "6" or "1,3"; 1 = Monday)
 //   services  slug | group | priceFrom | perUnitOptions | <field>_uk | <field>_ru | <field>_en ...
@@ -22,6 +23,7 @@ import {
   type InfoPage,
   type L10n,
   type LiveConfig,
+  type NovaPoshta,
   type ScheduleEntry,
   type Service,
   type ServiceGroup,
@@ -95,6 +97,12 @@ const num = (s: string | undefined, fallback: number) => (s && !Number.isNaN(Num
 
 const toSettings = (rows: Row[]) => Object.fromEntries(rows.map((r) => [r.key, r.value]));
 
+const toNovaPoshta = (s: Record<string, string>, d: NovaPoshta): NovaPoshta => ({
+  recipient: s.npRecipient || d.recipient,
+  phone: s.npPhone || d.phone,
+  branch: s.npBranch || d.branch,
+});
+
 const toSchedule = (rows: Row[]): ScheduleEntry[] =>
   rows.map((r) => ({ days: parseDays(r.days), from: r.from, to: r.to }));
 
@@ -158,6 +166,7 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     viber: s.viber || d.viber,
     timeZone: s.timeZone || d.timeZone,
     schedule: schedule.length ? toSchedule(schedule) : d.schedule,
+    novaPoshta: toNovaPoshta(s, d.novaPoshta),
     texts: {
       name: text("name"),
       city: text("city"),
@@ -188,6 +197,7 @@ export async function loadLiveConfig(sheetId: string, fallback: LiveConfig): Pro
     viber: s.viber || fallback.viber,
     timeZone: s.timeZone || fallback.timeZone,
     schedule: schedule.length ? toSchedule(schedule) : fallback.schedule,
+    novaPoshta: toNovaPoshta(s, fallback.novaPoshta),
     prices: { ...fallback.prices, ...Object.fromEntries(services.map((r) => [r.slug, num(r.priceFrom, fallback.prices[r.slug] ?? 0)])) },
     addons: addons.length ? toAddons(addons) : fallback.addons,
   };

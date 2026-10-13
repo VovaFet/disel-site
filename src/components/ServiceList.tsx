@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Locale, Service } from "@/config/types";
 import { localePath } from "@/i18n";
+import { GroupIcon } from "./GroupIcon";
 import { Price } from "./Live";
 
 export function ServiceList({ lang, services }: { lang: Locale; services: Service[] }) {
@@ -8,6 +9,9 @@ export function ServiceList({ lang, services }: { lang: Locale; services: Servic
     <ul className="cards">
       {services.map((s) => (
         <li key={s.slug} className="card">
+          <span className="card-icon">
+            <GroupIcon group={s.group} />
+          </span>
           <h3>
             <Link href={localePath(lang, `/poslugy/${s.slug}/`)}>{s.title[lang]}</Link>
           </h3>

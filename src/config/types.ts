@@ -35,6 +35,9 @@ export type InfoPage = { slug: InfoPageSlug; title: L10n; description: L10n; bod
 
 export type Addon = { id: string; price: number; label: L10n };
 
+// Recipient details customers type into the Nova Poshta app when sending parts in
+export type NovaPoshta = { recipient: string; phone: string; branch: string };
+
 // Values that may change often (prices, contacts, hours). The browser re-reads
 // them from the remote config at runtime, so they update without a rebuild.
 export type LiveConfig = {
@@ -44,6 +47,7 @@ export type LiveConfig = {
   viber: string;
   timeZone: string;
   schedule: ScheduleEntry[];
+  novaPoshta: NovaPoshta;
   prices: Record<string, number>;
   addons: Addon[];
 };
@@ -59,6 +63,7 @@ export type SiteConfig = {
   viber: string;
   timeZone: string;
   schedule: ScheduleEntry[];
+  novaPoshta: NovaPoshta;
   texts: {
     name: L10n;
     city: L10n;
@@ -83,6 +88,7 @@ export const toLive = (c: SiteConfig): LiveConfig => ({
   viber: c.viber,
   timeZone: c.timeZone,
   schedule: c.schedule,
+  novaPoshta: c.novaPoshta,
   prices: Object.fromEntries(c.services.map((s) => [s.slug, s.priceFrom])),
   addons: c.addons,
 });

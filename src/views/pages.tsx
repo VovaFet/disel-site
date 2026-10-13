@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FaqList } from "@/components/FaqList";
 import { JsonLd } from "@/components/JsonLd";
 import { ContactActions, MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
 import { OpenStatus } from "@/components/OpenStatus";
@@ -9,15 +10,17 @@ import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
 import { ServiceList } from "@/components/ServiceList";
+import { ShippingDetails } from "@/components/ShippingDetails";
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
-import { serviceSchema } from "@/lib/schema";
+import { faqSchema, serviceSchema } from "@/lib/schema";
 import { openGraph, pageMetadata } from "./RootShell";
 
 const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
   c.services.map((s) => ({
     slug: s.slug,
+    group: s.group,
     title: s.title[lang],
     perUnitOptions: s.perUnitOptions,
     perUnitLabel: s.perUnitLabel?.[lang],
@@ -80,6 +83,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
             </li>
           ))}
         </ol>
+        <ShippingDetails />
       </section>
 
       <section className="container section">
@@ -97,6 +101,14 @@ export async function HomePage({ lang }: { lang: Locale }) {
           ))}
         </ul>
       </section>
+
+      {c.commonFaq.length > 0 && (
+        <section className="container section">
+          <JsonLd data={faqSchema(c.commonFaq, lang)} />
+          <h2>{d.faq}</h2>
+          <FaqList items={c.commonFaq} lang={lang} />
+        </section>
+      )}
     </>
   );
 }
@@ -155,6 +167,11 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
   if (!s) notFound();
   const d = t(lang);
   const p = (path: string) => localePath(lang, path);
+  // Same group first, then the rest
+  const related = [
+    ...c.services.filter((x) => x.group === s.group && x.slug !== s.slug),
+    ...c.services.filter((x) => x.group !== s.group),
+  ].slice(0, 3);
 
   return (
     <article className="container section">
@@ -172,14 +189,27 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
         {d.priceLabel}: <Price slug={s.slug} />
       </p>
 
-      <h2>{d.includes}</h2>
-      <ul className="features">
-        {s.includes[lang].map((i) => (
-          <li key={i}>{i}</li>
-        ))}
-      </ul>
+      <div className="service-layout">
+        <div>
+          <h2>{d.includes}</h2>
+          <ul className="features">
+            {s.includes[lang].map((i) => (
+              <li key={i}>{i}</li>
+            ))}
+          </ul>
 
-      {s.body[lang] && <RichText text={s.body[lang]} />}
+          {s.body[lang] && <RichText text={s.body[lang]} />}
+        </div>
+        {/* Wide screens only: price and contact buttons stay in view while reading */}
+        <aside className="service-aside" aria-label={d.book}>
+          <span className="muted">{d.priceLabel}</span>
+          <strong className="aside-price">
+            <Price slug={s.slug} />
+          </strong>
+          <OpenStatus />
+          <ContactActions label={d.book} className="aside-actions" />
+        </aside>
+      </div>
 
       <h2>{d.estimate}</h2>
       <PriceCalculator items={calcItems(c, lang)} initialSlug={s.slug} />
@@ -187,16 +217,18 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
       {s.faq.length + c.commonFaq.length > 0 && (
         <>
           <h2>{d.faq}</h2>
-          {[...s.faq, ...c.commonFaq].map((f) => (
-            <details key={f.q[lang]} className="faq">
-              <summary>{f.q[lang]}</summary>
-              <p>{f.a[lang]}</p>
-            </details>
-          ))}
+          <FaqList items={[...s.faq, ...c.commonFaq]} lang={lang} />
         </>
       )}
 
       <ContactActions label={d.book} />
+
+      {related.length > 0 && (
+        <section className="related">
+          <h2>{d.otherServices}</h2>
+          <ServiceList lang={lang} services={related} />
+        </section>
+      )}
     </article>
   );
 }
@@ -216,6 +248,8 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
   const c = await getConfig();
   const d = t(lang);
   const mapSrc = `https://www.google.com/maps?q=${c.geo.lat},${c.geo.lng}&z=16&hl=${lang}&output=embed`;
+  // Opens turn-by-turn navigation in the Google Maps app on phones
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.geo.lat},${c.geo.lng}`;
   return (
     <section className="container section">
       <h1>{d.nav.contacts}</h1>
@@ -235,6 +269,11 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
         <OpenStatus />
         <HoursList />
       </address>
+      <div className="actions">
+        <a href={directionsUrl} className="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          {d.directions}
+        </a>
+      </div>
       <iframe
         title={`${c.texts.name[lang]} ${d.onMap}`}
         src={mapSrc}
@@ -261,6 +300,7 @@ export async function InfoPageView({ lang, slug }: { lang: Locale; slug: InfoPag
     <article className="container section">
       <h1>{page.title[lang]}</h1>
       <RichText text={page.body[lang]} />
+      {slug === "dostavka" && <ShippingDetails />}
       <ContactActions label={t(lang).call} />
     </article>
   );
