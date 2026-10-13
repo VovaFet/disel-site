@@ -13,7 +13,7 @@ import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { serviceSchema } from "@/lib/schema";
-import { pageMetadata } from "./RootShell";
+import { openGraph, pageMetadata } from "./RootShell";
 
 const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
   c.services.map((s) => ({
@@ -140,10 +140,13 @@ export async function serviceMetadata(lang: Locale, slug: string): Promise<Metad
   if (!s) return {};
   const d = t(lang);
   const price = `${d.from} ${s.priceFrom} ${d.currency}`;
-  return pageMetadata(lang, `/poslugy/${slug}/`, {
-    title: `${s.title[lang]} ${c.texts.cityIn[lang]} — ${price}`,
-    description: `${s.short[lang]} ${c.texts.city[lang]}, ${price}.`,
-  });
+  return {
+    ...pageMetadata(lang, `/poslugy/${slug}/`, {
+      title: `${s.title[lang]} ${c.texts.cityIn[lang]} — ${price}`,
+      description: `${s.short[lang]} ${c.texts.city[lang]}, ${price}.`,
+    }),
+    openGraph: openGraph(lang, c.texts.name[lang], localePath(lang, `/poslugy/${slug}/og.png`)),
+  };
 }
 
 export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }) {
