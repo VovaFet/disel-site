@@ -62,7 +62,17 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .cards { list-style: none; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 .card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; background: var(--surface); }
 .card h3 { margin-top: 0; }
-.card h3 a { color: var(--fg); }
+.card h3 a { color: var(--fg); text-decoration: none; }
+/* The whole card is clickable: the title link is stretched over it */
+.card { position: relative; }
+.card h3 a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.card:hover h3 a { color: var(--accent); }
+.card h3 a:focus-visible { outline: none; }
+.card:has(h3 a:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+.card-icon {
+  display: inline-grid; place-items: center; width: 44px; height: 44px; margin-bottom: 12px;
+  border-radius: 10px; color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
 .price { font-weight: 700; color: var(--accent); }
 
 .features { padding-left: 20px; }
