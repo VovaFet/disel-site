@@ -256,8 +256,8 @@ select {
   border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
 }
 @media (min-width: 900px) { .hero-image { margin-top: 0; } }
-.stats { list-style: none; padding: 0; margin: 32px 0 0; display: flex; flex-wrap: wrap; gap: 16px 40px; }
-.stats li { display: grid; }
+.stats { list-style: none; padding: 0; margin: 32px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px 24px; }
+.stats li { display: grid; align-content: start; }
 .stats strong { font-size: 2rem; line-height: 1.1; color: var(--accent); }
 .stats span { font-size: 0.9rem; color: var(--muted); }
 .brands { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
