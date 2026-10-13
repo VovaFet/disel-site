@@ -80,21 +80,31 @@ const toObjects = (table: string[][]): Row[] => {
 
 async function fetchTab(sheetId: string, tab: string): Promise<Row[]> {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(tab)}`;
-  // The browser skips its HTTP cache so live values are fresh. At build time "no-store" would make
-  // the static export fail (the build used to fall back to the bundled defaults without a word);
-  // instead the per-build stamp from next.config.ts keeps Next from reusing an older build's response.
-  const res =
-    typeof window === "undefined"
-      ? await fetch(`${url}&build=${process.env.SHEET_BUILD_STAMP}`)
-      : await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Sheet tab "${tab}": HTTP ${res.status}`);
-  return toObjects(parseCsv(await res.text()));
+  // The browser skips its HTTP cache so live values are fresh
+  if (typeof window !== "undefined") {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Sheet tab "${tab}": HTTP ${res.status}`);
+    return toObjects(parseCsv(await res.text()));
+  }
+  // Build time. "no-store" would make the static export fail; the per-build stamp from
+  // next.config.ts keeps Next from reusing an older build's response instead. Every build worker
+  // reads every tab at once, so Google answers some requests with 429: back off and retry.
+  for (let attempt = 1; ; attempt++) {
+    const res = await fetch(`${url}&build=${process.env.SHEET_BUILD_STAMP}&try=${attempt}`).catch((e: Error) => e);
+    if (res instanceof Response && res.ok) return toObjects(parseCsv(await res.text()));
+    const reason = res instanceof Response ? `HTTP ${res.status}` : String(res);
+    const retryable = !(res instanceof Response) || res.status === 429 || res.status >= 500;
+    if (!retryable || attempt === 5) throw new Error(`Sheet tab "${tab}": ${reason}`);
+    const wait = Math.round(1000 * 2 ** (attempt - 1) * (1 + Math.random()));
+    console.warn(`[config] Sheet tab "${tab}": ${reason}, retry ${attempt} in ${(wait / 1000).toFixed(1)}s`);
+    await new Promise((resolve) => setTimeout(resolve, wait));
+  }
 }
 
 // Google returns the first tab when the named one is missing, so an optional tab
-// counts only when its header has the expected columns
+// counts only when its header has the expected columns (network errors still fail)
 async function fetchOptionalTab(sheetId: string, tab: string, columns: string[]): Promise<Row[]> {
-  const rows = await fetchTab(sheetId, tab).catch(() => []);
+  const rows = await fetchTab(sheetId, tab);
   return rows.length > 0 && columns.every((c) => c in rows[0]) ? rows : [];
 }
 
