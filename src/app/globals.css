@@ -68,6 +68,19 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .features { padding-left: 20px; }
 .features li { margin-bottom: 8px; }
 .breadcrumbs { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; }
+
+/* Service page: price and contact buttons beside the text on wide screens */
+.service-aside { display: none; }
+@media (min-width: 1000px) {
+  .service-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 48px; align-items: start; }
+  .service-aside {
+    display: flex; flex-direction: column; gap: 10px; position: sticky; top: 96px; margin-top: 32px;
+    padding: 24px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
+  }
+}
+.aside-price { font-size: 1.8rem; line-height: 1.2; color: var(--accent); }
+.aside-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.related { margin-top: 48px; }
 .faq { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 8px; }
 .faq summary { cursor: pointer; font-weight: 600; }
 .contacts { font-style: normal; }

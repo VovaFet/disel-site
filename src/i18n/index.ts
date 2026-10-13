@@ -40,6 +40,7 @@ const dict = {
     estimateLabel: "Орієнтовна вартість",
     estimateNote: "Точну ціну назвемо після перевірки на стенді",
     includes: "Що входить",
+    otherServices: "Інші послуги",
     faq: "Часті питання",
     shippingHeading: "Як відправити деталі на ремонт",
     steps: [
@@ -96,6 +97,7 @@ const dict = {
     estimateLabel: "Ориентировочная стоимость",
     estimateNote: "Точную цену назовём после проверки на стенде",
     includes: "Что входит",
+    otherServices: "Другие услуги",
     faq: "Частые вопросы",
     shippingHeading: "Как отправить детали на ремонт",
     steps: [
@@ -152,6 +154,7 @@ const dict = {
     estimateLabel: "Estimated cost",
     estimateNote: "The exact price is confirmed after bench testing",
     includes: "What's included",
+    otherServices: "Other services",
     faq: "FAQ",
     shippingHeading: "How to send parts for repair",
     steps: [
