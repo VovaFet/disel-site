@@ -27,6 +27,12 @@ npm run dev     # local dev server
 npm run build   # static site in ./out
 ```
 
+## Branches
+
+Each change goes to its own branch off `dev`, then a pull request into `dev`; `dev` goes to `main` by a pull
+request. Direct pushes to `main` are stopped by the `.githooks/pre-push` hook (`git config core.hooksPath .githooks`)
+and by GitHub; the `from-dev` check fails pull requests into `main` from any other branch.
+
 ## Deploy
 
 Cloudflare Workers Builds deploys `main` as static assets from `out/` (see `wrangler.jsonc`); other branches
