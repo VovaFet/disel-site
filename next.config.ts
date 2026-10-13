@@ -13,7 +13,12 @@ const nextConfig: NextConfig = {
   env: { SHEET_BUILD_STAMP: String(Date.now()) },
   // Each language has its own root layout, so the 404 page (out/404.html) comes from
   // app/global-not-found.tsx instead of a not-found.tsx inside a layout.
-  experimental: { globalNotFound: true },
+  experimental: {
+    globalNotFound: true,
+    // Fewer build workers: each one reads every sheet tab, and with ~15 of them at once Google
+    // answers many requests with 429 (they are retried, but there is no need to provoke it)
+    cpus: 4,
+  },
 };
 
 export default nextConfig;
