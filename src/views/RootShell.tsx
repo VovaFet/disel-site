@@ -23,9 +23,20 @@ export async function rootMetadata(lang: Locale): Promise<Metadata> {
       template: `%s | ${name}, ${c.texts.city[lang]}`,
     },
     description: c.texts.description[lang],
-    openGraph: { type: "website", locale: ogLocale[lang], siteName: name },
+    openGraph: openGraph(lang, name, localePath(lang, "/og.png")),
+    twitter: { card: "summary_large_image" },
   };
 }
+
+// Link previews in messengers. A page that sets openGraph replaces the layout's one
+// entirely (metadata is merged shallowly), so it is always built here in full.
+// Images come from the og.png routes (see src/views/ogImage.tsx).
+export const openGraph = (lang: Locale, siteName: string, imagePath: string): Metadata["openGraph"] => ({
+  type: "website",
+  locale: ogLocale[lang],
+  siteName,
+  images: [{ url: imagePath, width: 1200, height: 630, type: "image/png" }],
+});
 
 // Per-page metadata with canonical URL and hreflang alternates for all languages
 export function pageMetadata(lang: Locale, path: string, meta: { title?: string; description?: string }): Metadata {
