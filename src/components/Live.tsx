@@ -34,6 +34,27 @@ export function MessengerLink({ kind, className, children }: { kind: "telegram" 
   );
 }
 
+// Call button with the number spelled out (tel: links do nothing on most desktops)
+// plus messengers, so every visitor has a way to get in touch.
+export function ContactActions({ label, className = "actions" }: { label: string; className?: string }) {
+  return (
+    <div className={className}>
+      <PhoneLink className="btn">
+        {label}:{" "}
+        <span className="nowrap">
+          <PhoneText />
+        </span>
+      </PhoneLink>
+      <MessengerLink kind="viber" className="btn btn-outline">
+        Viber
+      </MessengerLink>
+      <MessengerLink kind="telegram" className="btn btn-outline">
+        Telegram
+      </MessengerLink>
+    </div>
+  );
+}
+
 export function HoursList() {
   const { live, lang } = useLive();
   return (

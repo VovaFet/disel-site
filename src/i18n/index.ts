@@ -60,6 +60,7 @@ const dict = {
     phone: "Телефон",
     onMap: "на карті",
     writeTelegram: "Написати в Telegram",
+    writeViber: "Написати у Viber",
     days: ["", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"],
     dayOff: "вихідний",
     openUntil: (t: string) => `Відкрито до ${t}`,
@@ -68,6 +69,7 @@ const dict = {
     today: "сьогодні",
     tomorrow: "завтра",
     notFound: "Сторінку не знайдено",
+    notFoundText: "Можливо, адреса змінилася або в ній помилка. Перейдіть на головну чи до списку послуг.",
     toHome: "На головну",
   },
   ru: {
@@ -114,6 +116,7 @@ const dict = {
     phone: "Телефон",
     onMap: "на карте",
     writeTelegram: "Написать в Telegram",
+    writeViber: "Написать в Viber",
     days: ["", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
     dayOff: "выходной",
     openUntil: (t: string) => `Открыто до ${t}`,
@@ -122,6 +125,7 @@ const dict = {
     today: "сегодня",
     tomorrow: "завтра",
     notFound: "Страница не найдена",
+    notFoundText: "Возможно, адрес изменился или в нём ошибка. Перейдите на главную или к списку услуг.",
     toHome: "На главную",
   },
   en: {
@@ -168,6 +172,7 @@ const dict = {
     phone: "Phone",
     onMap: "on the map",
     writeTelegram: "Message on Telegram",
+    writeViber: "Message on Viber",
     days: ["", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     dayOff: "closed",
     openUntil: (t: string) => `Open until ${t}`,
@@ -176,6 +181,7 @@ const dict = {
     today: "today",
     tomorrow: "tomorrow",
     notFound: "Page not found",
+    notFoundText: "The address may have changed or contain a typo. Go to the home page or the list of services.",
     toHome: "Go home",
   },
 } satisfies Record<Locale, unknown>;

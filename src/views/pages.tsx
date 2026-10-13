@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
-import { MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
+import { ContactActions, MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
 import { OpenStatus } from "@/components/OpenStatus";
 import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { Reveal } from "@/components/Reveal";
@@ -13,7 +13,7 @@ import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { serviceSchema } from "@/lib/schema";
-import { pageMetadata } from "./RootShell";
+import { openGraph, pageMetadata } from "./RootShell";
 
 const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
   c.services.map((s) => ({
@@ -140,10 +140,13 @@ export async function serviceMetadata(lang: Locale, slug: string): Promise<Metad
   if (!s) return {};
   const d = t(lang);
   const price = `${d.from} ${s.priceFrom} ${d.currency}`;
-  return pageMetadata(lang, `/poslugy/${slug}/`, {
-    title: `${s.title[lang]} ${c.texts.cityIn[lang]} — ${price}`,
-    description: `${s.short[lang]} ${c.texts.city[lang]}, ${price}.`,
-  });
+  return {
+    ...pageMetadata(lang, `/poslugy/${slug}/`, {
+      title: `${s.title[lang]} ${c.texts.cityIn[lang]} — ${price}`,
+      description: `${s.short[lang]} ${c.texts.city[lang]}, ${price}.`,
+    }),
+    openGraph: openGraph(lang, c.texts.name[lang], localePath(lang, `/poslugy/${slug}/og.png`)),
+  };
 }
 
 export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }) {
@@ -193,11 +196,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
         </>
       )}
 
-      <div className="actions">
-        <PhoneLink className="btn">
-          {d.book}: <PhoneText />
-        </PhoneLink>
-      </div>
+      <ContactActions label={d.book} />
     </article>
   );
 }
@@ -230,6 +229,9 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
         <p>
           <MessengerLink kind="telegram">{d.writeTelegram}</MessengerLink>
         </p>
+        <p>
+          <MessengerLink kind="viber">{d.writeViber}</MessengerLink>
+        </p>
         <OpenStatus />
         <HoursList />
       </address>
@@ -259,11 +261,7 @@ export async function InfoPageView({ lang, slug }: { lang: Locale; slug: InfoPag
     <article className="container section">
       <h1>{page.title[lang]}</h1>
       <RichText text={page.body[lang]} />
-      <div className="actions">
-        <PhoneLink className="btn">
-          {t(lang).call}: <PhoneText />
-        </PhoneLink>
-      </div>
+      <ContactActions label={t(lang).call} />
     </article>
   );
 }
