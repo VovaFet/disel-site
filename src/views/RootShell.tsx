@@ -36,7 +36,7 @@ export function pageMetadata(lang: Locale, path: string, meta: { title?: string;
   };
 }
 
-export async function RootShell({ lang, children }: { lang: Locale; children: ReactNode }) {
+export async function RootShell({ lang, notFound, children }: { lang: Locale; notFound?: boolean; children: ReactNode }) {
   const config = await getConfig();
   return (
     <html lang={lang} className={inter.className}>
@@ -44,7 +44,7 @@ export async function RootShell({ lang, children }: { lang: Locale; children: Re
         <MouseBackground />
         <JsonLd data={businessSchema(config, lang)} />
         <LiveConfigProvider initial={toLive(config)} lang={lang} sheetId={sheetId}>
-          <SiteHeader lang={lang} config={config} />
+          <SiteHeader lang={lang} config={config} notFound={notFound} />
           <main>{children}</main>
           <SiteFooter lang={lang} config={config} />
         </LiveConfigProvider>
