@@ -68,6 +68,7 @@ const dict = {
     today: "сьогодні",
     tomorrow: "завтра",
     notFound: "Сторінку не знайдено",
+    notFoundText: "Можливо, адреса змінилася або в ній помилка. Перейдіть на головну чи до списку послуг.",
     toHome: "На головну",
   },
   ru: {
@@ -122,6 +123,7 @@ const dict = {
     today: "сегодня",
     tomorrow: "завтра",
     notFound: "Страница не найдена",
+    notFoundText: "Возможно, адрес изменился или в нём ошибка. Перейдите на главную или к списку услуг.",
     toHome: "На главную",
   },
   en: {
@@ -176,6 +178,7 @@ const dict = {
     today: "today",
     tomorrow: "tomorrow",
     notFound: "Page not found",
+    notFoundText: "The address may have changed or contain a typo. Go to the home page or the list of services.",
     toHome: "Go home",
   },
 } satisfies Record<Locale, unknown>;

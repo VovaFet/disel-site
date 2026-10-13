@@ -228,3 +228,7 @@ select {
 }
 .mouse-bg:not(.is-active)::before { opacity: 0.25; }
 body { background: var(--bg); isolation: isolate; }
+
+/* 404 page */
+.not-found { min-height: 50vh; }
+.not-found-code { margin: 0; font-size: clamp(4rem, 14vw, 7rem); font-weight: 800; line-height: 1; color: var(--accent); }

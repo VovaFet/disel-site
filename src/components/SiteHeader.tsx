@@ -7,7 +7,7 @@ import { HoursList, MessengerLink, PhoneLink } from "./Live";
 import { MobileMenu } from "./MobileMenu";
 import { OpenStatus } from "./OpenStatus";
 
-export function SiteHeader({ lang, config }: { lang: Locale; config: SiteConfig }) {
+export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: SiteConfig; notFound?: boolean }) {
   const d = t(lang);
   const p = (path: string) => localePath(lang, path);
   return (
@@ -22,7 +22,7 @@ export function SiteHeader({ lang, config }: { lang: Locale; config: SiteConfig 
           <Link href={p("/kontakty/")}>{d.nav.contacts}</Link>
           <PhoneLink className="btn btn-small" />
         </nav>
-        <LangSwitcher />
+        <LangSwitcher notFound={notFound} />
         <MobileMenu
           links={[
             { href: p("/"), label: d.nav.home },
