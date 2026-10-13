@@ -1,4 +1,4 @@
-import type { Faq, Locale, Service, SiteConfig } from "@/config/types";
+import type { Article, Faq, Locale, Service, SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { openingHoursSchema } from "./hours";
 
@@ -83,4 +83,20 @@ export function faqSchema(items: Faq[], lang: Locale) {
       })),
     },
   ];
+}
+
+export function articleSchema(c: SiteConfig, a: Article, lang: Locale, path: string) {
+  const abs = (p: string) => (p.startsWith("http") ? p : `${c.url}${p}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: a.title[lang],
+    description: a.description[lang],
+    datePublished: a.date,
+    inLanguage: lang,
+    mainEntityOfPage: abs(localePath(lang, path)),
+    ...(a.image && !a.image.startsWith("data:") && { image: abs(a.image) }),
+    author: { "@id": businessId(c) },
+    publisher: { "@id": businessId(c) },
+  };
 }

@@ -505,4 +505,6 @@ export const defaultConfig: SiteConfig = {
 
   // Brand/series and vehicle pages come from the sheet only (tabs series, vehicles)
   landings: [],
+  // Articles come from the sheet only (tab articles)
+  articles: [],
 };
