@@ -247,6 +247,32 @@ select {
 .feature { border-left: 4px solid var(--accent); padding: 8px 16px; }
 .feature p { margin: 4px 0 0; color: var(--muted); }
 
+/* Trust blocks: hero photo, numbers, brands, protocol sample, reviews (each hidden without data) */
+@media (min-width: 900px) {
+  .hero-with-image .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 48px; align-items: center; }
+}
+.hero-image {
+  display: block; width: 100%; margin-top: 32px; aspect-ratio: 4 / 3; object-fit: cover;
+  border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
+}
+@media (min-width: 900px) { .hero-image { margin-top: 0; } }
+.stats { list-style: none; padding: 0; margin: 32px 0 0; display: flex; flex-wrap: wrap; gap: 16px 40px; }
+.stats li { display: grid; }
+.stats strong { font-size: 2rem; line-height: 1.1; color: var(--accent); }
+.stats span { font-size: 0.9rem; color: var(--muted); }
+.brands { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+.brands ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.brands li { padding: 6px 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-weight: 600; }
+.protocol { margin: 32px 0 0; max-width: 760px; }
+.protocol img { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.protocol figcaption { margin-top: 8px; }
+.reviews { list-style: none; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.review { display: flex; flex-direction: column; gap: 8px; padding: 20px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.review blockquote { margin: 0; }
+.review p { margin: 0; }
+.stars { color: var(--accent); letter-spacing: 2px; }
+.stars-off { color: var(--border); }
+
 /* Scroll reveal (class added by JS only, so content is visible without it) */
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
 .reveal.is-visible { opacity: 1; transform: none; }
