@@ -17,8 +17,17 @@
 //   settings  brands (comma-separated), heroImage, protocolImage (an image URL or a /path from public/)
 //   stats     value | label_uk | label_ru | label_en          ("12" | "років досвіду")
 //   reviews   name | car | rating | text                      (rating 1–5, may be empty; text as written)
+//   Landing pages (optional; empty tab = no section): series → /marky/<slug>/, vehicles → /avto/<slug>/
+//   series, vehicles   slug | services | units | <field>_uk | <field>_ru | <field>_en ...
+//             services: related service slugs, comma-separated (the first gives price and calculator)
+//             units: calculator quantity, e.g. 6 injectors; fields: title, h1, short, description, body
+//             FAQ for these pages goes to the faq tab with the page slug
+//   articles  slug | date | kind | services | image | title_* | description_* | body_*   (optional; → /statti/<slug>/)
+//             date: YYYY-MM-DD; kind: "case" for a repair case study, empty for an article;
+//             services: related service slugs; image: cover URL or /path from public/
 import { defaultConfig } from "./default";
 import {
+  type Article,
   infoPageSlugs,
   locales,
   serviceGroups,
@@ -26,6 +35,8 @@ import {
   type Faq,
   type InfoPage,
   type L10n,
+  type Landing,
+  type LandingSection,
   type LiveConfig,
   type NovaPoshta,
   type ScheduleEntry,
@@ -80,21 +91,31 @@ const toObjects = (table: string[][]): Row[] => {
 
 async function fetchTab(sheetId: string, tab: string): Promise<Row[]> {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(tab)}`;
-  // The browser skips its HTTP cache so live values are fresh. At build time "no-store" would make
-  // the static export fail (the build used to fall back to the bundled defaults without a word);
-  // instead the per-build stamp from next.config.ts keeps Next from reusing an older build's response.
-  const res =
-    typeof window === "undefined"
-      ? await fetch(`${url}&build=${process.env.SHEET_BUILD_STAMP}`)
-      : await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Sheet tab "${tab}": HTTP ${res.status}`);
-  return toObjects(parseCsv(await res.text()));
+  // The browser skips its HTTP cache so live values are fresh
+  if (typeof window !== "undefined") {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Sheet tab "${tab}": HTTP ${res.status}`);
+    return toObjects(parseCsv(await res.text()));
+  }
+  // Build time. "no-store" would make the static export fail; the per-build stamp from
+  // next.config.ts keeps Next from reusing an older build's response instead. Every build worker
+  // reads every tab at once, so Google answers some requests with 429: back off and retry.
+  for (let attempt = 1; ; attempt++) {
+    const res = await fetch(`${url}&build=${process.env.SHEET_BUILD_STAMP}&try=${attempt}`).catch((e: Error) => e);
+    if (res instanceof Response && res.ok) return toObjects(parseCsv(await res.text()));
+    const reason = res instanceof Response ? `HTTP ${res.status}` : String(res);
+    const retryable = !(res instanceof Response) || res.status === 429 || res.status >= 500;
+    if (!retryable || attempt === 5) throw new Error(`Sheet tab "${tab}": ${reason}`);
+    const wait = Math.round(1000 * 2 ** (attempt - 1) * (1 + Math.random()));
+    console.warn(`[config] Sheet tab "${tab}": ${reason}, retry ${attempt} in ${(wait / 1000).toFixed(1)}s`);
+    await new Promise((resolve) => setTimeout(resolve, wait));
+  }
 }
 
 // Google returns the first tab when the named one is missing, so an optional tab
-// counts only when its header has the expected columns
+// counts only when its header has the expected columns (network errors still fail)
 async function fetchOptionalTab(sheetId: string, tab: string, columns: string[]): Promise<Row[]> {
-  const rows = await fetchTab(sheetId, tab).catch(() => []);
+  const rows = await fetchTab(sheetId, tab);
   return rows.length > 0 && columns.every((c) => c in rows[0]) ? rows : [];
 }
 
@@ -154,6 +175,50 @@ const toTrust = (s: Record<string, string>, stats: Row[], reviews: Row[]): Trust
     })),
 });
 
+// Newest first; rows without a slug, title or a valid date are skipped
+const toArticles = (rows: Row[], serviceSlugs: string[]): Article[] =>
+  rows
+    .filter((r) => {
+      const ok = r.slug && r.title_uk && /^\d{4}-\d{2}-\d{2}$/.test(r.date ?? "");
+      if (!ok && r.slug) console.warn(`[config] articles/${r.slug}: needs title_uk and a YYYY-MM-DD date, skipped`);
+      return ok;
+    })
+    .map((r) => ({
+      slug: r.slug,
+      date: r.date,
+      isCase: (r.kind ?? "").trim().toLowerCase() === "case",
+      services: (r.services ?? "").split(",").map((x) => x.trim()).filter((x) => serviceSlugs.includes(x)),
+      image: r.image ?? "",
+      title: l10n(r, "title"),
+      description: l10n(r, "description"),
+      body: l10n(r, "body"),
+    }))
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+function toLandings(section: LandingSection, rows: Row[], faqRows: Row[], serviceSlugs: string[]): Landing[] {
+  return rows
+    .filter((r) => r.slug && r.title_uk)
+    .map((r) => {
+      const services = (r.services ?? "").split(",").map((x) => x.trim()).filter(Boolean);
+      const unknown = services.filter((x) => !serviceSlugs.includes(x));
+      if (unknown.length) console.warn(`[config] ${section}/${r.slug}: unknown services ${unknown.join(", ")}`);
+      const title = l10n(r, "title");
+      const h1 = l10n(r, "h1");
+      return {
+        section,
+        slug: r.slug,
+        services: services.filter((x) => serviceSlugs.includes(x)),
+        units: r.units && Number(r.units) > 0 ? Math.round(Number(r.units)) : undefined,
+        title,
+        h1: h1.uk ? h1 : title,
+        short: l10n(r, "short"),
+        description: l10n(r, "description"),
+        body: l10n(r, "body"),
+        faq: faqRows.filter((f) => f.slug === r.slug).map(toFaq),
+      };
+    });
+}
+
 function toServices(rows: Row[], faqRows: Row[]): Service[] {
   // A row without a slug has no page address (e.g. a service still being filled in): skip it
   const withSlug = rows.filter((r) => {
@@ -192,8 +257,15 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     fetchOptionalTab(sheetId, "stats", ["value", "label_uk"]),
     fetchOptionalTab(sheetId, "reviews", ["name", "text"]),
   ]);
+  const [series, vehicles] = await Promise.all([
+    fetchOptionalTab(sheetId, "series", ["slug", "title_uk"]),
+    fetchOptionalTab(sheetId, "vehicles", ["slug", "title_uk"]),
+  ]);
+  const articles = await fetchOptionalTab(sheetId, "articles", ["slug", "date", "title_uk"]);
   const s = toSettings(settingsRows);
   const d = defaultConfig;
+  const svc = services.length ? toServices(services, faq) : d.services;
+  const svcSlugs = svc.map((x) => x.slug);
   const text = (key: keyof SiteConfig["texts"]): L10n => {
     const row = texts.find((r) => r.key === key);
     if (!row?.uk) return d.texts[key];
@@ -220,12 +292,14 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
       description: text("description"),
       shipping: text("shipping"),
     },
-    services: services.length ? toServices(services, faq) : d.services,
+    services: svc,
     commonFaq: faq.some((f) => f.slug === "*") ? faq.filter((f) => f.slug === "*").map(toFaq) : d.commonFaq,
     // Missing pages in the sheet fall back to the bundled text
     pages: d.pages.map((p) => toPages(pages).find((x) => x.slug === p.slug) ?? p),
     addons: addons.length ? toAddons(addons) : d.addons,
     trust: toTrust(s, stats, reviews),
+    landings: [...toLandings("marky", series, faq, svcSlugs), ...toLandings("avto", vehicles, faq, svcSlugs)],
+    articles: toArticles(articles, svcSlugs),
   };
 }
 

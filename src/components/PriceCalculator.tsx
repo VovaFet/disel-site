@@ -14,11 +14,19 @@ export type CalcItem = {
   perUnitLabel?: string;
 };
 
-export function PriceCalculator({ items, initialSlug }: { items: CalcItem[]; initialSlug?: string }) {
+export function PriceCalculator({
+  items,
+  initialSlug,
+  initialQty = 4,
+}: {
+  items: CalcItem[];
+  initialSlug?: string;
+  initialQty?: number;
+}) {
   const { live, lang } = useLive();
   const d = t(lang);
   const [slug, setSlug] = useState(initialSlug ?? items[0]?.slug ?? "");
-  const [qty, setQty] = useState(4);
+  const [qty, setQty] = useState(initialQty);
   // Text of the quantity field while it is being typed in (it may be briefly empty)
   const [qtyDraft, setQtyDraft] = useState<string | null>(null);
   const maxQty = 24; // enough for a batch from a garage

@@ -43,6 +43,17 @@ const dict = {
     estimateNote: "Точну ціну назвемо після перевірки на стенді",
     includes: "Що входить",
     otherServices: "Інші послуги",
+    relatedServices: "Пов'язані послуги",
+    landingLinks: "Марки, серії та авто",
+    sections: {
+      marky: { title: "Марки й серії", intro: "Ремонт форсунок і ПНВТ за виробником і серією: що саме ремонтуємо, типові несправності й ціни." },
+      avto: { title: "Авто й двигуни", intro: "Яка паливна апаратура стоїть на популярних дизелях, що в ній ламається і скільки коштує ремонт." },
+    },
+    sectionEmpty: "Розділ наповнюється.",
+    articles: { title: "Статті", intro: "Поради щодо паливної апаратури дизелів і реальні ремонти з протоколами до і після." },
+    caseLabel: "Кейс",
+    usefulArticles: "Корисні статті",
+    forUnits: (n: number) => `за ${n} шт.`,
     faq: "Часті питання",
     shippingHeading: "Як відправити деталі на ремонт",
     npHeading: "Дані для відправки Новою поштою",
@@ -114,6 +125,17 @@ const dict = {
     estimateNote: "Точную цену назовём после проверки на стенде",
     includes: "Что входит",
     otherServices: "Другие услуги",
+    relatedServices: "Связанные услуги",
+    landingLinks: "Марки, серии и авто",
+    sections: {
+      marky: { title: "Марки и серии", intro: "Ремонт форсунок и ТНВД по производителю и серии: что именно ремонтируем, типичные неисправности и цены." },
+      avto: { title: "Авто и двигатели", intro: "Какая топливная аппаратура стоит на популярных дизелях, что в ней ломается и сколько стоит ремонт." },
+    },
+    sectionEmpty: "Раздел наполняется.",
+    articles: { title: "Статьи", intro: "Советы по топливной аппаратуре дизелей и реальные ремонты с протоколами до и после." },
+    caseLabel: "Кейс",
+    usefulArticles: "Полезные статьи",
+    forUnits: (n: number) => `за ${n} шт.`,
     faq: "Частые вопросы",
     shippingHeading: "Как отправить детали на ремонт",
     npHeading: "Данные для отправки Новой почтой",
@@ -185,6 +207,17 @@ const dict = {
     estimateNote: "The exact price is confirmed after bench testing",
     includes: "What's included",
     otherServices: "Other services",
+    relatedServices: "Related services",
+    landingLinks: "Brands, series and vehicles",
+    sections: {
+      marky: { title: "Brands & series", intro: "Injector and fuel pump repair by maker and series: what we repair, typical faults and prices." },
+      avto: { title: "Vehicles & engines", intro: "Which fuel system parts popular diesel engines use, what fails in them and what the repair costs." },
+    },
+    sectionEmpty: "This section is being filled in.",
+    articles: { title: "Articles", intro: "Advice on diesel fuel systems and real repairs with before-and-after reports." },
+    caseLabel: "Case study",
+    usefulArticles: "Useful articles",
+    forUnits: (n: number) => `for ${n}`,
     faq: "FAQ",
     shippingHeading: "How to send parts for repair",
     npHeading: "Nova Poshta shipping details",
@@ -233,6 +266,15 @@ const dict = {
 
 export type Dict = (typeof dict)["uk"];
 export const t = (lang: Locale): Dict => dict[lang];
+
+// "13 жовтня 2026" from YYYY-MM-DD (as UTC, so the day never shifts)
+export const formatDate = (lang: Locale, date: string) =>
+  new Date(`${date}T00:00:00Z`).toLocaleDateString(lang === "en" ? "en-GB" : lang === "ru" ? "ru-RU" : "uk-UA", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 
 export const formatPrice = (lang: Locale, n: number) =>
   `${n.toLocaleString(lang === "en" ? "en-US" : "uk-UA")} ${dict[lang].currency}`;

@@ -4,14 +4,17 @@ Static Next.js site (`output: "export"`) in Ukrainian (`/`), Russian (`/ru/`) an
 
 ## Content: Google Sheet
 
-All business data lives in a Google Sheet (tabs `settings`, `texts`, `schedule`, `services`, `faq`, `addons`, `pages`, and the optional `stats`, `reviews`;
+All business data lives in a Google Sheet (tabs `settings`, `texts`, `schedule`, `services`, `faq`, `addons`, `pages`, and the optional `stats`, `reviews`,
+`series` (pages under `/marky/`), `vehicles` (pages under `/avto/`), `articles` (under `/statti/`);
 the column format is described at the top of `src/config/sheet.ts`).
 
 - **Build time**: the whole sheet is read and baked into the HTML (what search engines index).
 - **In the browser**: prices, phone/messengers, opening hours and calculator extras are re-read on page load,
   so those edits are live immediately. Everything else (texts, services, FAQ, pages) appears after a rebuild:
   run the **Rebuild site** action (see Deploy). Prices in page titles and link previews also refresh then.
-- If the sheet is unreachable, `src/config/default.ts` is used (the build never fails).
+- Without `NEXT_PUBLIC_SHEET_ID` the bundled `src/config/default.ts` is used. With it, the build retries
+  Google's "too many requests" answers; if the sheet still can't be read, the build fails, so Cloudflare
+  keeps the previous version instead of publishing placeholder data. `next dev` falls back to the defaults.
 - Keep the cells formatted as plain text (`settings` and `services` already are). Phone numbers like
   `+38 (0..) ...` otherwise turn into formulas (`#ERROR!`) or lose the `+`, and a column that mixes numbers
   with text comes back from Google with one kind blanked (e.g. some prices empty). The build log warns

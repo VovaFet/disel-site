@@ -1,4 +1,4 @@
-import type { Faq, Locale, Service, SiteConfig } from "@/config/types";
+import type { Article, Faq, Locale, Service, SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { openingHoursSchema } from "./hours";
 
@@ -29,9 +29,22 @@ export function businessSchema(c: SiteConfig, lang: Locale) {
   };
 }
 
+// Breadcrumbs from [name, path] pairs, home first
+export function breadcrumbSchema(c: SiteConfig, lang: Locale, items: [name: string, path: string][]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map(([name, path], i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name,
+      item: `${c.url}${localePath(lang, path)}`,
+    })),
+  };
+}
+
 export function serviceSchema(c: SiteConfig, service: Service, lang: Locale) {
   const d = t(lang);
-  const abs = (path: string) => `${c.url}${localePath(lang, path)}`;
   return [
     {
       "@context": "https://schema.org",
@@ -47,15 +60,11 @@ export function serviceSchema(c: SiteConfig, service: Service, lang: Locale) {
         priceSpecification: { "@type": "PriceSpecification", minPrice: service.priceFrom, priceCurrency: "UAH" },
       },
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: d.nav.home, item: abs("/") },
-        { "@type": "ListItem", position: 2, name: d.nav.services, item: abs("/poslugy/") },
-        { "@type": "ListItem", position: 3, name: service.title[lang], item: abs(`/poslugy/${service.slug}/`) },
-      ],
-    },
+    breadcrumbSchema(c, lang, [
+      [d.nav.home, "/"],
+      [d.nav.services, "/poslugy/"],
+      [service.title[lang], `/poslugy/${service.slug}/`],
+    ]),
     ...faqSchema([...service.faq, ...c.commonFaq], lang),
   ];
 }
@@ -74,4 +83,20 @@ export function faqSchema(items: Faq[], lang: Locale) {
       })),
     },
   ];
+}
+
+export function articleSchema(c: SiteConfig, a: Article, lang: Locale, path: string) {
+  const abs = (p: string) => (p.startsWith("http") ? p : `${c.url}${p}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: a.title[lang],
+    description: a.description[lang],
+    datePublished: a.date,
+    inLanguage: lang,
+    mainEntityOfPage: abs(localePath(lang, path)),
+    ...(a.image && !a.image.startsWith("data:") && { image: abs(a.image) }),
+    author: { "@id": businessId(c) },
+    publisher: { "@id": businessId(c) },
+  };
 }

@@ -6,6 +6,7 @@ import { FaqList } from "@/components/FaqList";
 import { JsonLd } from "@/components/JsonLd";
 import { ContactActions, MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
 import { OpenStatus } from "@/components/OpenStatus";
+import { PriceAside } from "@/components/PriceAside";
 import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
@@ -16,9 +17,10 @@ import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { faqSchema, serviceSchema } from "@/lib/schema";
+import { ArticleCards } from "./articles";
 import { openGraph, pageMetadata } from "./RootShell";
 
-const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
+export const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
   c.services.map((s) => ({
     slug: s.slug,
     group: s.group,
@@ -113,6 +115,16 @@ export async function HomePage({ lang }: { lang: Locale }) {
 
       <Reviews reviews={c.trust.reviews} lang={lang} />
 
+      {c.articles.length > 0 && (
+        <section className="container section">
+          <h2>{d.usefulArticles}</h2>
+          <ArticleCards lang={lang} articles={c.articles.slice(0, 3)} />
+          <p>
+            <Link href={localePath(lang, "/statti/")}>{d.articles.title} →</Link>
+          </p>
+        </section>
+      )}
+
       {c.commonFaq.length > 0 && (
         <section className="container section">
           <JsonLd data={faqSchema(c.commonFaq, lang)} />
@@ -183,6 +195,9 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
     ...c.services.filter((x) => x.group === s.group && x.slug !== s.slug),
     ...c.services.filter((x) => x.group !== s.group),
   ].slice(0, 3);
+  // Brand/series and vehicle pages that belong to this service
+  const landingLinks = c.landings.filter((l) => l.services.includes(s.slug));
+  const articleLinks = c.articles.filter((a) => a.services.includes(s.slug)).slice(0, 4);
 
   return (
     <article className="container section">
@@ -211,16 +226,21 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
 
           {s.body[lang] && <RichText text={s.body[lang]} />}
         </div>
-        {/* Wide screens only: price and contact buttons stay in view while reading */}
-        <aside className="service-aside" aria-label={d.book}>
-          <span className="muted">{d.priceLabel}</span>
-          <strong className="aside-price">
-            <Price slug={s.slug} />
-          </strong>
-          <OpenStatus />
-          <ContactActions label={d.book} className="aside-actions" />
-        </aside>
+        <PriceAside lang={lang} price={<Price slug={s.slug} />} />
       </div>
+
+      {landingLinks.length > 0 && (
+        <nav className="landing-links" aria-label={d.landingLinks}>
+          <h2>{d.landingLinks}</h2>
+          <ul>
+            {landingLinks.map((l) => (
+              <li key={`${l.section}/${l.slug}`}>
+                <Link href={p(`/${l.section}/${l.slug}/`)}>{l.title[lang]}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
 
       <h2>{d.estimate}</h2>
       <PriceCalculator items={calcItems(c, lang)} initialSlug={s.slug} />
@@ -233,6 +253,13 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
       )}
 
       <ContactActions label={d.book} />
+
+      {articleLinks.length > 0 && (
+        <section className="related">
+          <h2>{d.usefulArticles}</h2>
+          <ArticleCards lang={lang} articles={articleLinks} />
+        </section>
+      )}
 
       {related.length > 0 && (
         <section className="related">

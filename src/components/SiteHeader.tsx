@@ -1,11 +1,18 @@
 import Link from "next/link";
-import type { Locale, SiteConfig } from "@/config/types";
+import { landingSections, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { HeaderShell } from "./HeaderShell";
 import { LangSwitcher } from "./LangSwitcher";
 import { HoursList, MessengerLink, PhoneLink } from "./Live";
 import { MobileMenu } from "./MobileMenu";
 import { OpenStatus } from "./OpenStatus";
+
+// Brand/series, vehicle and article sections that have pages, for the mobile menu and the footer
+const sectionLinks = (lang: Locale, config: SiteConfig) =>
+  landingSections
+    .filter((s) => config.landings.some((l) => l.section === s))
+    .map((s) => ({ href: localePath(lang, `/${s}/`), label: t(lang).sections[s].title }))
+    .concat(config.articles.length ? [{ href: localePath(lang, "/statti/"), label: t(lang).articles.title }] : []);
 
 export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: SiteConfig; notFound?: boolean }) {
   const d = t(lang);
@@ -27,6 +34,7 @@ export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: S
           links={[
             { href: p("/"), label: d.nav.home },
             { href: p("/poslugy/"), label: d.nav.servicesFull },
+            ...sectionLinks(lang, config),
             { href: `${p("/")}#calculator`, label: d.nav.calculator },
             { href: p("/dostavka/"), label: d.nav.delivery },
             { href: p("/pro-nas/"), label: d.nav.about },
@@ -61,6 +69,11 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
             <li>
               <Link href={localePath(lang, "/poslugy/")}>{d.nav.servicesFull}</Link>
             </li>
+            {sectionLinks(lang, config).map((l) => (
+              <li key={l.href}>
+                <Link href={l.href}>{l.label}</Link>
+              </li>
+            ))}
             <li>
               <Link href={localePath(lang, "/dostavka/")}>{d.nav.delivery}</Link>
             </li>
