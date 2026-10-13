@@ -155,7 +155,12 @@ const toTrust = (s: Record<string, string>, stats: Row[], reviews: Row[]): Trust
 });
 
 function toServices(rows: Row[], faqRows: Row[]): Service[] {
-  return rows.map((r) => {
+  // A row without a slug has no page address (e.g. a service still being filled in): skip it
+  const withSlug = rows.filter((r) => {
+    if (!r.slug) console.warn(`[config] services: row without slug skipped ("${r.title_uk ?? ""}")`);
+    return Boolean(r.slug);
+  });
+  return withSlug.map((r) => {
     const includes = l10n(r, "includes");
     const options = r.perUnitOptions ? r.perUnitOptions.split(",").map((x) => Number(x.trim())) : undefined;
     // An empty price usually means mixed number/text cells in the column: Google then blanks one kind

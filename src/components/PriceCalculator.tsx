@@ -17,7 +17,7 @@ export type CalcItem = {
 export function PriceCalculator({ items, initialSlug }: { items: CalcItem[]; initialSlug?: string }) {
   const { live, lang } = useLive();
   const d = t(lang);
-  const [slug, setSlug] = useState(initialSlug ?? items[0].slug);
+  const [slug, setSlug] = useState(initialSlug ?? items[0]?.slug ?? "");
   const [qty, setQty] = useState(4);
   // Text of the quantity field while it is being typed in (it may be briefly empty)
   const [qtyDraft, setQtyDraft] = useState<string | null>(null);
@@ -30,7 +30,8 @@ export function PriceCalculator({ items, initialSlug }: { items: CalcItem[]; ini
 
   const radioName = useId();
 
-  const item = items.find((s) => s.slug === slug)!;
+  const item = items.find((s) => s.slug === slug);
+  if (!item) return null; // no services in the sheet: nothing to estimate
   const units = item.perUnitOptions ? qty : 1;
   const price = (s: string) => live.prices[s] ?? 0;
   const extras = live.addons.filter((a) => picked.includes(a.id));
