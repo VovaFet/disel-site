@@ -19,6 +19,7 @@ import { openGraph, pageMetadata } from "./RootShell";
 const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
   c.services.map((s) => ({
     slug: s.slug,
+    group: s.group,
     title: s.title[lang],
     perUnitOptions: s.perUnitOptions,
     perUnitLabel: s.perUnitLabel?.[lang],
