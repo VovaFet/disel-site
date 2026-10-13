@@ -12,6 +12,13 @@ export function PriceCalculator({ items, initialSlug }: { items: CalcItem[]; ini
   const d = t(lang);
   const [slug, setSlug] = useState(initialSlug ?? items[0].slug);
   const [qty, setQty] = useState(4);
+  // Text of the quantity field while it is being typed in (it may be briefly empty)
+  const [qtyDraft, setQtyDraft] = useState<string | null>(null);
+  const maxQty = 24; // enough for a batch from a garage
+  const pickQty = (n: number) => {
+    setQty(Math.min(Math.max(n, 1), maxQty));
+    setQtyDraft(null);
+  };
   const [picked, setPicked] = useState<string[]>([]);
 
   const item = items.find((s) => s.slug === slug)!;
@@ -44,18 +51,43 @@ export function PriceCalculator({ items, initialSlug }: { items: CalcItem[]; ini
         {item.perUnitOptions && (
           <fieldset className="field">
             <legend>{item.perUnitLabel}</legend>
-            <div className="chips">
-              {item.perUnitOptions.map((n) => (
-                <button
-                  key={n}
-                  type="button"
-                  className={`chip ${qty === n ? "is-active" : ""}`}
-                  aria-pressed={qty === n}
-                  onClick={() => setQty(n)}
-                >
-                  {n}
+            <div className="qty">
+              <div className="chips">
+                {item.perUnitOptions.map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    className={`chip ${qty === n ? "is-active" : ""}`}
+                    aria-pressed={qty === n}
+                    onClick={() => pickQty(n)}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+              {/* Any other count (5, 7, a batch of 12): step or type it */}
+              <div className="stepper">
+                <button type="button" aria-label={d.decreaseQty} disabled={qty <= 1} onClick={() => pickQty(qty - 1)}>
+                  −
                 </button>
-              ))}
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  max={maxQty}
+                  aria-label={item.perUnitLabel}
+                  value={qtyDraft ?? String(qty)}
+                  onChange={(e) => {
+                    const n = Number(e.target.value);
+                    setQtyDraft(e.target.value);
+                    if (Number.isInteger(n) && n >= 1) setQty(Math.min(n, maxQty));
+                  }}
+                  onBlur={() => setQtyDraft(null)}
+                />
+                <button type="button" aria-label={d.increaseQty} disabled={qty >= maxQty} onClick={() => pickQty(qty + 1)}>
+                  +
+                </button>
+              </div>
             </div>
           </fieldset>
         )}
