@@ -128,7 +128,28 @@ select {
 .chip.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
 .check { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 4px 0; }
 .check input { width: 18px; height: 18px; accent-color: var(--accent); }
-.check .muted { margin-left: auto; }
+.check .muted { margin-left: auto; white-space: nowrap; }
+
+/* Service picker: cards with prices on wide screens, the native select on phones */
+.svc-options { display: none; }
+@media (min-width: 800px) {
+  .svc-select { display: none; }
+  .svc-options { display: grid; gap: 14px; }
+}
+.svc-group { display: grid; gap: 6px; }
+.svc-group-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.svc-grid { display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.svc-option {
+  position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); transition: border-color 0.15s, background 0.15s;
+}
+.svc-option:hover { border-color: var(--accent); }
+.svc-option.is-active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--bg)); }
+.svc-option input { position: absolute; opacity: 0; pointer-events: none; }
+.svc-option:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+.svc-title { font-weight: 600; line-height: 1.3; }
+.svc-price { font-size: 0.85rem; color: var(--muted); }
+.svc-option.is-active .svc-price { color: var(--accent); }
 .calc-total {
   display: flex; flex-direction: column; justify-content: center; gap: 8px;
   padding: 24px; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--border);
@@ -137,6 +158,15 @@ select {
 .calc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .calc-actions .btn { flex: 1; }
 .calc-actions .btn:first-child { flex-basis: 100%; }
+/* Breakdown under the total: base price × quantity and each picked extra */
+.calc-lines { list-style: none; margin: 0; padding: 8px 0 0; border-top: 1px solid var(--border); display: grid; gap: 4px; font-size: 0.9rem; }
+.calc-lines li { display: flex; justify-content: space-between; gap: 12px; }
+.calc-lines li > span:last-child { white-space: nowrap; font-weight: 600; }
+.calc-line-unit { display: block; white-space: nowrap; }
+/* The picker makes the left column tall: keep the total in view while choosing */
+@media (min-width: 800px) {
+  .calc-total { align-self: start; position: sticky; top: 88px; }
+}
 .total-value { font-size: 2rem; color: var(--accent); animation: pop 0.25s ease-out; }
 @keyframes pop { from { transform: scale(0.94); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
 .muted { color: var(--muted); }
