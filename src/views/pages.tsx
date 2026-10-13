@@ -157,6 +157,11 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
   if (!s) notFound();
   const d = t(lang);
   const p = (path: string) => localePath(lang, path);
+  // Same group first, then the rest
+  const related = [
+    ...c.services.filter((x) => x.group === s.group && x.slug !== s.slug),
+    ...c.services.filter((x) => x.group !== s.group),
+  ].slice(0, 3);
 
   return (
     <article className="container section">
@@ -174,14 +179,27 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
         {d.priceLabel}: <Price slug={s.slug} />
       </p>
 
-      <h2>{d.includes}</h2>
-      <ul className="features">
-        {s.includes[lang].map((i) => (
-          <li key={i}>{i}</li>
-        ))}
-      </ul>
+      <div className="service-layout">
+        <div>
+          <h2>{d.includes}</h2>
+          <ul className="features">
+            {s.includes[lang].map((i) => (
+              <li key={i}>{i}</li>
+            ))}
+          </ul>
 
-      {s.body[lang] && <RichText text={s.body[lang]} />}
+          {s.body[lang] && <RichText text={s.body[lang]} />}
+        </div>
+        {/* Wide screens only: price and contact buttons stay in view while reading */}
+        <aside className="service-aside" aria-label={d.book}>
+          <span className="muted">{d.priceLabel}</span>
+          <strong className="aside-price">
+            <Price slug={s.slug} />
+          </strong>
+          <OpenStatus />
+          <ContactActions label={d.book} className="aside-actions" />
+        </aside>
+      </div>
 
       <h2>{d.estimate}</h2>
       <PriceCalculator items={calcItems(c, lang)} initialSlug={s.slug} />
@@ -199,6 +217,13 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
       )}
 
       <ContactActions label={d.book} />
+
+      {related.length > 0 && (
+        <section className="related">
+          <h2>{d.otherServices}</h2>
+          <ServiceList lang={lang} services={related} />
+        </section>
+      )}
     </article>
   );
 }
