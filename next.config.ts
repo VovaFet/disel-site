@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
   images: { unoptimized: true },
+  // New on every build: the build-time sheet requests carry it, so `next build` never reuses
+  // sheet data that a previous build left in .next/cache (CI may keep that folder)
+  env: { SHEET_BUILD_STAMP: String(Date.now()) },
   // Each language has its own root layout, so the 404 page (out/404.html) comes from
   // app/global-not-found.tsx instead of a not-found.tsx inside a layout.
   experimental: { globalNotFound: true },
