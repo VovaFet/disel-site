@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FaqList } from "@/components/FaqList";
 import { JsonLd } from "@/components/JsonLd";
 import { ContactActions, MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
 import { OpenStatus } from "@/components/OpenStatus";
@@ -13,7 +14,7 @@ import { ShippingDetails } from "@/components/ShippingDetails";
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
-import { serviceSchema } from "@/lib/schema";
+import { faqSchema, serviceSchema } from "@/lib/schema";
 import { openGraph, pageMetadata } from "./RootShell";
 
 const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
@@ -100,6 +101,14 @@ export async function HomePage({ lang }: { lang: Locale }) {
           ))}
         </ul>
       </section>
+
+      {c.commonFaq.length > 0 && (
+        <section className="container section">
+          <JsonLd data={faqSchema(c.commonFaq, lang)} />
+          <h2>{d.faq}</h2>
+          <FaqList items={c.commonFaq} lang={lang} />
+        </section>
+      )}
     </>
   );
 }
@@ -208,12 +217,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
       {s.faq.length + c.commonFaq.length > 0 && (
         <>
           <h2>{d.faq}</h2>
-          {[...s.faq, ...c.commonFaq].map((f) => (
-            <details key={f.q[lang]} className="faq">
-              <summary>{f.q[lang]}</summary>
-              <p>{f.a[lang]}</p>
-            </details>
-          ))}
+          <FaqList items={[...s.faq, ...c.commonFaq]} lang={lang} />
         </>
       )}
 

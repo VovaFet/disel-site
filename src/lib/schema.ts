@@ -1,4 +1,4 @@
-import type { Locale, Service, SiteConfig } from "@/config/types";
+import type { Faq, Locale, Service, SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { openingHoursSchema } from "./hours";
 
@@ -56,10 +56,18 @@ export function serviceSchema(c: SiteConfig, service: Service, lang: Locale) {
         { "@type": "ListItem", position: 3, name: service.title[lang], item: abs(`/poslugy/${service.slug}/`) },
       ],
     },
+    ...faqSchema([...service.faq, ...c.commonFaq], lang),
+  ];
+}
+
+// FAQPage markup; nothing when there are no questions (an empty FAQPage is invalid)
+export function faqSchema(items: Faq[], lang: Locale) {
+  if (!items.length) return [];
+  return [
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: [...service.faq, ...c.commonFaq].map((f) => ({
+      mainEntity: items.map((f) => ({
         "@type": "Question",
         name: f.q[lang],
         acceptedAnswer: { "@type": "Answer", text: f.a[lang] },
