@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
-import { MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
+import { ContactActions, MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
 import { OpenStatus } from "@/components/OpenStatus";
 import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { Reveal } from "@/components/Reveal";
@@ -196,11 +196,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
         </>
       )}
 
-      <div className="actions">
-        <PhoneLink className="btn">
-          {d.book}: <PhoneText />
-        </PhoneLink>
-      </div>
+      <ContactActions label={d.book} />
     </article>
   );
 }
@@ -233,6 +229,9 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
         <p>
           <MessengerLink kind="telegram">{d.writeTelegram}</MessengerLink>
         </p>
+        <p>
+          <MessengerLink kind="viber">{d.writeViber}</MessengerLink>
+        </p>
         <OpenStatus />
         <HoursList />
       </address>
@@ -262,11 +261,7 @@ export async function InfoPageView({ lang, slug }: { lang: Locale; slug: InfoPag
     <article className="container section">
       <h1>{page.title[lang]}</h1>
       <RichText text={page.body[lang]} />
-      <div className="actions">
-        <PhoneLink className="btn">
-          {t(lang).call}: <PhoneText />
-        </PhoneLink>
-      </div>
+      <ContactActions label={t(lang).call} />
     </article>
   );
 }

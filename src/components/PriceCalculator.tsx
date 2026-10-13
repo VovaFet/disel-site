@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { formatPrice, t } from "@/i18n";
+import { ContactActions } from "./Live";
 import { useLive } from "./LiveConfig";
 
 export type CalcItem = { slug: string; title: string; perUnitOptions?: number[]; perUnitLabel?: string };
@@ -79,9 +80,7 @@ export function PriceCalculator({ items, initialSlug }: { items: CalcItem[]; ini
           {d.from} {formatPrice(lang, total)}
         </strong>
         <span className="muted small">{d.estimateNote}</span>
-        <a href={`tel:${live.phone}`} className="btn">
-          {d.book}
-        </a>
+        <ContactActions label={d.book} className="calc-actions" />
       </div>
     </div>
   );
