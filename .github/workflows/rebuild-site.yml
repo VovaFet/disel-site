@@ -1,0 +1,38 @@
+# Rebuilds the site on Cloudflare so text edits in the Google Sheet go live
+# (prices, contacts and hours are re-read in the browser and need no rebuild, see README).
+# Run it by hand: Actions → "Rebuild site" → Run workflow.
+# Needs the repository secret CF_DEPLOY_HOOK_URL: a Cloudflare deploy hook for the main branch
+# (Workers → disel-site → Settings → Builds → Deploy Hooks).
+name: Rebuild site
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Start a Cloudflare build
+        env:
+          HOOK_URL: ${{ secrets.CF_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK_URL" ]; then
+            echo "::error::Немає секрету CF_DEPLOY_HOOK_URL: додайте його в Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          body=$(curl -sS -X POST "$HOOK_URL") || { echo "::error::Не вдалося зв'язатися з Cloudflare."; exit 1; }
+          if [ "$(jq -r '.success' <<<"$body" 2>/dev/null)" != "true" ]; then
+            echo "::error::Cloudflare не запустив збірку: $(jq -c '.errors' <<<"$body" 2>/dev/null || echo "$body")"
+            exit 1
+          fi
+          build=$(jq -r '.result.build_uuid' <<<"$body")
+          if [ "$(jq -r '.result.already_exists // false' <<<"$body")" = "true" ]; then
+            msg="Збірка вже стоїть у черзі ($build), сайт оновиться, щойно вона завершиться."
+          else
+            msg="Збірку $build запущено, сайт оновиться за кілька хвилин."
+          fi
+          echo "$msg"
+          echo "$msg" >> "$GITHUB_STEP_SUMMARY"

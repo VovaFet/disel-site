@@ -79,6 +79,20 @@ export type SiteConfig = {
   commonFaq: Faq[];
   pages: InfoPage[];
   addons: Addon[];
+  trust: Trust;
+};
+
+// Trust blocks on the home page. They come from the sheet only, with no bundled examples
+// (made-up numbers or reviews must never reach the live site); an empty field hides its block.
+export type Stat = { value: string; label: L10n };
+// rating 1–5, 0 = no stars; the text is shown as written, in every language
+export type Review = { name: string; car: string; rating: number; text: string };
+export type Trust = {
+  brands: string[];
+  heroImage: string;
+  protocolImage: string;
+  stats: Stat[];
+  reviews: Review[];
 };
 
 export const toLive = (c: SiteConfig): LiveConfig => ({

@@ -499,4 +499,7 @@ export const defaultConfig: SiteConfig = {
       label: { uk: "Пакування й відправка назад", ru: "Упаковка и отправка обратно", en: "Packing and return shipping" },
     },
   ],
+
+  // Filled from the sheet only: these blocks stay hidden until there is real data
+  trust: { brands: [], heroImage: "", protocolImage: "", stats: [], reviews: [] },
 };

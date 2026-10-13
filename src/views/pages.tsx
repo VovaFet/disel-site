@@ -11,6 +11,7 @@ import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
 import { ServiceList } from "@/components/ServiceList";
 import { ShippingDetails } from "@/components/ShippingDetails";
+import { Brands, HeroImage, ProtocolSample, Reviews, Stats } from "@/components/Trust";
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
@@ -35,24 +36,29 @@ export async function HomePage({ lang }: { lang: Locale }) {
   const d = t(lang);
   return (
     <>
-      <section className="hero">
-        <div className="container">
-          <OpenStatus />
-          <h1>
-            {d.homeH1} {c.texts.cityIn[lang]}
-          </h1>
-          <p className="lead">{c.texts.description[lang]}</p>
-          <p className="badge">📦 {c.texts.shipping[lang]}</p>
-          <div className="actions">
-            <PhoneLink className="btn">
-              {d.book}: <PhoneText />
-            </PhoneLink>
-            <a href="#calculator" className="btn btn-outline">
-              {d.estimate}
-            </a>
+      <section className={`hero ${c.trust.heroImage ? "hero-with-image" : ""}`}>
+        <div className="container hero-grid">
+          <div>
+            <OpenStatus />
+            <h1>
+              {d.homeH1} {c.texts.cityIn[lang]}
+            </h1>
+            <p className="lead">{c.texts.description[lang]}</p>
+            <p className="badge">📦 {c.texts.shipping[lang]}</p>
+            <div className="actions">
+              <PhoneLink className="btn">
+                {d.book}: <PhoneText />
+              </PhoneLink>
+              <a href="#calculator" className="btn btn-outline">
+                {d.estimate}
+              </a>
+            </div>
+            <Stats stats={c.trust.stats} lang={lang} />
           </div>
+          <HeroImage src={c.trust.heroImage} lang={lang} />
         </div>
       </section>
+      <Brands brands={c.trust.brands} lang={lang} />
 
       <section className="container section">
         <h2>{d.servicesHeading}</h2>
@@ -100,7 +106,10 @@ export async function HomePage({ lang }: { lang: Locale }) {
             </li>
           ))}
         </ul>
+        <ProtocolSample src={c.trust.protocolImage} lang={lang} />
       </section>
+
+      <Reviews reviews={c.trust.reviews} lang={lang} />
 
       {c.commonFaq.length > 0 && (
         <section className="container section">

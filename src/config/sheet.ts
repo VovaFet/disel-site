@@ -13,6 +13,10 @@
 //   body format: blank line = new block, "## " = heading, lines starting with "- " = list
 //   faq       slug | q_uk | a_uk | q_ru | a_ru | q_en | a_en   (slug "*" = every service)
 //   addons    id | price | label_uk | label_ru | label_en
+//   Trust blocks on the home page (optional; empty = hidden):
+//   settings  brands (comma-separated), heroImage, protocolImage (an image URL or a /path from public/)
+//   stats     value | label_uk | label_ru | label_en          ("12" | "років досвіду")
+//   reviews   name | car | rating | text                      (rating 1–5, may be empty; text as written)
 import { defaultConfig } from "./default";
 import {
   infoPageSlugs,
@@ -28,6 +32,7 @@ import {
   type Service,
   type ServiceGroup,
   type SiteConfig,
+  type Trust,
 } from "./types";
 
 type Row = Record<string, string>;
@@ -75,9 +80,22 @@ const toObjects = (table: string[][]): Row[] => {
 
 async function fetchTab(sheetId: string, tab: string): Promise<Row[]> {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(tab)}`;
-  const res = await fetch(url, { cache: "no-store" });
+  // The browser skips its HTTP cache so live values are fresh. At build time "no-store" would make
+  // the static export fail (the build used to fall back to the bundled defaults without a word);
+  // instead the per-build stamp from next.config.ts keeps Next from reusing an older build's response.
+  const res =
+    typeof window === "undefined"
+      ? await fetch(`${url}&build=${process.env.SHEET_BUILD_STAMP}`)
+      : await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`Sheet tab "${tab}": HTTP ${res.status}`);
   return toObjects(parseCsv(await res.text()));
+}
+
+// Google returns the first tab when the named one is missing, so an optional tab
+// counts only when its header has the expected columns
+async function fetchOptionalTab(sheetId: string, tab: string, columns: string[]): Promise<Row[]> {
+  const rows = await fetchTab(sheetId, tab).catch(() => []);
+  return rows.length > 0 && columns.every((c) => c in rows[0]) ? rows : [];
 }
 
 // Falls back to Ukrainian when a translation cell is empty
@@ -121,10 +139,27 @@ const toPages = (rows: Row[]): InfoPage[] =>
       body: l10n(r, "body"),
     }));
 
+const toTrust = (s: Record<string, string>, stats: Row[], reviews: Row[]): Trust => ({
+  brands: (s.brands ?? "").split(",").map((b) => b.trim()).filter(Boolean),
+  heroImage: s.heroImage ?? "",
+  protocolImage: s.protocolImage ?? "",
+  stats: stats.filter((r) => r.value && r.label_uk).map((r) => ({ value: r.value, label: l10n(r, "label") })),
+  reviews: reviews
+    .filter((r) => r.name && r.text)
+    .map((r) => ({
+      name: r.name,
+      car: r.car ?? "",
+      rating: Math.min(5, Math.max(0, Math.round(num(r.rating, 0)))),
+      text: r.text,
+    })),
+});
+
 function toServices(rows: Row[], faqRows: Row[]): Service[] {
   return rows.map((r) => {
     const includes = l10n(r, "includes");
     const options = r.perUnitOptions ? r.perUnitOptions.split(",").map((x) => Number(x.trim())) : undefined;
+    // An empty price usually means mixed number/text cells in the column: Google then blanks one kind
+    if (!r.priceFrom || Number.isNaN(Number(r.priceFrom))) console.warn(`[config] services: no valid priceFrom for "${r.slug}"`);
     return {
       slug: r.slug,
       group: (serviceGroups as readonly string[]).includes(r.group) ? (r.group as ServiceGroup) : "injectors",
@@ -148,6 +183,10 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
   const [settingsRows, texts, schedule, services, faq, addons, pages] = await Promise.all(
     ["settings", "texts", "schedule", "services", "faq", "addons", "pages"].map((t) => fetchTab(sheetId, t)),
   );
+  const [stats, reviews] = await Promise.all([
+    fetchOptionalTab(sheetId, "stats", ["value", "label_uk"]),
+    fetchOptionalTab(sheetId, "reviews", ["name", "text"]),
+  ]);
   const s = toSettings(settingsRows);
   const d = defaultConfig;
   const text = (key: keyof SiteConfig["texts"]): L10n => {
@@ -181,6 +220,7 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     // Missing pages in the sheet fall back to the bundled text
     pages: d.pages.map((p) => toPages(pages).find((x) => x.slug === p.slug) ?? p),
     addons: addons.length ? toAddons(addons) : d.addons,
+    trust: toTrust(s, stats, reviews),
   };
 }
 
