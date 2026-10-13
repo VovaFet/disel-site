@@ -216,6 +216,8 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
   const c = await getConfig();
   const d = t(lang);
   const mapSrc = `https://www.google.com/maps?q=${c.geo.lat},${c.geo.lng}&z=16&hl=${lang}&output=embed`;
+  // Opens turn-by-turn navigation in the Google Maps app on phones
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.geo.lat},${c.geo.lng}`;
   return (
     <section className="container section">
       <h1>{d.nav.contacts}</h1>
@@ -235,6 +237,11 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
         <OpenStatus />
         <HoursList />
       </address>
+      <div className="actions">
+        <a href={directionsUrl} className="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          {d.directions}
+        </a>
+      </div>
       <iframe
         title={`${c.texts.name[lang]} ${d.onMap}`}
         src={mapSrc}
