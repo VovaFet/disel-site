@@ -9,6 +9,7 @@ import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
 import { ServiceList } from "@/components/ServiceList";
+import { ShippingDetails } from "@/components/ShippingDetails";
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
@@ -80,6 +81,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
             </li>
           ))}
         </ol>
+        <ShippingDetails />
       </section>
 
       <section className="container section">
@@ -268,6 +270,7 @@ export async function InfoPageView({ lang, slug }: { lang: Locale; slug: InfoPag
     <article className="container section">
       <h1>{page.title[lang]}</h1>
       <RichText text={page.body[lang]} />
+      {slug === "dostavka" && <ShippingDetails />}
       <ContactActions label={t(lang).call} />
     </article>
   );
