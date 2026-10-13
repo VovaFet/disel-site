@@ -17,6 +17,7 @@ import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { faqSchema, serviceSchema } from "@/lib/schema";
+import { ArticleCards } from "./articles";
 import { openGraph, pageMetadata } from "./RootShell";
 
 export const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
@@ -114,6 +115,16 @@ export async function HomePage({ lang }: { lang: Locale }) {
 
       <Reviews reviews={c.trust.reviews} lang={lang} />
 
+      {c.articles.length > 0 && (
+        <section className="container section">
+          <h2>{d.usefulArticles}</h2>
+          <ArticleCards lang={lang} articles={c.articles.slice(0, 3)} />
+          <p>
+            <Link href={localePath(lang, "/statti/")}>{d.articles.title} →</Link>
+          </p>
+        </section>
+      )}
+
       {c.commonFaq.length > 0 && (
         <section className="container section">
           <JsonLd data={faqSchema(c.commonFaq, lang)} />
@@ -186,6 +197,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
   ].slice(0, 3);
   // Brand/series and vehicle pages that belong to this service
   const landingLinks = c.landings.filter((l) => l.services.includes(s.slug));
+  const articleLinks = c.articles.filter((a) => a.services.includes(s.slug)).slice(0, 4);
 
   return (
     <article className="container section">
@@ -241,6 +253,13 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
       )}
 
       <ContactActions label={d.book} />
+
+      {articleLinks.length > 0 && (
+        <section className="related">
+          <h2>{d.usefulArticles}</h2>
+          <ArticleCards lang={lang} articles={articleLinks} />
+        </section>
+      )}
 
       {related.length > 0 && (
         <section className="related">

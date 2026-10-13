@@ -50,6 +50,9 @@ const dict = {
       avto: { title: "Авто й двигуни", intro: "Яка паливна апаратура стоїть на популярних дизелях, що в ній ламається і скільки коштує ремонт." },
     },
     sectionEmpty: "Розділ наповнюється.",
+    articles: { title: "Статті", intro: "Поради щодо паливної апаратури дизелів і реальні ремонти з протоколами до і після." },
+    caseLabel: "Кейс",
+    usefulArticles: "Корисні статті",
     forUnits: (n: number) => `за ${n} шт.`,
     faq: "Часті питання",
     shippingHeading: "Як відправити деталі на ремонт",
@@ -129,6 +132,9 @@ const dict = {
       avto: { title: "Авто и двигатели", intro: "Какая топливная аппаратура стоит на популярных дизелях, что в ней ломается и сколько стоит ремонт." },
     },
     sectionEmpty: "Раздел наполняется.",
+    articles: { title: "Статьи", intro: "Советы по топливной аппаратуре дизелей и реальные ремонты с протоколами до и после." },
+    caseLabel: "Кейс",
+    usefulArticles: "Полезные статьи",
     forUnits: (n: number) => `за ${n} шт.`,
     faq: "Частые вопросы",
     shippingHeading: "Как отправить детали на ремонт",
@@ -208,6 +214,9 @@ const dict = {
       avto: { title: "Vehicles & engines", intro: "Which fuel system parts popular diesel engines use, what fails in them and what the repair costs." },
     },
     sectionEmpty: "This section is being filled in.",
+    articles: { title: "Articles", intro: "Advice on diesel fuel systems and real repairs with before-and-after reports." },
+    caseLabel: "Case study",
+    usefulArticles: "Useful articles",
     forUnits: (n: number) => `for ${n}`,
     faq: "FAQ",
     shippingHeading: "How to send parts for repair",
@@ -257,6 +266,15 @@ const dict = {
 
 export type Dict = (typeof dict)["uk"];
 export const t = (lang: Locale): Dict => dict[lang];
+
+// "13 жовтня 2026" from YYYY-MM-DD (as UTC, so the day never shifts)
+export const formatDate = (lang: Locale, date: string) =>
+  new Date(`${date}T00:00:00Z`).toLocaleDateString(lang === "en" ? "en-GB" : lang === "ru" ? "ru-RU" : "uk-UA", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 
 export const formatPrice = (lang: Locale, n: number) =>
   `${n.toLocaleString(lang === "en" ? "en-US" : "uk-UA")} ${dict[lang].currency}`;

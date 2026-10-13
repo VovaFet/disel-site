@@ -7,11 +7,12 @@ import { HoursList, MessengerLink, PhoneLink } from "./Live";
 import { MobileMenu } from "./MobileMenu";
 import { OpenStatus } from "./OpenStatus";
 
-// Brand/series and vehicle sections that have pages, for the mobile menu and the footer
+// Brand/series, vehicle and article sections that have pages, for the mobile menu and the footer
 const sectionLinks = (lang: Locale, config: SiteConfig) =>
   landingSections
     .filter((s) => config.landings.some((l) => l.section === s))
-    .map((s) => ({ href: localePath(lang, `/${s}/`), label: t(lang).sections[s].title }));
+    .map((s) => ({ href: localePath(lang, `/${s}/`), label: t(lang).sections[s].title }))
+    .concat(config.articles.length ? [{ href: localePath(lang, "/statti/"), label: t(lang).articles.title }] : []);
 
 export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: SiteConfig; notFound?: boolean }) {
   const d = t(lang);

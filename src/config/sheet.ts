@@ -22,8 +22,12 @@
 //             services: related service slugs, comma-separated (the first gives price and calculator)
 //             units: calculator quantity, e.g. 6 injectors; fields: title, h1, short, description, body
 //             FAQ for these pages goes to the faq tab with the page slug
+//   articles  slug | date | kind | services | image | title_* | description_* | body_*   (optional; → /statti/<slug>/)
+//             date: YYYY-MM-DD; kind: "case" for a repair case study, empty for an article;
+//             services: related service slugs; image: cover URL or /path from public/
 import { defaultConfig } from "./default";
 import {
+  type Article,
   infoPageSlugs,
   locales,
   serviceGroups,
@@ -161,6 +165,26 @@ const toTrust = (s: Record<string, string>, stats: Row[], reviews: Row[]): Trust
     })),
 });
 
+// Newest first; rows without a slug, title or a valid date are skipped
+const toArticles = (rows: Row[], serviceSlugs: string[]): Article[] =>
+  rows
+    .filter((r) => {
+      const ok = r.slug && r.title_uk && /^\d{4}-\d{2}-\d{2}$/.test(r.date ?? "");
+      if (!ok && r.slug) console.warn(`[config] articles/${r.slug}: needs title_uk and a YYYY-MM-DD date, skipped`);
+      return ok;
+    })
+    .map((r) => ({
+      slug: r.slug,
+      date: r.date,
+      isCase: (r.kind ?? "").trim().toLowerCase() === "case",
+      services: (r.services ?? "").split(",").map((x) => x.trim()).filter((x) => serviceSlugs.includes(x)),
+      image: r.image ?? "",
+      title: l10n(r, "title"),
+      description: l10n(r, "description"),
+      body: l10n(r, "body"),
+    }))
+    .sort((a, b) => b.date.localeCompare(a.date));
+
 function toLandings(section: LandingSection, rows: Row[], faqRows: Row[], serviceSlugs: string[]): Landing[] {
   return rows
     .filter((r) => r.slug && r.title_uk)
@@ -227,6 +251,7 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     fetchOptionalTab(sheetId, "series", ["slug", "title_uk"]),
     fetchOptionalTab(sheetId, "vehicles", ["slug", "title_uk"]),
   ]);
+  const articles = await fetchOptionalTab(sheetId, "articles", ["slug", "date", "title_uk"]);
   const s = toSettings(settingsRows);
   const d = defaultConfig;
   const svc = services.length ? toServices(services, faq) : d.services;
@@ -264,6 +289,7 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     addons: addons.length ? toAddons(addons) : d.addons,
     trust: toTrust(s, stats, reviews),
     landings: [...toLandings("marky", series, faq, svcSlugs), ...toLandings("avto", vehicles, faq, svcSlugs)],
+    articles: toArticles(articles, svcSlugs),
   };
 }
 

@@ -100,6 +100,20 @@ export type SiteConfig = {
   addons: Addon[];
   trust: Trust;
   landings: Landing[];
+  articles: Article[];
+};
+
+// Articles and repair case studies (content plan stage 4) under /statti/, newest first.
+// The text is "rich text lite" like service bodies; image is an optional cover.
+export type Article = {
+  slug: string;
+  date: string; // YYYY-MM-DD
+  isCase: boolean;
+  services: string[];
+  image: string;
+  title: L10n;
+  description: L10n;
+  body: L10n;
 };
 
 // Trust blocks on the home page. They come from the sheet only, with no bundled examples

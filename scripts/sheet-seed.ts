@@ -9,6 +9,7 @@ const daysToText = (days: number[]) =>
     : days.join(",");
 
 const l10nCols = (field: string) => locales.map((l) => `${field}_${l}`);
+const articleFields = ["title", "description", "body"] as const;
 const landingFields = ["title", "h1", "short", "description", "body"] as const;
 const serviceFields = ["perUnitLabel", "title", "h1", "short", "description", "includes", "body"] as const;
 
@@ -58,6 +59,10 @@ const tabs: Record<string, (string | number)[][]> = {
   addons: [["id", "price", ...l10nCols("label")], ...c.addons.map((a) => [a.id, a.price, ...locales.map((l) => a.label[l])])],
   stats: [["value", ...l10nCols("label")], ...c.trust.stats.map((s) => [s.value, ...locales.map((l) => s.label[l])])],
   reviews: [["name", "car", "rating", "text"], ...c.trust.reviews.map((r) => [r.name, r.car, r.rating || "", r.text])],
+  articles: [
+    ["slug", "date", "kind", "services", "image", ...articleFields.flatMap(l10nCols)],
+    ...c.articles.map((a) => [a.slug, a.date, a.isCase ? "case" : "", a.services.join(","), a.image, ...articleFields.flatMap((f) => locales.map((l) => a[f][l]))]),
+  ],
   ...Object.fromEntries(
     (["series", "vehicles"] as const).map((tab) => [
       tab,
