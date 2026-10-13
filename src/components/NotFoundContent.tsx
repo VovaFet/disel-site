@@ -1,10 +1,13 @@
 "use client";
 
+import type { Locale } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { usePathLocale } from "./usePathLocale";
 
-export function NotFoundContent() {
-  const lang = usePathLocale();
+// `lang` is known on the /ru/404/ and /en/404/ pages; the root 404.html takes it from the address
+export function NotFoundContent({ lang: pageLang }: { lang?: Locale }) {
+  const pathLang = usePathLocale();
+  const lang = pageLang ?? pathLang;
   const d = t(lang);
   return (
     <section className="container section not-found" lang={lang}>
