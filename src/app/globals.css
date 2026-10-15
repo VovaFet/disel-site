@@ -222,6 +222,11 @@ select {
 .total-value { font-size: 2rem; color: var(--accent); animation: pop 0.25s ease-out; }
 @keyframes pop { from { transform: scale(0.94); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
 .muted { color: var(--muted); }
+/* Discount offer (texts → discount in the sheet) next to prices */
+.discount-note { color: var(--accent); font-weight: 600; font-size: 0.95rem; }
+p.discount-note { margin: -8px 0 16px; }
+.badge-discount { border-color: var(--accent); color: var(--accent); }
+.hero .badge { margin-right: 8px; }
 .nowrap { white-space: nowrap; }
 .small { font-size: 0.85rem; }
 

@@ -18,10 +18,12 @@ export function PriceCalculator({
   items,
   initialSlug,
   initialQty = 4,
+  discount,
 }: {
   items: CalcItem[];
   initialSlug?: string;
   initialQty?: number;
+  discount?: string;
 }) {
   const { live, lang } = useLive();
   const d = t(lang);
@@ -179,6 +181,7 @@ export function PriceCalculator({
           </ul>
         )}
         <span className="muted small">{d.estimateNote}</span>
+        {discount && <span className="discount-note">{discount}</span>}
         <ContactActions label={d.book} className="calc-actions" />
       </div>
     </div>

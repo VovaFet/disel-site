@@ -123,16 +123,26 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
           {d.priceLabel}: <LandingPrice landing={l} />
         </p>
       )}
+      {services.length > 0 && c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
 
       <div className="service-layout">
         <div>{l.body[lang] && <RichText text={l.body[lang]} />}</div>
-        <PriceAside lang={lang} price={services.length > 0 ? <LandingPrice landing={l} /> : undefined} />
+        <PriceAside
+          lang={lang}
+          price={services.length > 0 ? <LandingPrice landing={l} /> : undefined}
+          note={c.texts.discount[lang]}
+        />
       </div>
 
       {services.length > 0 && (
         <>
           <h2>{d.estimate}</h2>
-          <PriceCalculator items={calcItems(c, lang)} initialSlug={l.services[0]} initialQty={l.units} />
+          <PriceCalculator
+            items={calcItems(c, lang)}
+            initialSlug={l.services[0]}
+            initialQty={l.units}
+            discount={c.texts.discount[lang]}
+          />
         </>
       )}
 
