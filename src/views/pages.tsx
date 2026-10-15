@@ -56,10 +56,10 @@ export async function HomePage({ lang }: { lang: Locale }) {
                 {d.estimate}
               </a>
             </div>
-            <Stats stats={c.trust.stats} lang={lang} />
           </div>
           <HeroImage src={c.trust.heroImage} lang={lang} />
         </div>
+        <Stats stats={c.trust.stats} lang={lang} />
       </section>
       <Brands brands={c.trust.brands} lang={lang} />
 

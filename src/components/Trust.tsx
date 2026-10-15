@@ -7,17 +7,20 @@ export function HeroImage({ src, lang }: { src: string; lang: Locale }) {
   return src ? <SheetImage src={src} alt={t(lang).heroImageAlt} className="hero-image" /> : null;
 }
 
+// A separate panel under the hero, full container width
 export function Stats({ stats, lang }: { stats: Stat[]; lang: Locale }) {
   if (!stats.length) return null;
   return (
-    <ul className="stats">
-      {stats.map((s) => (
-        <li key={s.value + s.label.uk}>
-          <strong>{s.value}</strong>
-          <span>{s.label[lang]}</span>
-        </li>
-      ))}
-    </ul>
+    <div className="container">
+      <ul className="stats">
+        {stats.map((s) => (
+          <li key={s.value + s.label.uk}>
+            <strong>{s.value}</strong>
+            <span>{s.label[lang]}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
