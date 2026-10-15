@@ -92,6 +92,8 @@ export type SiteConfig = {
     region: L10n;
     description: L10n;
     shipping: L10n;
+    // Discount offer shown next to prices, e.g. "−10% для УБД, медиків і волонтерів"; empty = hidden
+    discount: L10n;
   };
   services: Service[];
   // FAQ shown on every service page (slug "*" in the sheet)

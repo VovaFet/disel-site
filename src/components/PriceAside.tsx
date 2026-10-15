@@ -5,7 +5,7 @@ import { ContactActions } from "./Live";
 import { OpenStatus } from "./OpenStatus";
 
 // Wide screens only: price and contact buttons stay in view next to a long page text
-export function PriceAside({ lang, price }: { lang: Locale; price?: ReactNode }) {
+export function PriceAside({ lang, price, note }: { lang: Locale; price?: ReactNode; note?: string }) {
   const d = t(lang);
   return (
     <aside className="service-aside" aria-label={d.book}>
@@ -13,6 +13,7 @@ export function PriceAside({ lang, price }: { lang: Locale; price?: ReactNode })
         <>
           <span className="muted">{d.priceLabel}</span>
           <strong className="aside-price">{price}</strong>
+          {note && <span className="discount-note">{note}</span>}
         </>
       )}
       <OpenStatus />

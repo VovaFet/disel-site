@@ -34,6 +34,8 @@ export const defaultConfig: SiteConfig = {
       ru: "Принимаем снятые ТНВД и форсунки Новой почтой со всей Украины",
       en: "We accept removed pumps and injectors via Nova Poshta from all over Ukraine",
     },
+    // Filled in the sheet (texts → discount) when there is an offer
+    discount: { uk: "", ru: "", en: "" },
   },
 
   services: [
