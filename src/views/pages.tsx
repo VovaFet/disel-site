@@ -47,6 +47,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
             </h1>
             <p className="lead">{c.texts.description[lang]}</p>
             <p className="badge">📦 {c.texts.shipping[lang]}</p>
+            {c.texts.discount[lang] && <p className="badge badge-discount">{c.texts.discount[lang]}</p>}
             <div className="actions">
               <PhoneLink className="btn">
                 {d.book}: <PhoneText />
@@ -71,7 +72,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
         <section id="calculator" className="container section">
           <h2>{d.calculatorHeading}</h2>
           <Reveal>
-            <PriceCalculator items={calcItems(c, lang)} />
+            <PriceCalculator items={calcItems(c, lang)} discount={c.texts.discount[lang]} />
           </Reveal>
         </section>
       )}
@@ -214,6 +215,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
       <p className="price">
         {d.priceLabel}: <Price slug={s.slug} />
       </p>
+      {c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
 
       <div className="service-layout">
         <div>
@@ -226,7 +228,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
 
           {s.body[lang] && <RichText text={s.body[lang]} />}
         </div>
-        <PriceAside lang={lang} price={<Price slug={s.slug} />} />
+        <PriceAside lang={lang} price={<Price slug={s.slug} />} note={c.texts.discount[lang]} />
       </div>
 
       {landingLinks.length > 0 && (
@@ -243,7 +245,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
       )}
 
       <h2>{d.estimate}</h2>
-      <PriceCalculator items={calcItems(c, lang)} initialSlug={s.slug} />
+      <PriceCalculator items={calcItems(c, lang)} initialSlug={s.slug} discount={c.texts.discount[lang]} />
 
       {s.faq.length + c.commonFaq.length > 0 && (
         <>
