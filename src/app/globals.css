@@ -33,6 +33,10 @@ h2 { font-size: 1.5rem; margin: 32px 0 16px; }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 .section { padding: 40px 16px; }
+/* The section padding already separates sections; heading and list margins on top of it doubled the gap */
+.section > h2:first-child,
+.section > script:first-child + h2 { margin-top: 0; }
+.section > :last-child { margin-bottom: 0; }
 
 html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -320,6 +324,7 @@ p.discount-note { margin: -8px 0 16px; }
 @media (max-width: 760px) {
   .nav { display: none; }
   .burger { display: flex; }
+  .section { padding-top: 28px; padding-bottom: 28px; }
 }
 @media (min-width: 761px) {
   .mobile-menu { display: none !important; }
