@@ -1,6 +1,6 @@
 # DieselMedic — website
 
-Static Next.js 16 site (`output: "export"`) for a diesel fuel pump and injector repair workshop in Odesa,
+Static Next.js 16 site (`output: "export"`) for a diesel fuel pump, injector and turbocharger repair workshop in Odesa,
 in Ukrainian (`/`), Russian (`/ru/`) and English (`/en/`). The content comes from a Google Sheet; the site is
 deployed to Cloudflare Workers as static files.
 
@@ -30,7 +30,7 @@ rows of every tab from the bundled defaults.
 | `settings` | Site url, phone, Telegram, Viber, time zone, map point; Nova Poshta details `npRecipient`, `npPhone`, `npBranch`; trust blocks `brands`, `heroImage`, `protocolImage` | contacts and Nova Poshta: live; the rest: rebuild |
 | `texts` | Workshop name, city, address, site description, shipping line, `discount` | rebuild |
 | `schedule` | Opening hours (days `1-5`, `6`; 1 = Monday) | live |
-| `services` | Services: `slug`, `group` (`injectors`, `pumps`, `testing`), `priceFrom`, calculator quantities, texts | `priceFrom`: live; the rest: rebuild |
+| `services` | Services: `slug`, `group` (`injectors`, `pumps`, `turbo`, `testing`), `priceFrom`, calculator quantities, texts | `priceFrom`: live; the rest: rebuild |
 | `faq` | Questions by page `slug` (a service, brand or vehicle page); `*` = on every service page | rebuild |
 | `addons` | Calculator extras (express service, return shipping) | live |
 | `pages` | Delivery & payment and About us texts | rebuild |
@@ -47,10 +47,12 @@ Common tasks:
 - **Add a service**: a new `services` row with a unique `slug` (it becomes the page address `/poslugy/<slug>/`),
   its `group` and at least the Ukrainian texts, then rebuild. Rows are shown in sheet order; a row without a
   slug is skipped with a build warning.
+- **Fault signs** ("When to bring it in" on a service page): `services` → `symptoms_uk`, `symptoms_ru`,
+  `symptoms_en`, one sign per line; empty = no block.
 - **Discount**: `texts` → `discount`, e.g. "Знижка 10% для УБД, медиків і волонтерів". It shows on the home
   page, under the prices and in the calculator; empty = hidden.
 - **Hide a section or block**: empty its tab (or `settings` value) and rebuild.
-- **Images** (`heroImage`, `protocolImage`, an article's `image`): a direct image URL or a `/path` of a file in
+- **Images** (`heroImage`, `protocolImage`, a service's or an article's `image`): a direct image URL or a `/path` of a file in
   `public/`. Google Drive share links don't work as images.
 - **Long texts** (`body`, `pages`, `articles`): a blank line starts a new paragraph, `## ` a heading, `- ` a list item.
 

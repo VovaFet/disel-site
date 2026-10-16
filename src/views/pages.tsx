@@ -11,6 +11,7 @@ import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
 import { ServiceList } from "@/components/ServiceList";
+import { SheetImage } from "@/components/SheetImage";
 import { ShippingDetails } from "@/components/ShippingDetails";
 import { Brands, HeroImage, ProtocolSample, Reviews, Stats } from "@/components/Trust";
 import { getConfig } from "@/config";
@@ -199,6 +200,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
   // Brand/series and vehicle pages that belong to this service
   const landingLinks = c.landings.filter((l) => l.services.includes(s.slug));
   const articleLinks = c.articles.filter((a) => a.services.includes(s.slug)).slice(0, 4);
+  const symptoms = s.symptoms?.[lang] ?? [];
 
   return (
     <article className="container section">
@@ -208,17 +210,33 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
         <span>{s.title[lang]}</span>
       </nav>
 
-      <h1>
-        {s.h1[lang]} {c.texts.cityIn[lang]}
-      </h1>
-      <p className="lead">{s.description[lang]}</p>
-      <p className="price">
-        {d.priceLabel}: <Price slug={s.slug} />
-      </p>
-      {c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
+      <div className="service-head">
+        <div>
+          <h1>
+            {s.h1[lang]} {c.texts.cityIn[lang]}
+          </h1>
+          <p className="lead">{s.description[lang]}</p>
+          <p className="price">
+            {d.priceLabel}: <Price slug={s.slug} />
+          </p>
+          {c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
+        </div>
+        {s.image && <SheetImage src={s.image} alt={s.title[lang]} className="service-image" />}
+      </div>
 
       <div className="service-layout">
         <div>
+          {symptoms.length > 0 && (
+            <>
+              <h2>{d.symptoms}</h2>
+              <ul className="symptoms">
+                {symptoms.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </>
+          )}
+
           <h2>{d.includes}</h2>
           <ul className="features">
             {s.includes[lang].map((i) => (

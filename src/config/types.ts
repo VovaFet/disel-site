@@ -8,12 +8,14 @@ export type ScheduleEntry = { days: number[]; from: string; to: string };
 
 export type Faq = { q: L10n; a: L10n };
 
-export const serviceGroups = ["injectors", "pumps", "testing"] as const;
+export const serviceGroups = ["injectors", "pumps", "turbo", "testing"] as const;
 export type ServiceGroup = (typeof serviceGroups)[number];
 
 export type Service = {
   slug: string;
   group: ServiceGroup;
+  // Photo for the service page: an image URL or a /path from public/; empty = none
+  image?: string;
   priceFrom: number;
   // When set, the price is per item and the calculator asks for a quantity
   perUnitOptions?: number[];
@@ -23,6 +25,8 @@ export type Service = {
   short: L10n;
   description: L10n;
   includes: Record<Locale, string[]>;
+  // Signs of a fault, shown as "When to bring it in"; empty = hidden
+  symptoms?: Record<Locale, string[]>;
   // Long-form page text in "rich text lite": blank line = new block, "## " = heading, "- " lines = list
   body: L10n;
   faq: Faq[];

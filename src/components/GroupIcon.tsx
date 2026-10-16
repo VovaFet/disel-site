@@ -21,6 +21,14 @@ const shapes: Record<ServiceGroup, ReactNode> = {
       <path d="M10.5 6.5h2M13.75 6.5h2M17 6.5h2" />
     </>
   ),
+  // turbocharger: volute housing with the outlet, compressor wheel in the middle
+  turbo: (
+    <>
+      <path d="M20 12a8 8 0 1 1-8-8h9v4.5h-1.8" />
+      <circle cx="12" cy="12" r="1.2" />
+      <path d="M12 10.8C12 8.5 13.5 7.5 15 7.5M13.2 12C15.5 12 16.5 13.5 16.5 15M12 13.2C12 15.5 10.5 16.5 9 16.5M10.8 12C8.5 12 7.5 10.5 7.5 9" />
+    </>
+  ),
   // test bench: pressure gauge
   testing: (
     <>
