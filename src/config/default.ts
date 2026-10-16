@@ -369,6 +369,36 @@ export const defaultConfig: SiteConfig = {
       faq: [],
     },
 
+    /* ---------------- Turbochargers ---------------- */
+    {
+      slug: "remont-turbin",
+      group: "turbo",
+      priceFrom: 0,
+      title: { uk: "Ремонт турбін", ru: "Ремонт турбин", en: "Turbocharger repair" },
+      h1: { uk: "Ремонт турбін", ru: "Ремонт турбин", en: "Turbocharger repair" },
+      short: {
+        uk: "Дефектовка, перевірка картриджа на витік і тиску наддуву, налаштування на стенді.",
+        ru: "Дефектовка, проверка картриджа на утечку и давления наддува, настройка на стенде.",
+        en: "Inspection, cartridge leak test, boost pressure check and bench setup.",
+      },
+      description: {
+        uk: "Ремонтуємо зняті турбіни: дефектовка, перевірка картриджа на витік, перевірка тиску наддуву й налаштування на стенді.",
+        ru: "Ремонтируем снятые турбины: дефектовка, проверка картриджа на утечку, проверка давления наддува и настройка на стенде.",
+        en: "We repair removed turbochargers: inspection, cartridge leak test, boost pressure check and bench setup.",
+      },
+      includes: {
+        uk: ["Дефектовка", "Перевірка картриджа на витік", "Перевірка тиску наддуву", "Налаштування на стенді"],
+        ru: ["Дефектовка", "Проверка картриджа на утечку", "Проверка давления наддува", "Настройка на стенде"],
+        en: ["Inspection", "Cartridge leak test", "Boost pressure check", "Bench setup"],
+      },
+      body: {
+        uk: "## Як ремонтуємо\nРозбираємо турбіну й дефектуємо деталі, перевіряємо картридж на витік і тиск наддуву. Після ремонту налаштовуємо турбіну на стенді.\n\n## Ціна\nВартість залежить від стану турбіни, точну суму називаємо після дефектовки.",
+        ru: "## Как ремонтируем\nРазбираем турбину и дефектуем детали, проверяем картридж на утечку и давление наддува. После ремонта настраиваем турбину на стенде.\n\n## Цена\nСтоимость зависит от состояния турбины, точную сумму называем после дефектовки.",
+        en: "## How we repair it\nWe disassemble the turbocharger, inspect the parts, and test the cartridge for leaks and the boost pressure. After the repair we set the turbocharger up on the bench.\n\n## Price\nThe cost depends on the turbocharger's condition; we quote the exact price after inspection.",
+      },
+      faq: [],
+    },
+
     /* ---------------- Testing ---------------- */
     {
       slug: "perevirka-na-stendi",

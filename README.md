@@ -1,6 +1,6 @@
 # DieselMedic — website
 
-Static Next.js 16 site (`output: "export"`) for a diesel fuel pump and injector repair workshop in Odesa,
+Static Next.js 16 site (`output: "export"`) for a diesel fuel pump, injector and turbocharger repair workshop in Odesa,
 in Ukrainian (`/`), Russian (`/ru/`) and English (`/en/`). The content comes from a Google Sheet; the site is
 deployed to Cloudflare Workers as static files.
 
@@ -30,7 +30,7 @@ rows of every tab from the bundled defaults.
 | `settings` | Site url, phone, Telegram, Viber, time zone, map point; Nova Poshta details `npRecipient`, `npPhone`, `npBranch`; trust blocks `brands`, `heroImage`, `protocolImage` | contacts and Nova Poshta: live; the rest: rebuild |
 | `texts` | Workshop name, city, address, site description, shipping line, `discount` | rebuild |
 | `schedule` | Opening hours (days `1-5`, `6`; 1 = Monday) | live |
-| `services` | Services: `slug`, `group` (`injectors`, `pumps`, `testing`), `priceFrom`, calculator quantities, texts | `priceFrom`: live; the rest: rebuild |
+| `services` | Services: `slug`, `group` (`injectors`, `pumps`, `turbo`, `testing`), `priceFrom`, calculator quantities, texts | `priceFrom`: live; the rest: rebuild |
 | `faq` | Questions by page `slug` (a service, brand or vehicle page); `*` = on every service page | rebuild |
 | `addons` | Calculator extras (express service, return shipping) | live |
 | `pages` | Delivery & payment and About us texts | rebuild |

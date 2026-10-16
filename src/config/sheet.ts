@@ -7,7 +7,7 @@
 //   texts     key | uk | ru | en                (name, city, cityIn, street, region, description, shipping, discount)
 //   schedule  days | from | to                  (days: "1-5", "6" or "1,3"; 1 = Monday)
 //   services  slug | group | priceFrom | perUnitOptions | <field>_uk | <field>_ru | <field>_en ...
-//             group: injectors | pumps | testing
+//             group: injectors | pumps | turbo | testing
 //             fields: perUnitLabel, title, h1, short, description, includes (one item per line), body
 //             symptoms_uk | symptoms_ru | symptoms_en: signs of a fault, one per line (optional)
 //             image: photo for the service page, an image URL or a /path from public/ (optional)
