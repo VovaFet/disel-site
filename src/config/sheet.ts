@@ -10,6 +10,7 @@
 //             group: injectors | pumps | testing
 //             fields: perUnitLabel, title, h1, short, description, includes (one item per line), body
 //             symptoms_uk | symptoms_ru | symptoms_en: signs of a fault, one per line (optional)
+//             image: photo for the service page, an image URL or a /path from public/ (optional)
 //   pages     slug | title_* | description_* | body_*   (slug: dostavka | pro-nas)
 //   body format: blank line = new block, "## " = heading, lines starting with "- " = list
 //   faq       slug | q_uk | a_uk | q_ru | a_ru | q_en | a_en   (slug "*" = every service)
@@ -251,6 +252,7 @@ function toServices(rows: Row[], faqRows: Row[]): Service[] {
       description: l10n(r, "description"),
       includes: l10nLines(r, "includes"),
       symptoms: l10nLines(r, "symptoms"),
+      image: r.image ?? "",
       body: l10n(r, "body"),
       faq: faqRows.filter((f) => f.slug === r.slug).map(toFaq),
     };

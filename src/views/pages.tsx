@@ -11,6 +11,7 @@ import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/RichText";
 import { ServiceList } from "@/components/ServiceList";
+import { SheetImage } from "@/components/SheetImage";
 import { ShippingDetails } from "@/components/ShippingDetails";
 import { Brands, HeroImage, ProtocolSample, Reviews, Stats } from "@/components/Trust";
 import { getConfig } from "@/config";
@@ -209,14 +210,19 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
         <span>{s.title[lang]}</span>
       </nav>
 
-      <h1>
-        {s.h1[lang]} {c.texts.cityIn[lang]}
-      </h1>
-      <p className="lead">{s.description[lang]}</p>
-      <p className="price">
-        {d.priceLabel}: <Price slug={s.slug} />
-      </p>
-      {c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
+      <div className="service-head">
+        <div>
+          <h1>
+            {s.h1[lang]} {c.texts.cityIn[lang]}
+          </h1>
+          <p className="lead">{s.description[lang]}</p>
+          <p className="price">
+            {d.priceLabel}: <Price slug={s.slug} />
+          </p>
+          {c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
+        </div>
+        {s.image && <SheetImage src={s.image} alt={s.title[lang]} className="service-image" />}
+      </div>
 
       <div className="service-layout">
         <div>

@@ -14,6 +14,8 @@ export type ServiceGroup = (typeof serviceGroups)[number];
 export type Service = {
   slug: string;
   group: ServiceGroup;
+  // Photo for the service page: an image URL or a /path from public/; empty = none
+  image?: string;
   priceFrom: number;
   // When set, the price is per item and the calculator asks for a quantity
   perUnitOptions?: number[];

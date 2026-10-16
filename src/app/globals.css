@@ -106,6 +106,15 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .aside-price { font-size: 1.8rem; line-height: 1.2; color: var(--accent); }
 .aside-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
 .related { margin-top: 48px; }
+/* Service photo (services → image in the sheet): beside the heading on wide screens, under it on phones */
+.service-image {
+  display: block; width: 100%; max-width: 520px; margin: 8px 0 16px; aspect-ratio: 4 / 3; object-fit: cover;
+  border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
+}
+@media (min-width: 900px) {
+  .service-head:has(> .service-image) { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 48px; align-items: center; }
+  .service-image { margin: 0; }
+}
 /* Links from a service to its brand/series and vehicle pages */
 .landing-links ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .landing-links a {

@@ -52,7 +52,7 @@ Common tasks:
 - **Discount**: `texts` → `discount`, e.g. "Знижка 10% для УБД, медиків і волонтерів". It shows on the home
   page, under the prices and in the calculator; empty = hidden.
 - **Hide a section or block**: empty its tab (or `settings` value) and rebuild.
-- **Images** (`heroImage`, `protocolImage`, an article's `image`): a direct image URL or a `/path` of a file in
+- **Images** (`heroImage`, `protocolImage`, a service's or an article's `image`): a direct image URL or a `/path` of a file in
   `public/`. Google Drive share links don't work as images.
 - **Long texts** (`body`, `pages`, `articles`): a blank line starts a new paragraph, `## ` a heading, `- ` a list item.
 
