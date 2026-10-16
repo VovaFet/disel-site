@@ -8,7 +8,7 @@ export type ScheduleEntry = { days: number[]; from: string; to: string };
 
 export type Faq = { q: L10n; a: L10n };
 
-export const serviceGroups = ["injectors", "pumps", "testing"] as const;
+export const serviceGroups = ["injectors", "pumps", "turbo", "testing"] as const;
 export type ServiceGroup = (typeof serviceGroups)[number];
 
 export type Service = {

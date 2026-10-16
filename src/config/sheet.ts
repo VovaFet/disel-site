@@ -7,7 +7,7 @@
 //   texts     key | uk | ru | en                (name, city, cityIn, street, region, description, shipping, discount)
 //   schedule  days | from | to                  (days: "1-5", "6" or "1,3"; 1 = Monday)
 //   services  slug | group | priceFrom | perUnitOptions | <field>_uk | <field>_ru | <field>_en ...
-//             group: injectors | pumps | testing
+//             group: injectors | pumps | turbo | testing
 //             fields: perUnitLabel, title, h1, short, description, includes (one item per line), body
 //   pages     slug | title_* | description_* | body_*   (slug: dostavka | pro-nas)
 //   body format: blank line = new block, "## " = heading, lines starting with "- " = list
