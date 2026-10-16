@@ -9,6 +9,7 @@
 //   services  slug | group | priceFrom | perUnitOptions | <field>_uk | <field>_ru | <field>_en ...
 //             group: injectors | pumps | testing
 //             fields: perUnitLabel, title, h1, short, description, includes (one item per line), body
+//             symptoms_uk | symptoms_ru | symptoms_en: signs of a fault, one per line (optional)
 //   pages     slug | title_* | description_* | body_*   (slug: dostavka | pro-nas)
 //   body format: blank line = new block, "## " = heading, lines starting with "- " = list
 //   faq       slug | q_uk | a_uk | q_ru | a_ru | q_en | a_en   (slug "*" = every service)
@@ -38,6 +39,7 @@ import {
   type Landing,
   type LandingSection,
   type LiveConfig,
+  type Locale,
   type NovaPoshta,
   type ScheduleEntry,
   type Service,
@@ -123,6 +125,14 @@ async function fetchOptionalTab(sheetId: string, tab: string, columns: string[])
 const l10n = (row: Row, field: string): L10n => {
   const uk = row[`${field}_uk`] ?? "";
   return Object.fromEntries(locales.map((l) => [l, row[`${field}_${l}`] || uk])) as L10n;
+};
+
+// A list cell: one item per line
+const l10nLines = (row: Row, field: string): Record<Locale, string[]> => {
+  const v = l10n(row, field);
+  return Object.fromEntries(
+    locales.map((l) => [l, v[l].split("\n").map((x) => x.trim()).filter(Boolean)]),
+  ) as Record<Locale, string[]>;
 };
 
 const parseDays = (s: string): number[] =>
@@ -226,7 +236,6 @@ function toServices(rows: Row[], faqRows: Row[]): Service[] {
     return Boolean(r.slug);
   });
   return withSlug.map((r) => {
-    const includes = l10n(r, "includes");
     const options = r.perUnitOptions ? r.perUnitOptions.split(",").map((x) => Number(x.trim())) : undefined;
     // An empty price usually means mixed number/text cells in the column: Google then blanks one kind
     if (!r.priceFrom || Number.isNaN(Number(r.priceFrom))) console.warn(`[config] services: no valid priceFrom for "${r.slug}"`);
@@ -240,9 +249,8 @@ function toServices(rows: Row[], faqRows: Row[]): Service[] {
       h1: l10n(r, "h1"),
       short: l10n(r, "short"),
       description: l10n(r, "description"),
-      includes: Object.fromEntries(
-        locales.map((l) => [l, includes[l].split("\n").map((x) => x.trim()).filter(Boolean)]),
-      ) as Service["includes"],
+      includes: l10nLines(r, "includes"),
+      symptoms: l10nLines(r, "symptoms"),
       body: l10n(r, "body"),
       faq: faqRows.filter((f) => f.slug === r.slug).map(toFaq),
     };

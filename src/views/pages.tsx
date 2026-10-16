@@ -199,6 +199,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
   // Brand/series and vehicle pages that belong to this service
   const landingLinks = c.landings.filter((l) => l.services.includes(s.slug));
   const articleLinks = c.articles.filter((a) => a.services.includes(s.slug)).slice(0, 4);
+  const symptoms = s.symptoms?.[lang] ?? [];
 
   return (
     <article className="container section">
@@ -219,6 +220,17 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
 
       <div className="service-layout">
         <div>
+          {symptoms.length > 0 && (
+            <>
+              <h2>{d.symptoms}</h2>
+              <ul className="symptoms">
+                {symptoms.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </>
+          )}
+
           <h2>{d.includes}</h2>
           <ul className="features">
             {s.includes[lang].map((i) => (

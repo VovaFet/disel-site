@@ -23,6 +23,8 @@ export type Service = {
   short: L10n;
   description: L10n;
   includes: Record<Locale, string[]>;
+  // Signs of a fault, shown as "When to bring it in"; empty = hidden
+  symptoms?: Record<Locale, string[]>;
   // Long-form page text in "rich text lite": blank line = new block, "## " = heading, "- " lines = list
   body: L10n;
   faq: Faq[];
