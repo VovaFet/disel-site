@@ -48,7 +48,8 @@ Common tasks:
   its `group` and at least the Ukrainian texts, then rebuild. Rows are shown in sheet order; a row without a
   slug is skipped with a build warning.
 - **Fault signs** ("When to bring it in" on a service page): `services` → `symptoms_uk`, `symptoms_ru`,
-  `symptoms_en`, one sign per line; empty = no block.
+  `symptoms_en`, one sign per line; empty = no block. "Title. Explanation" shows the first sentence (or the
+  part before a colon) in bold with the rest under it.
 - **Discount**: `texts` → `discount`, e.g. "Знижка 10% для УБД, медиків і волонтерів". It shows on the home
   page, under the prices and in the calculator; empty = hidden.
 - **Hide a section or block**: empty its tab (or `settings` value) and rebuild.

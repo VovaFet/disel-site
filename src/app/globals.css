@@ -92,6 +92,8 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
   display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; line-height: 1;
   color: var(--accent-fg); background: var(--accent);
 }
+.symptoms strong { display: block; font-weight: 600; }
+.symptoms span { display: block; margin-top: 4px; font-size: 0.92rem; color: var(--muted); }
 .breadcrumbs { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; }
 
 /* Service page: price and contact buttons beside the text on wide screens */

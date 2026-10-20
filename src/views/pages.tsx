@@ -13,6 +13,7 @@ import { RichText } from "@/components/RichText";
 import { ServiceList } from "@/components/ServiceList";
 import { SheetImage } from "@/components/SheetImage";
 import { ShippingDetails } from "@/components/ShippingDetails";
+import { SymptomList } from "@/components/SymptomList";
 import { Brands, HeroImage, ProtocolSample, Reviews, Stats } from "@/components/Trust";
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
@@ -229,11 +230,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
           {symptoms.length > 0 && (
             <>
               <h2>{d.symptoms}</h2>
-              <ul className="symptoms">
-                {symptoms.map((x) => (
-                  <li key={x}>{x}</li>
-                ))}
-              </ul>
+              <SymptomList items={symptoms} />
             </>
           )}
 
