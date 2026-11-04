@@ -96,5 +96,6 @@ export async function serviceOgImage(lang: Locale, slug: string) {
   const c = await getConfig();
   const s = c.services.find((x) => x.slug === slug);
   if (!s) return homeOgImage(lang);
-  return render(lang, `${s.title[lang]} ${c.texts.cityIn[lang]}`, `${t(lang).from} ${formatPrice(lang, s.priceFrom)}`);
+  const price = s.priceFrom > 0 ? `${t(lang).from} ${formatPrice(lang, s.priceFrom)}` : undefined;
+  return render(lang, `${s.title[lang]} ${c.texts.cityIn[lang]}`, price);
 }

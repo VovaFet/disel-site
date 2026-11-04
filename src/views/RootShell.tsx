@@ -6,7 +6,7 @@ import { LiveConfigProvider } from "@/components/LiveConfig";
 import { MouseBackground } from "@/components/MouseBackground";
 import { SiteFooter, SiteHeader } from "@/components/SiteHeader";
 import { getConfig, sheetId } from "@/config";
-import { toLive, type Locale } from "@/config/types";
+import { toLive, type Locale, type SiteConfig } from "@/config/types";
 import { languageAlternates, localePath, ogLocale, t } from "@/i18n";
 import { businessSchema } from "@/lib/schema";
 import "@/app/globals.css";
@@ -22,7 +22,8 @@ export async function rootMetadata(lang: Locale): Promise<Metadata> {
     metadataBase: new URL(c.url),
     title: {
       default: `${name} — ${t(lang).homeTitle} ${c.texts.cityIn[lang]}`,
-      template: `%s | ${name}, ${c.texts.city[lang]}`,
+      // Page titles already name the city where it matters
+      template: `%s | ${name}`,
     },
     description: c.texts.description[lang],
     openGraph: openGraph(lang, name, localePath(lang, "/og.png")),
@@ -33,19 +34,28 @@ export async function rootMetadata(lang: Locale): Promise<Metadata> {
 // Link previews in messengers. A page that sets openGraph replaces the layout's one
 // entirely (metadata is merged shallowly), so it is always built here in full.
 // Images come from the og.png routes (see src/views/ogImage.tsx).
-export const openGraph = (lang: Locale, siteName: string, imagePath: string): Metadata["openGraph"] => ({
+export const openGraph = (lang: Locale, siteName: string, imagePath: string, url?: string): Metadata["openGraph"] => ({
   type: "website",
   locale: ogLocale[lang],
   siteName,
+  ...(url && { url }),
   images: [{ url: imagePath, width: 1200, height: 630, type: "image/png" }],
 });
 
-// Per-page metadata with canonical URL and hreflang alternates for all languages
-export function pageMetadata(lang: Locale, path: string, meta: { title?: string; description?: string }): Metadata {
+// Per-page metadata: canonical URL, hreflang alternates for all languages and the link preview with
+// the page's own URL (`image` is the og.png path; the home page preview by default)
+export function pageMetadata(
+  c: SiteConfig,
+  lang: Locale,
+  path: string,
+  meta: { title?: string; description?: string },
+  image = "/og.png",
+): Metadata {
   return {
     ...(meta.title && { title: meta.title }),
     ...(meta.description && { description: meta.description }),
     alternates: { canonical: localePath(lang, path), languages: languageAlternates(path) },
+    openGraph: openGraph(lang, c.texts.name[lang], localePath(lang, image), localePath(lang, path)),
   };
 }
 

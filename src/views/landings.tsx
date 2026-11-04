@@ -14,7 +14,7 @@ import { RichText } from "@/components/RichText";
 import { ServiceList } from "@/components/ServiceList";
 import { getConfig } from "@/config";
 import type { Landing, LandingSection, Locale, SiteConfig } from "@/config/types";
-import { localePath, t } from "@/i18n";
+import { formatPrice, localePath, t } from "@/i18n";
 import { breadcrumbSchema, faqSchema } from "@/lib/schema";
 import { calcItems } from "./pages";
 import { pageMetadata } from "./RootShell";
@@ -40,7 +40,7 @@ export async function landingMetadata(lang: Locale, section: LandingSection, slu
   const c = await getConfig();
   const d = t(lang);
   if (!slug?.length) {
-    const meta = pageMetadata(lang, sectionPath(section), {
+    const meta = pageMetadata(c, lang, sectionPath(section), {
       title: d.sections[section].title,
       description: d.sections[section].intro,
     });
@@ -49,8 +49,8 @@ export async function landingMetadata(lang: Locale, section: LandingSection, slu
   const l = landingsIn(c, section).find((x) => x.slug === slug[0]);
   if (!l) return {};
   const service = c.services.find((s) => s.slug === l.services[0]);
-  const price = service ? ` — ${d.from} ${service.priceFrom} ${d.currency}` : "";
-  return pageMetadata(lang, sectionPath(section, l.slug), {
+  const price = service && service.priceFrom > 0 ? ` — ${d.from} ${formatPrice(lang, service.priceFrom)}` : "";
+  return pageMetadata(c, lang, sectionPath(section, l.slug), {
     title: `${l.title[lang]} ${c.texts.cityIn[lang]}${price}`,
     description: l.description[lang] || l.short[lang],
   });

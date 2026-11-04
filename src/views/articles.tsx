@@ -50,12 +50,12 @@ export async function articleMetadata(lang: Locale, slug?: string[]): Promise<Me
   const c = await getConfig();
   const d = t(lang);
   if (!slug?.length) {
-    const meta = pageMetadata(lang, articlePath(), { title: d.articles.title, description: d.articles.intro });
+    const meta = pageMetadata(c, lang, articlePath(), { title: d.articles.title, description: d.articles.intro });
     return c.articles.length ? meta : { ...meta, robots: { index: false } };
   }
   const a = c.articles.find((x) => x.slug === slug[0]);
   if (!a) return {};
-  return pageMetadata(lang, articlePath(a.slug), { title: a.title[lang], description: a.description[lang] });
+  return pageMetadata(c, lang, articlePath(a.slug), { title: a.title[lang], description: a.description[lang] });
 }
 
 export function ArticleRoute({ lang, slug }: { lang: Locale; slug?: string[] }) {
