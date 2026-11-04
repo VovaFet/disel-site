@@ -56,9 +56,11 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
           <div className="logo footer-logo">
             <Logo name={config.texts.name[lang]} size={28} />
           </div>
-          <p>
-            {config.texts.city[lang]}, {config.texts.street[lang]}
-          </p>
+          {config.texts.street[lang] && (
+            <p>
+              {config.texts.city[lang]}, {config.texts.street[lang]}
+            </p>
+          )}
           <p>
             <PhoneLink />
           </p>
