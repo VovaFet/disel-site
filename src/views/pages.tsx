@@ -302,6 +302,8 @@ export async function contactsMetadata(lang: Locale): Promise<Metadata> {
 export async function ContactsPage({ lang }: { lang: Locale }) {
   const c = await getConfig();
   const d = t(lang);
+  // Without a street address (texts → street) the map point would be a guess: no address, directions or map
+  const street = c.texts.street[lang];
   const mapSrc = `https://www.google.com/maps?q=${c.geo.lat},${c.geo.lng}&z=16&hl=${lang}&output=embed`;
   // Opens turn-by-turn navigation in the Google Maps app on phones
   const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.geo.lat},${c.geo.lng}`;
@@ -309,9 +311,11 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
     <section className="container section">
       <h1>{d.nav.contacts}</h1>
       <address className="contacts">
-        <p>
-          {c.texts.city[lang]}, {c.texts.street[lang]}
-        </p>
+        {street && (
+          <p>
+            {c.texts.city[lang]}, {street}
+          </p>
+        )}
         <p>
           {d.phone}: <PhoneLink />
         </p>
@@ -324,18 +328,22 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
         <OpenStatus />
         <HoursList />
       </address>
-      <div className="actions">
-        <a href={directionsUrl} className="btn btn-outline" target="_blank" rel="noopener noreferrer">
-          {d.directions}
-        </a>
-      </div>
-      <iframe
-        title={`${c.texts.name[lang]} ${d.onMap}`}
-        src={mapSrc}
-        className="map"
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-      />
+      {street && (
+        <>
+          <div className="actions">
+            <a href={directionsUrl} className="btn btn-outline" target="_blank" rel="noopener noreferrer">
+              {d.directions}
+            </a>
+          </div>
+          <iframe
+            title={`${c.texts.name[lang]} ${d.onMap}`}
+            src={mapSrc}
+            className="map"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </>
+      )}
     </section>
   );
 }
