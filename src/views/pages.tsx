@@ -46,11 +46,12 @@ export async function HomePage({ lang }: { lang: Locale }) {
             <OpenStatus />
             {c.texts.slogan[lang] && <p className="slogan">{c.texts.slogan[lang]}</p>}
             <h1>
-              {d.homeH1} {c.texts.cityIn[lang]}
+              {d.homeH1} {c.texts.area[lang]}
             </h1>
             <p className="lead">{c.texts.description[lang]}</p>
             <p className="badge">📦 {c.texts.shipping[lang]}</p>
             {c.texts.discount[lang] && <p className="badge badge-discount">{c.texts.discount[lang]}</p>}
+            {c.texts.removedOnly[lang] && <p className="notice">{c.texts.removedOnly[lang]}</p>}
             <div className="actions">
               <PhoneLink className="btn">
                 {d.book}: <PhoneText />
@@ -147,7 +148,7 @@ export async function servicesMetadata(lang: Locale): Promise<Metadata> {
   const d = t(lang);
   return pageMetadata(c, lang, "/poslugy/", {
     title: d.servicesHeading,
-    description: `${d.servicesDescription} ${c.texts.cityIn[lang]}. ${c.texts.shipping[lang]}.`,
+    description: `${d.servicesDescription} ${c.texts.area[lang]}. ${c.texts.shipping[lang]}.`,
   });
 }
 
@@ -184,8 +185,8 @@ export async function serviceMetadata(lang: Locale, slug: string): Promise<Metad
     lang,
     `/poslugy/${slug}/`,
     {
-      title: `${s.title[lang]} ${c.texts.cityIn[lang]}${price && ` — ${price}`}`,
-      description: `${s.short[lang]} ${c.texts.city[lang]}${price && `, ${price}`}.`,
+      title: `${s.title[lang]} ${c.texts.area[lang]}${price && ` — ${price}`}`,
+      description: `${s.short[lang]}${price && ` ${price.charAt(0).toUpperCase()}${price.slice(1)}.`} ${t(lang).mailIn}`,
     },
     `/poslugy/${slug}/og.png`,
   );
@@ -218,7 +219,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
       <div className="service-head">
         <div>
           <h1>
-            {s.h1[lang]} {c.texts.cityIn[lang]}
+            {s.h1[lang]} {c.texts.area[lang]}
           </h1>
           <p className="lead">{s.description[lang]}</p>
           <p className="price">
@@ -247,7 +248,12 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
 
           {s.body[lang] && <RichText text={s.body[lang]} />}
         </div>
-        <PriceAside lang={lang} price={<Price slug={s.slug} />} note={c.texts.discount[lang]} />
+        <PriceAside
+          lang={lang}
+          price={<Price slug={s.slug} />}
+          note={c.texts.discount[lang]}
+          footnote={c.texts.removedOnly[lang]}
+        />
       </div>
 
       {landingLinks.length > 0 && (
@@ -299,7 +305,7 @@ export async function contactsMetadata(lang: Locale): Promise<Metadata> {
   const d = t(lang);
   return pageMetadata(c, lang, "/kontakty/", {
     title: d.contactsTitle,
-    description: `${d.contactsDescription} ${c.texts.name[lang]} ${c.texts.cityIn[lang]}. ${c.texts.shipping[lang]}.`,
+    description: `${d.contactsDescription} ${c.texts.name[lang]}. ${c.texts.shipping[lang]}.`,
   });
 }
 
@@ -314,6 +320,7 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
   return (
     <section className="container section">
       <h1>{d.nav.contacts}</h1>
+      {c.texts.removedOnly[lang] && <p className="notice">{c.texts.removedOnly[lang]}</p>}
       <address className="contacts">
         {street && (
           <p>

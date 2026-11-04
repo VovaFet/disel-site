@@ -51,7 +51,7 @@ export async function landingMetadata(lang: Locale, section: LandingSection, slu
   const service = c.services.find((s) => s.slug === l.services[0]);
   const price = service && service.priceFrom > 0 ? ` — ${d.from} ${formatPrice(lang, service.priceFrom)}` : "";
   return pageMetadata(c, lang, sectionPath(section, l.slug), {
-    title: `${l.title[lang]} ${c.texts.cityIn[lang]}${price}`,
+    title: `${l.title[lang]} ${c.texts.area[lang]}${price}`,
     description: l.description[lang] || l.short[lang],
   });
 }
@@ -115,7 +115,7 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
       </nav>
 
       <h1>
-        {l.h1[lang]} {c.texts.cityIn[lang]}
+        {l.h1[lang]} {c.texts.area[lang]}
       </h1>
       {l.description[lang] && <p className="lead">{l.description[lang]}</p>}
       {services.length > 0 && (
@@ -131,6 +131,7 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
           lang={lang}
           price={services.length > 0 ? <LandingPrice landing={l} /> : undefined}
           note={c.texts.discount[lang]}
+          footnote={c.texts.removedOnly[lang]}
         />
       </div>
 

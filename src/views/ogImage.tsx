@@ -96,7 +96,7 @@ async function render(lang: Locale, title: string, price?: string) {
 
 export async function homeOgImage(lang: Locale) {
   const c = await getConfig();
-  return render(lang, `${t(lang).homeH1} ${c.texts.cityIn[lang]}`);
+  return render(lang, `${t(lang).homeH1} ${c.texts.area[lang]}`);
 }
 
 export async function serviceOgImage(lang: Locale, slug: string) {
@@ -104,5 +104,5 @@ export async function serviceOgImage(lang: Locale, slug: string) {
   const s = c.services.find((x) => x.slug === slug);
   if (!s) return homeOgImage(lang);
   const price = s.priceFrom > 0 ? `${t(lang).from} ${formatPrice(lang, s.priceFrom)}` : undefined;
-  return render(lang, `${s.title[lang]} ${c.texts.cityIn[lang]}`, price);
+  return render(lang, `${s.title[lang]} ${c.texts.area[lang]}`, price);
 }
