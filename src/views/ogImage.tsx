@@ -54,6 +54,13 @@ async function render(lang: Locale, title: string, price?: string) {
             {first.toUpperCase()}
             <span style={{ color: colors.accent }}>{second.toUpperCase()}</span>
           </div>
+          {c.texts.slogan[lang] && (
+            <div
+              style={{ marginLeft: 14, paddingLeft: 24, borderLeft: `2px solid ${colors.muted}`, fontSize: 30, color: colors.muted }}
+            >
+              {c.texts.slogan[lang]}
+            </div>
+          )}
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 32 }}>
           <div style={{ fontSize: title.length > 45 ? 64 : 76, fontWeight: 800, lineHeight: 1.1 }}>{title}</div>

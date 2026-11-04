@@ -4,7 +4,7 @@
 // Tabs (first row = headers):
 //   settings  key | value                       (url, phone, phoneDisplay, telegram, viber, timeZone, lat, lng, postalCode, country,
 //                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in)
-//   texts     key | uk | ru | en                (name, city, cityIn, street, region, description, shipping, discount)
+//   texts     key | uk | ru | en                (name, city, cityIn, street, region, description, shipping, discount, slogan)
 //   schedule  days | from | to                  (days: "1-5", "6" or "1,3"; 1 = Monday)
 //   services  slug | group | priceFrom | perUnitOptions | <field>_uk | <field>_ru | <field>_en ...
 //             group: injectors | pumps | turbo | testing
@@ -302,6 +302,7 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
       description: text("description"),
       shipping: text("shipping"),
       discount: text("discount"),
+      slogan: text("slogan"),
     },
     services: svc,
     commonFaq: faq.some((f) => f.slug === "*") ? faq.filter((f) => f.slug === "*").map(toFaq) : d.commonFaq,
