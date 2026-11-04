@@ -22,7 +22,8 @@ export const defaultConfig: SiteConfig = {
     name: { uk: "DieselMedic", ru: "DieselMedic", en: "DieselMedic" },
     city: { uk: "Київ", ru: "Киев", en: "Kyiv" },
     cityIn: { uk: "в Києві", ru: "в Киеве", en: "in Kyiv" },
-    street: { uk: "вул. Прикладна, 1", ru: "ул. Примерная, 1", en: "1 Prykladna St" },
+    // Empty until the exact address is known: the site then hides the address line and the map
+    street: { uk: "", ru: "", en: "" },
     region: { uk: "Київ", ru: "Киев", en: "Kyiv" },
     description: {
       uk: "Ремонт знятих паливних насосів високого тиску (ПНВТ/ТНВД) і дизельних форсунок. Перевірка на стенді, протокол до і після ремонту, відправка Новою поштою по всій Україні.",
