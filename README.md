@@ -1,6 +1,6 @@
 # DieselMedic — website
 
-Static Next.js 16 site (`output: "export"`) for a diesel fuel pump, injector and turbocharger repair workshop in Odesa,
+Static Next.js 16 site (`output: "export"`) for a diesel fuel pump, injector and turbocharger repair workshop in Kyiv,
 in Ukrainian (`/`), Russian (`/ru/`) and English (`/en/`). The content comes from a Google Sheet; the site is
 deployed to Cloudflare Workers as static files.
 
@@ -52,7 +52,8 @@ Common tasks:
   part before a colon) in bold with the rest under it.
 - **Discount**: `texts` → `discount`, e.g. "Знижка 10% для УБД, медиків і волонтерів". It shows on the home
   page, under the prices and in the calculator; empty = hidden.
-- **Hide a section or block**: empty its tab (or `settings` value) and rebuild.
+- **Hide a section or block**: empty its tab (or `settings` value) and rebuild. Without `texts` → `street` the
+  address line, the map and the directions button are hidden.
 - **Images** (`heroImage`, `protocolImage`, a service's or an article's `image`): a direct image URL or a `/path` of a file in
   `public/`. Google Drive share links don't work as images.
 - **Long texts** (`body`, `pages`, `articles`): a blank line starts a new paragraph, `## ` a heading, `- ` a list item.
@@ -83,7 +84,8 @@ This is Next.js 16: read `node_modules/next/dist/docs/` before relying on older 
 - `src/views/` — page bodies shared by both route trees (pages, landings, articles, link preview images)
 - `src/components/` — UI pieces; `Live*` and the calculator use the values the browser refreshes
 - `src/i18n/` — interface strings in three languages
-- `scripts/` — sheet seed, the build adapter that writes per-language 404 pages
+- `scripts/` — sheet seed, the build adapter that writes per-language 404 pages, `make-icons.ts` (favicons and
+  `public/logo.png` from the logo mark in `src/lib/logo.ts`: `npx tsx scripts/make-icons.ts`)
 
 ## Branches
 

@@ -90,7 +90,7 @@ export type SiteConfig = {
   texts: {
     name: L10n;
     city: L10n;
-    // City with preposition in the locative case: "в Одесі", "в Одессе", "in Odesa"
+    // City with preposition in the locative case: "в Києві", "в Киеве", "in Kyiv"
     cityIn: L10n;
     street: L10n;
     region: L10n;

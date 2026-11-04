@@ -5,6 +5,7 @@ import { openingHoursSchema } from "./hours";
 export const businessId = (c: SiteConfig) => `${c.url}/#business`;
 
 export function businessSchema(c: SiteConfig, lang: Locale) {
+  const photo = c.trust.heroImage;
   return {
     "@context": "https://schema.org",
     "@type": "AutoRepair",
@@ -14,15 +15,17 @@ export function businessSchema(c: SiteConfig, lang: Locale) {
     telephone: c.phone,
     description: c.texts.description[lang],
     inLanguage: lang,
+    logo: `${c.url}/logo.png`,
+    ...(photo && !photo.startsWith("data:") && { image: photo.startsWith("http") ? photo : `${c.url}${photo}` }),
     address: {
       "@type": "PostalAddress",
-      streetAddress: c.texts.street[lang],
+      ...(c.texts.street[lang] && { streetAddress: c.texts.street[lang] }),
       addressLocality: c.texts.city[lang],
       addressRegion: c.texts.region[lang],
-      postalCode: c.postalCode,
+      ...(c.postalCode && { postalCode: c.postalCode }),
       addressCountry: c.country,
     },
-    geo: { "@type": "GeoCoordinates", latitude: c.geo.lat, longitude: c.geo.lng },
+    ...(c.texts.street[lang] && { geo: { "@type": "GeoCoordinates", latitude: c.geo.lat, longitude: c.geo.lng } }),
     openingHours: openingHoursSchema(c.schedule),
     areaServed: [c.texts.city[lang], c.country],
     priceRange: "₴₴",

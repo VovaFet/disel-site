@@ -24,7 +24,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return paths.flatMap((path) =>
     locales.map((lang) => ({
       url: abs(lang, path),
-      lastModified: new Date(),
       priority: path === "/" ? 1 : 0.8,
       alternates: { languages: Object.fromEntries(locales.map((l) => [l, abs(l, path)])) },
     })),

@@ -3,6 +3,7 @@ import { landingSections, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { HeaderShell } from "./HeaderShell";
 import { LangSwitcher } from "./LangSwitcher";
+import { Logo } from "./Logo";
 import { HoursList, MessengerLink, PhoneLink } from "./Live";
 import { MobileMenu } from "./MobileMenu";
 import { OpenStatus } from "./OpenStatus";
@@ -21,7 +22,7 @@ export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: S
     <HeaderShell>
       <div className="container header-inner">
         <Link href={p("/")} className="logo">
-          {config.texts.name[lang]}
+          <Logo name={config.texts.name[lang]} />
         </Link>
         <nav aria-label={d.mainMenu} className="nav">
           <Link href={p("/poslugy/")}>{d.nav.services}</Link>
@@ -52,10 +53,14 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
     <footer className="footer">
       <div className="container footer-inner">
         <div>
-          <strong>{config.texts.name[lang]}</strong>
-          <p>
-            {config.texts.city[lang]}, {config.texts.street[lang]}
-          </p>
+          <div className="logo footer-logo">
+            <Logo name={config.texts.name[lang]} size={28} />
+          </div>
+          {config.texts.street[lang] && (
+            <p>
+              {config.texts.city[lang]}, {config.texts.street[lang]}
+            </p>
+          )}
           <p>
             <PhoneLink />
           </p>

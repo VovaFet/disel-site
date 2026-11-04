@@ -66,7 +66,7 @@ const dict = {
     steps: [
       { title: "Зніміть деталі", text: "ПНВТ або форсунки — самостійно чи на найближчому СТО" },
       { title: "Запакуйте", text: "Заглушіть отвори, загорніть у плівку, вкладіть записку з телефоном" },
-      { title: "Відправте Новою поштою", text: "Або привезіть особисто — адреса на сторінці контактів" },
+      { title: "Відправте Новою поштою", text: "Або привезіть особисто — домовимося телефоном" },
       { title: "Отримайте протокол", text: "Узгоджуємо ціну до ремонту, повертаємо з протоколом тесту" },
     ],
     whyHeading: "Чому обирають нас",
@@ -149,7 +149,7 @@ const dict = {
     steps: [
       { title: "Снимите детали", text: "ТНВД или форсунки — самостоятельно или на ближайшем СТО" },
       { title: "Упакуйте", text: "Заглушите отверстия, оберните плёнкой, вложите записку с телефоном" },
-      { title: "Отправьте Новой почтой", text: "Или привезите лично — адрес на странице контактов" },
+      { title: "Отправьте Новой почтой", text: "Или привезите лично — договоримся по телефону" },
       { title: "Получите протокол", text: "Согласуем цену до ремонта, вернём с протоколом теста" },
     ],
     whyHeading: "Почему выбирают нас",
@@ -232,7 +232,7 @@ const dict = {
     steps: [
       { title: "Remove the parts", text: "The pump or injectors — yourself or at a local garage" },
       { title: "Pack them", text: "Plug the openings, wrap in film, add a note with your phone number" },
-      { title: "Ship via Nova Poshta", text: "Or bring them in person — see the contacts page" },
+      { title: "Ship via Nova Poshta", text: "Or bring them in person — call us to arrange" },
       { title: "Get the report", text: "We agree the price first and return parts with a test report" },
     ],
     whyHeading: "Why choose us",

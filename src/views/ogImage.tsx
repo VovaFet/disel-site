@@ -6,15 +6,21 @@ import { ImageResponse } from "next/og";
 import { getConfig } from "@/config";
 import type { Locale } from "@/config/types";
 import { formatPrice, t } from "@/i18n";
+import { logoArc, logoPulse, splitLogoName } from "@/lib/logo";
 
 const font = (file: string) => readFile(join(process.cwd(), "src/assets/fonts", file));
-const fonts = Promise.all([font("Inter-Regular.ttf"), font("Inter-ExtraBold.ttf")]);
+const fonts = Promise.all([
+  font("Inter-Regular.ttf"),
+  font("Inter-ExtraBold.ttf"),
+  font("FiraSansExtraCondensed-ExtraBold.ttf"),
+]);
 
 const colors = { bg: "#121417", fg: "#eceff3", muted: "#a2aab5", accent: "#e8590c" };
 
 async function render(lang: Locale, title: string, price?: string) {
   const c = await getConfig();
-  const [regular, extraBold] = await fonts;
+  const [regular, extraBold, logo] = await fonts;
+  const [first, second] = splitLogoName(c.texts.name[lang]);
   return new ImageResponse(
     (
       <div
@@ -32,9 +38,22 @@ async function render(lang: Locale, title: string, price?: string) {
           fontFamily: "Inter",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 40, fontWeight: 800 }}>
-          <div style={{ width: 14, height: 44, borderRadius: 4, backgroundColor: colors.accent }} />
-          {c.texts.name[lang]}
+        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+          <svg width="72" height="72" viewBox="0 0 64 64">
+            <path d={logoArc} fill="none" stroke={colors.accent} strokeWidth={5} strokeLinecap="round" />
+            <path
+              d={logoPulse}
+              fill="none"
+              stroke={colors.fg}
+              strokeWidth={4.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <div style={{ display: "flex", fontFamily: "Fira Sans Extra Condensed", fontSize: 58, letterSpacing: 1.5 }}>
+            {first.toUpperCase()}
+            <span style={{ color: colors.accent }}>{second.toUpperCase()}</span>
+          </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 32 }}>
           <div style={{ fontSize: title.length > 45 ? 64 : 76, fontWeight: 800, lineHeight: 1.1 }}>{title}</div>
@@ -62,6 +81,7 @@ async function render(lang: Locale, title: string, price?: string) {
       fonts: [
         { name: "Inter", data: regular, weight: 400, style: "normal" },
         { name: "Inter", data: extraBold, weight: 800, style: "normal" },
+        { name: "Fira Sans Extra Condensed", data: logo, weight: 800, style: "normal" },
       ],
     },
   );
@@ -76,5 +96,6 @@ export async function serviceOgImage(lang: Locale, slug: string) {
   const c = await getConfig();
   const s = c.services.find((x) => x.slug === slug);
   if (!s) return homeOgImage(lang);
-  return render(lang, `${s.title[lang]} ${c.texts.cityIn[lang]}`, `${t(lang).from} ${formatPrice(lang, s.priceFrom)}`);
+  const price = s.priceFrom > 0 ? `${t(lang).from} ${formatPrice(lang, s.priceFrom)}` : undefined;
+  return render(lang, `${s.title[lang]} ${c.texts.cityIn[lang]}`, price);
 }

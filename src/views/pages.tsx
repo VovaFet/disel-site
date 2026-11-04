@@ -17,10 +17,10 @@ import { SymptomList } from "@/components/SymptomList";
 import { Brands, HeroImage, ProtocolSample, Reviews, Stats } from "@/components/Trust";
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
-import { localePath, t } from "@/i18n";
+import { formatPrice, localePath, t } from "@/i18n";
 import { faqSchema, serviceSchema } from "@/lib/schema";
 import { ArticleCards } from "./articles";
-import { openGraph, pageMetadata } from "./RootShell";
+import { pageMetadata } from "./RootShell";
 
 export const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
   c.services.map((s) => ({
@@ -33,7 +33,7 @@ export const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
 
 /* ---------- Home ---------- */
 
-export const homeMetadata = (lang: Locale): Metadata => pageMetadata(lang, "/", {});
+export const homeMetadata = async (lang: Locale): Promise<Metadata> => pageMetadata(await getConfig(), lang, "/", {});
 
 export async function HomePage({ lang }: { lang: Locale }) {
   const c = await getConfig();
@@ -144,7 +144,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
 export async function servicesMetadata(lang: Locale): Promise<Metadata> {
   const c = await getConfig();
   const d = t(lang);
-  return pageMetadata(lang, "/poslugy/", {
+  return pageMetadata(c, lang, "/poslugy/", {
     title: d.servicesHeading,
     description: `${d.servicesDescription} ${c.texts.cityIn[lang]}. ${c.texts.shipping[lang]}.`,
   });
@@ -176,15 +176,18 @@ export async function serviceMetadata(lang: Locale, slug: string): Promise<Metad
   const c = await getConfig();
   const s = c.services.find((x) => x.slug === slug);
   if (!s) return {};
-  const d = t(lang);
-  const price = `${d.from} ${s.priceFrom} ${d.currency}`;
-  return {
-    ...pageMetadata(lang, `/poslugy/${slug}/`, {
-      title: `${s.title[lang]} ${c.texts.cityIn[lang]} — ${price}`,
-      description: `${s.short[lang]} ${c.texts.city[lang]}, ${price}.`,
-    }),
-    openGraph: openGraph(lang, c.texts.name[lang], localePath(lang, `/poslugy/${slug}/og.png`)),
-  };
+  // A zero price means "after diagnostics": it stays out of titles and previews
+  const price = s.priceFrom > 0 ? `${t(lang).from} ${formatPrice(lang, s.priceFrom)}` : "";
+  return pageMetadata(
+    c,
+    lang,
+    `/poslugy/${slug}/`,
+    {
+      title: `${s.title[lang]} ${c.texts.cityIn[lang]}${price && ` — ${price}`}`,
+      description: `${s.short[lang]} ${c.texts.city[lang]}${price && `, ${price}`}.`,
+    },
+    `/poslugy/${slug}/og.png`,
+  );
 }
 
 export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }) {
@@ -293,15 +296,17 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
 export async function contactsMetadata(lang: Locale): Promise<Metadata> {
   const c = await getConfig();
   const d = t(lang);
-  return pageMetadata(lang, "/kontakty/", {
+  return pageMetadata(c, lang, "/kontakty/", {
     title: d.contactsTitle,
-    description: `${d.contactsDescription} ${c.texts.name[lang]} ${c.texts.cityIn[lang]}.`,
+    description: `${d.contactsDescription} ${c.texts.name[lang]} ${c.texts.cityIn[lang]}. ${c.texts.shipping[lang]}.`,
   });
 }
 
 export async function ContactsPage({ lang }: { lang: Locale }) {
   const c = await getConfig();
   const d = t(lang);
+  // Without a street address (texts → street) the map point would be a guess: no address, directions or map
+  const street = c.texts.street[lang];
   const mapSrc = `https://www.google.com/maps?q=${c.geo.lat},${c.geo.lng}&z=16&hl=${lang}&output=embed`;
   // Opens turn-by-turn navigation in the Google Maps app on phones
   const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${c.geo.lat},${c.geo.lng}`;
@@ -309,9 +314,11 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
     <section className="container section">
       <h1>{d.nav.contacts}</h1>
       <address className="contacts">
-        <p>
-          {c.texts.city[lang]}, {c.texts.street[lang]}
-        </p>
+        {street && (
+          <p>
+            {c.texts.city[lang]}, {street}
+          </p>
+        )}
         <p>
           {d.phone}: <PhoneLink />
         </p>
@@ -324,18 +331,22 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
         <OpenStatus />
         <HoursList />
       </address>
-      <div className="actions">
-        <a href={directionsUrl} className="btn btn-outline" target="_blank" rel="noopener noreferrer">
-          {d.directions}
-        </a>
-      </div>
-      <iframe
-        title={`${c.texts.name[lang]} ${d.onMap}`}
-        src={mapSrc}
-        className="map"
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-      />
+      {street && (
+        <>
+          <div className="actions">
+            <a href={directionsUrl} className="btn btn-outline" target="_blank" rel="noopener noreferrer">
+              {d.directions}
+            </a>
+          </div>
+          <iframe
+            title={`${c.texts.name[lang]} ${d.onMap}`}
+            src={mapSrc}
+            className="map"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </>
+      )}
     </section>
   );
 }
@@ -345,8 +356,9 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
 const infoPath = (slug: InfoPageSlug) => `/${slug}/`;
 
 export async function infoMetadata(lang: Locale, slug: InfoPageSlug): Promise<Metadata> {
-  const page = (await getConfig()).pages.find((p) => p.slug === slug)!;
-  return pageMetadata(lang, infoPath(slug), { title: page.title[lang], description: page.description[lang] });
+  const c = await getConfig();
+  const page = c.pages.find((p) => p.slug === slug)!;
+  return pageMetadata(c, lang, infoPath(slug), { title: page.title[lang], description: page.description[lang] });
 }
 
 export async function InfoPageView({ lang, slug }: { lang: Locale; slug: InfoPageSlug }) {
