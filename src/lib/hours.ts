@@ -39,7 +39,8 @@ function nowIn(timeZone: string, date: Date) {
   return { day, minutes: Number(get("hour")) * 60 + Number(get("minute")) };
 }
 
-export type OpenStatus = { open: boolean; text: string };
+// next: when a closed workshop opens again
+export type OpenStatus = { open: boolean; text: string; next?: string };
 
 export function getOpenStatus(schedule: ScheduleEntry[], timeZone: string, lang: Locale, date = new Date()): OpenStatus {
   const d = t(lang);
@@ -55,7 +56,7 @@ export function getOpenStatus(schedule: ScheduleEntry[], timeZone: string, lang:
     const s = entryFor(wd);
     if (!s || (i === 0 && minutes >= toMinutes(s.from))) continue;
     const when = i === 0 ? d.today : i === 1 ? d.tomorrow : d.days[wd];
-    return { open: false, text: d.closedOpens(when, s.from) };
+    return { open: false, text: d.closed, next: d.opensAt(when, s.from) };
   }
   return { open: false, text: d.closed };
 }
