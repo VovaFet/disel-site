@@ -54,6 +54,13 @@ async function render(lang: Locale, title: string, price?: string) {
             {first.toUpperCase()}
             <span style={{ color: colors.accent }}>{second.toUpperCase()}</span>
           </div>
+          {c.texts.slogan[lang] && (
+            <div
+              style={{ marginLeft: 14, paddingLeft: 24, borderLeft: `2px solid ${colors.muted}`, fontSize: 30, color: colors.muted }}
+            >
+              {c.texts.slogan[lang]}
+            </div>
+          )}
         </div>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 32 }}>
           <div style={{ fontSize: title.length > 45 ? 64 : 76, fontWeight: 800, lineHeight: 1.1 }}>{title}</div>
@@ -89,7 +96,7 @@ async function render(lang: Locale, title: string, price?: string) {
 
 export async function homeOgImage(lang: Locale) {
   const c = await getConfig();
-  return render(lang, `${t(lang).homeH1} ${c.texts.cityIn[lang]}`);
+  return render(lang, `${t(lang).homeH1} ${c.texts.area[lang]}`);
 }
 
 export async function serviceOgImage(lang: Locale, slug: string) {
@@ -97,5 +104,5 @@ export async function serviceOgImage(lang: Locale, slug: string) {
   const s = c.services.find((x) => x.slug === slug);
   if (!s) return homeOgImage(lang);
   const price = s.priceFrom > 0 ? `${t(lang).from} ${formatPrice(lang, s.priceFrom)}` : undefined;
-  return render(lang, `${s.title[lang]} ${c.texts.cityIn[lang]}`, price);
+  return render(lang, `${s.title[lang]} ${c.texts.area[lang]}`, price);
 }

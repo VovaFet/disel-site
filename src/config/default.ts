@@ -22,6 +22,7 @@ export const defaultConfig: SiteConfig = {
     name: { uk: "DieselMedic", ru: "DieselMedic", en: "DieselMedic" },
     city: { uk: "Київ", ru: "Киев", en: "Kyiv" },
     cityIn: { uk: "в Києві", ru: "в Киеве", en: "in Kyiv" },
+    area: { uk: "з усієї України", ru: "со всей Украины", en: "across Ukraine" },
     // Empty until the exact address is known: the site then hides the address line and the map
     street: { uk: "", ru: "", en: "" },
     region: { uk: "Київ", ru: "Киев", en: "Kyiv" },
@@ -37,6 +38,12 @@ export const defaultConfig: SiteConfig = {
     },
     // Filled in the sheet (texts → discount) when there is an offer
     discount: { uk: "", ru: "", en: "" },
+    slogan: { uk: "Ваш дизель — наш пацієнт", ru: "Ваш дизель — наш пациент", en: "Your diesel is our patient" },
+    removedOnly: {
+      uk: "Працюємо лише зі знятими деталями. Автомобілі не приймаємо.",
+      ru: "Работаем только со снятыми деталями. Автомобили не принимаем.",
+      en: "We only work with removed parts and don't take cars in.",
+    },
   },
 
   services: [

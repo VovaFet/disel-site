@@ -92,12 +92,18 @@ export type SiteConfig = {
     city: L10n;
     // City with preposition in the locative case: "в Києві", "в Киеве", "in Kyiv"
     cityIn: L10n;
+    // Where parts come from, used in headings and titles instead of the city: "з усієї України"
+    area: L10n;
     street: L10n;
     region: L10n;
     description: L10n;
     shipping: L10n;
     // Discount offer shown next to prices, e.g. "−10% для УБД, медиків і волонтерів"; empty = hidden
     discount: L10n;
+    // Slogan above the home page heading, under the footer logo and in link previews
+    slogan: L10n;
+    // "Removed parts only" notice on the home page, contacts and next to service prices; empty = hidden
+    removedOnly: L10n;
   };
   services: Service[];
   // FAQ shown on every service page (slug "*" in the sheet)
