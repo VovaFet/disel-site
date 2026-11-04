@@ -47,7 +47,20 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 }
 .header.is-scrolled { box-shadow: 0 4px 16px rgb(0 0 0 / 0.12); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 12px; padding-bottom: 12px; }
-.logo { font-weight: 700; font-size: 1.2rem; color: var(--fg); text-decoration: none; }
+.logo { display: inline-flex; align-items: center; gap: 10px; color: var(--fg); text-decoration: none; }
+.logo-mark { flex: none; }
+.logo-word {
+  font-family: var(--font-logo), "Arial Narrow", sans-serif; font-weight: 800; font-size: 1.7rem;
+  line-height: 1; letter-spacing: 0.03em; text-transform: uppercase;
+}
+.logo-word span { color: var(--accent); }
+.footer-logo { margin-bottom: 8px; }
+.footer-logo .logo-word { font-size: 1.45rem; }
+@media (max-width: 420px) {
+  .header .logo { gap: 8px; }
+  .header .logo-mark { width: 28px; height: 28px; }
+  .header .logo-word { font-size: 1.45rem; }
+}
 .nav { display: flex; align-items: center; gap: 20px; }
 .nav a:not(.btn) { color: var(--fg); text-decoration: none; }
 

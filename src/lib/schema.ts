@@ -5,6 +5,7 @@ import { openingHoursSchema } from "./hours";
 export const businessId = (c: SiteConfig) => `${c.url}/#business`;
 
 export function businessSchema(c: SiteConfig, lang: Locale) {
+  const photo = c.trust.heroImage;
   return {
     "@context": "https://schema.org",
     "@type": "AutoRepair",
@@ -14,6 +15,8 @@ export function businessSchema(c: SiteConfig, lang: Locale) {
     telephone: c.phone,
     description: c.texts.description[lang],
     inLanguage: lang,
+    logo: `${c.url}/logo.png`,
+    ...(photo && !photo.startsWith("data:") && { image: photo.startsWith("http") ? photo : `${c.url}${photo}` }),
     address: {
       "@type": "PostalAddress",
       streetAddress: c.texts.street[lang],
