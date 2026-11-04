@@ -22,9 +22,14 @@ export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: S
   return (
     <HeaderShell>
       <div className="container header-inner">
-        <IntentLink href={p("/")} className="logo">
-          <Logo name={config.texts.name[lang]} />
-        </IntentLink>
+        <div className="brand">
+          <IntentLink href={p("/")} className="logo">
+            <Logo name={config.texts.name[lang]} />
+          </IntentLink>
+          <div className="header-status">
+            <OpenStatus />
+          </div>
+        </div>
         <nav aria-label={d.mainMenu} className="nav">
           <Link href={p("/poslugy/")}>{d.nav.services}</Link>
           <IntentLink href={`${p("/")}#calculator`}>{d.nav.calculator}</IntentLink>
