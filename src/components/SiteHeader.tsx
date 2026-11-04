@@ -90,6 +90,9 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
             <li>
               <Link href={localePath(lang, "/kontakty/")}>{d.nav.contacts}</Link>
             </li>
+            <li>
+              <Link href={localePath(lang, "/konfidentsiinist/")}>{d.nav.privacy}</Link>
+            </li>
           </ul>
         </nav>
         <div>

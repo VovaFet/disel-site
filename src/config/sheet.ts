@@ -12,7 +12,7 @@
 //             fields: perUnitLabel, title, h1, short, description, includes (one item per line), body
 //             symptoms_uk | symptoms_ru | symptoms_en: signs of a fault, one per line (optional)
 //             image: photo for the service page, an image URL or a /path from public/ (optional)
-//   pages     slug | title_* | description_* | body_*   (slug: dostavka | pro-nas)
+//   pages     slug | title_* | description_* | body_*   (slug: dostavka | pro-nas | konfidentsiinist)
 //   body format: blank line = new block, "## " = heading, lines starting with "- " = list
 //   faq       slug | q_uk | a_uk | q_ru | a_ru | q_en | a_en   (slug "*" = every service)
 //   addons    id | price | label_uk | label_ru | label_en
