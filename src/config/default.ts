@@ -5,25 +5,26 @@ import type { SiteConfig } from "./types";
 // TODO: replace placeholder contacts, prices and verify warranty/payment terms.
 export const defaultConfig: SiteConfig = {
   url: "https://example.com",
-  geo: { lat: 46.4825, lng: 30.7233 },
-  postalCode: "65000",
+  geo: { lat: 50.4501, lng: 30.5234 },
+  postalCode: "",
   country: "UA",
   phone: "+380000000000",
   phoneDisplay: "+38 (000) 000-00-00",
   telegram: "https://t.me/username",
   viber: "viber://chat?number=%2B380000000000",
   timeZone: "Europe/Kyiv",
-  novaPoshta: { recipient: "Прізвище Ім'я По батькові", phone: "+380000000000", branch: "Одеса, відділення №1" },
+  novaPoshta: { recipient: "Прізвище Ім'я По батькові", phone: "+380000000000", branch: "Київ, відділення №1" },
   schedule: [
     { days: [1, 2, 3, 4, 5], from: "09:00", to: "18:00" },
     { days: [6], from: "09:00", to: "14:00" },
   ],
   texts: {
     name: { uk: "DieselMedic", ru: "DieselMedic", en: "DieselMedic" },
-    city: { uk: "Одеса", ru: "Одесса", en: "Odesa" },
-    cityIn: { uk: "в Одесі", ru: "в Одессе", en: "in Odesa" },
-    street: { uk: "вул. Прикладна, 1", ru: "ул. Примерная, 1", en: "1 Prykladna St" },
-    region: { uk: "Одеська область", ru: "Одесская область", en: "Odesa Oblast" },
+    city: { uk: "Київ", ru: "Киев", en: "Kyiv" },
+    cityIn: { uk: "в Києві", ru: "в Киеве", en: "in Kyiv" },
+    // Empty until the exact address is known: the site then hides the address line and the map
+    street: { uk: "", ru: "", en: "" },
+    region: { uk: "Київ", ru: "Киев", en: "Kyiv" },
     description: {
       uk: "Ремонт знятих паливних насосів високого тиску (ПНВТ/ТНВД) і дизельних форсунок. Перевірка на стенді, протокол до і після ремонту, відправка Новою поштою по всій Україні.",
       ru: "Ремонт снятых топливных насосов высокого давления (ТНВД) и дизельных форсунок. Проверка на стенде, протокол до и после ремонта, отправка Новой почтой по всей Украине.",
