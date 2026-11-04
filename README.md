@@ -1,6 +1,6 @@
 # DieselMedic — website
 
-Static Next.js 16 site (`output: "export"`) for a diesel fuel pump, injector and turbocharger repair workshop in Odesa,
+Static Next.js 16 site (`output: "export"`) for a diesel fuel pump, injector and turbocharger repair workshop in Kyiv,
 in Ukrainian (`/`), Russian (`/ru/`) and English (`/en/`). The content comes from a Google Sheet; the site is
 deployed to Cloudflare Workers as static files.
 

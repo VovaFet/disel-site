@@ -19,7 +19,7 @@ export function businessSchema(c: SiteConfig, lang: Locale) {
       streetAddress: c.texts.street[lang],
       addressLocality: c.texts.city[lang],
       addressRegion: c.texts.region[lang],
-      postalCode: c.postalCode,
+      ...(c.postalCode && { postalCode: c.postalCode }),
       addressCountry: c.country,
     },
     geo: { "@type": "GeoCoordinates", latitude: c.geo.lat, longitude: c.geo.lng },
