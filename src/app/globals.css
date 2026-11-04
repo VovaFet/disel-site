@@ -71,7 +71,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .nav { display: flex; align-items: center; gap: 20px; }
 .nav a:not(.btn) { color: var(--fg); text-decoration: none; }
 
-.hero { padding: 64px 0; }
+.hero { padding: 28px 0 48px; }
 .lead { font-size: 1.15rem; color: var(--muted); max-width: 720px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 
