@@ -110,7 +110,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .related { margin-top: 48px; }
 /* Service photo (services → image in the sheet): beside the heading on wide screens, under it on phones */
 .service-image {
-  display: block; width: 100%; max-width: 520px; margin: 8px 0 16px; aspect-ratio: 4 / 3; object-fit: cover;
+  display: block; width: 100%; max-width: 520px; height: auto; margin: 8px 0 16px; aspect-ratio: 4 / 3; object-fit: cover;
   border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
 }
 @media (min-width: 900px) {
@@ -297,7 +297,7 @@ p.discount-note { margin: -8px 0 16px; }
   .hero-with-image .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 48px; align-items: center; }
 }
 .hero-image {
-  display: block; width: 100%; margin-top: 32px; aspect-ratio: 4 / 3; object-fit: cover;
+  display: block; width: 100%; height: auto; margin-top: 32px; aspect-ratio: 4 / 3; object-fit: cover;
   border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
 }
 @media (min-width: 900px) { .hero-image { margin-top: 0; } }
