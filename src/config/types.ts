@@ -98,6 +98,8 @@ export type SiteConfig = {
     shipping: L10n;
     // Discount offer shown next to prices, e.g. "−10% для УБД, медиків і волонтерів"; empty = hidden
     discount: L10n;
+    // Slogan above the home page heading, under the footer logo and in link previews
+    slogan: L10n;
   };
   services: Service[];
   // FAQ shown on every service page (slug "*" in the sheet)

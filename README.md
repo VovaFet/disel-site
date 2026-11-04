@@ -28,7 +28,7 @@ rows of every tab from the bundled defaults.
 | Tab | What it controls | When edits show |
 |---|---|---|
 | `settings` | Site url, phone, Telegram, Viber, time zone, map point; Nova Poshta details `npRecipient`, `npPhone`, `npBranch`; trust blocks `brands`, `heroImage`, `protocolImage` | contacts and Nova Poshta: live; the rest: rebuild |
-| `texts` | Workshop name, city, address, site description, shipping line, `discount` | rebuild |
+| `texts` | Workshop name, city, address, site description, shipping line, `discount`, `slogan` | rebuild |
 | `schedule` | Opening hours (days `1-5`, `6`; 1 = Monday) | live |
 | `services` | Services: `slug`, `group` (`injectors`, `pumps`, `turbo`, `testing`), `priceFrom`, calculator quantities, texts | `priceFrom`: live; the rest: rebuild |
 | `faq` | Questions by page `slug` (a service, brand or vehicle page); `*` = on every service page | rebuild |

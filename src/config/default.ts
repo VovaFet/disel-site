@@ -37,6 +37,7 @@ export const defaultConfig: SiteConfig = {
     },
     // Filled in the sheet (texts → discount) when there is an offer
     discount: { uk: "", ru: "", en: "" },
+    slogan: { uk: "Ваш дизель — наш пацієнт", ru: "Ваш дизель — наш пациент", en: "Your diesel is our patient" },
   },
 
   services: [

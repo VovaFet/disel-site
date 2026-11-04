@@ -44,6 +44,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
         <div className="container hero-grid">
           <div>
             <OpenStatus />
+            {c.texts.slogan[lang] && <p className="slogan">{c.texts.slogan[lang]}</p>}
             <h1>
               {d.homeH1} {c.texts.cityIn[lang]}
             </h1>
