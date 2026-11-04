@@ -27,7 +27,7 @@ export function businessSchema(c: SiteConfig, lang: Locale) {
     },
     ...(c.texts.street[lang] && { geo: { "@type": "GeoCoordinates", latitude: c.geo.lat, longitude: c.geo.lng } }),
     openingHours: openingHoursSchema(c.schedule),
-    areaServed: [c.texts.city[lang], c.country],
+    areaServed: c.country,
     priceRange: "₴₴",
   };
 }

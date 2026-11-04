@@ -21,7 +21,7 @@ export async function rootMetadata(lang: Locale): Promise<Metadata> {
   return {
     metadataBase: new URL(c.url),
     title: {
-      default: `${name} — ${t(lang).homeTitle} ${c.texts.cityIn[lang]}`,
+      default: `${name} — ${t(lang).homeTitle} ${c.texts.area[lang]}`,
       // Page titles already name the city where it matters
       template: `%s | ${name}`,
     },
