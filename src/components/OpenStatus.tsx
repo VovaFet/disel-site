@@ -20,7 +20,15 @@ export function OpenStatus() {
   return (
     <span className={`status ${status.open ? "status-open" : "status-closed"}`}>
       <span className="status-dot" />
-      {status.text}
+      <span>
+        {status.text}
+        {status.next && (
+          <span className="status-next">
+            <span className="status-sep"> · </span>
+            {status.next}
+          </span>
+        )}
+      </span>
     </span>
   );
 }

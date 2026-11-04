@@ -71,7 +71,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .nav { display: flex; align-items: center; gap: 20px; }
 .nav a:not(.btn) { color: var(--fg); text-decoration: none; }
 
-.hero { padding: 64px 0; }
+.hero { padding: 28px 0 48px; }
 .lead { font-size: 1.15rem; color: var(--muted); max-width: 720px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 
@@ -186,6 +186,17 @@ article > .article-meta { margin-bottom: 8px; }
 .status-open { color: #2b8a3e; }
 .status-open .status-dot { animation: pulse 2s infinite; }
 .status-closed { color: #c92a2a; }
+/* Next to the logo where the header has room, on two lines; the home hero shows it elsewhere */
+.brand { display: flex; align-items: center; gap: 14px; }
+.header-status { display: none; }
+.header-status .status { margin: 0; padding-left: 14px; border-left: 1px solid var(--border); font-size: 0.78rem; line-height: 1.3; white-space: nowrap; }
+.header-status .status-pending { display: none; }
+.header-status .status-sep { display: none; }
+.header-status .status-next { display: block; color: var(--muted); font-weight: 500; }
+@media (min-width: 1100px) {
+  .header-status { display: block; }
+  .hero .status { display: none; }
+}
 @keyframes pulse {
   0% { box-shadow: 0 0 0 0 rgb(43 138 62 / 0.6); }
   70% { box-shadow: 0 0 0 8px rgb(43 138 62 / 0); }
