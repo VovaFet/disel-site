@@ -17,7 +17,7 @@ export const isLocale = (v: string): v is Locale => (locales as readonly string[
 
 const dict = {
   uk: {
-    nav: { home: "Головна", services: "Послуги", servicesFull: "Послуги та ціни", calculator: "Калькулятор", contacts: "Контакти", delivery: "Доставка й оплата", about: "Про нас" },
+    nav: { home: "Головна", services: "Послуги", servicesFull: "Послуги та ціни", calculator: "Калькулятор", contacts: "Контакти", delivery: "Доставка й оплата", about: "Про нас", privacy: "Політика конфіденційності" },
     groups: { injectors: "Форсунки", pumps: "ПНВТ (ТНВД)", turbo: "Турбіни", testing: "Перевірка" },
     footerInfo: "Інформація",
     menuOpen: "Відкрити меню",
@@ -101,7 +101,7 @@ const dict = {
     toHome: "На головну",
   },
   ru: {
-    nav: { home: "Главная", services: "Услуги", servicesFull: "Услуги и цены", calculator: "Калькулятор", contacts: "Контакты", delivery: "Доставка и оплата", about: "О нас" },
+    nav: { home: "Главная", services: "Услуги", servicesFull: "Услуги и цены", calculator: "Калькулятор", contacts: "Контакты", delivery: "Доставка и оплата", about: "О нас", privacy: "Политика конфиденциальности" },
     groups: { injectors: "Форсунки", pumps: "ТНВД", turbo: "Турбины", testing: "Проверка" },
     footerInfo: "Информация",
     menuOpen: "Открыть меню",
@@ -185,7 +185,7 @@ const dict = {
     toHome: "На главную",
   },
   en: {
-    nav: { home: "Home", services: "Services", servicesFull: "Services & prices", calculator: "Calculator", contacts: "Contacts", delivery: "Delivery & payment", about: "About us" },
+    nav: { home: "Home", services: "Services", servicesFull: "Services & prices", calculator: "Calculator", contacts: "Contacts", delivery: "Delivery & payment", about: "About us", privacy: "Privacy policy" },
     groups: { injectors: "Injectors", pumps: "Fuel pumps", turbo: "Turbochargers", testing: "Testing" },
     footerInfo: "Information",
     menuOpen: "Open menu",
