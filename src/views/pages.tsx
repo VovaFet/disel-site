@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaqList } from "@/components/FaqList";
+import { IntentLink } from "@/components/IntentLink";
 import { JsonLd } from "@/components/JsonLd";
 import { ContactActions, MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
 import { OpenStatus } from "@/components/OpenStatus";
@@ -212,7 +213,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
     <article className="container section">
       <JsonLd data={serviceSchema(c, s, lang)} />
       <nav aria-label={d.breadcrumbs} className="breadcrumbs">
-        <Link href={p("/")}>{d.nav.home}</Link> / <Link href={p("/poslugy/")}>{d.nav.services}</Link> /{" "}
+        <IntentLink href={p("/")}>{d.nav.home}</IntentLink> / <Link href={p("/poslugy/")}>{d.nav.services}</Link> /{" "}
         <span>{s.title[lang]}</span>
       </nav>
 
