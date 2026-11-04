@@ -32,8 +32,8 @@ export type Service = {
   faq: Faq[];
 };
 
-// Static info pages (delivery, about). Routes are fixed; content comes from the config.
-export const infoPageSlugs = ["dostavka", "pro-nas"] as const;
+// Static info pages (delivery, about, privacy policy). Routes are fixed; content comes from the config.
+export const infoPageSlugs = ["dostavka", "pro-nas", "konfidentsiinist"] as const;
 export type InfoPageSlug = (typeof infoPageSlugs)[number];
 export type InfoPage = { slug: InfoPageSlug; title: L10n; description: L10n; body: L10n };
 

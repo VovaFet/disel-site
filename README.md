@@ -13,7 +13,7 @@ deployed to Cloudflare Workers as static files.
 | `/marky/`, `/marky/<slug>/` | Brand and series pages (Bosch CP3, VP44…) | `series`, `faq` |
 | `/avto/`, `/avto/<slug>/` | Vehicle and engine pages (Sprinter 2.2 CDI…) | `vehicles`, `faq` |
 | `/statti/`, `/statti/<slug>/` | Articles and repair case studies | `articles` |
-| `/dostavka/`, `/pro-nas/` | Delivery & payment, About us | `pages` |
+| `/dostavka/`, `/pro-nas/`, `/konfidentsiinist/` | Delivery & payment, About us, Privacy policy | `pages` |
 | `/kontakty/` | Contacts, map, directions | `settings`, `texts`, `schedule` |
 
 Every page exists in the three languages; an empty translation cell falls back to Ukrainian. A section whose
@@ -33,7 +33,7 @@ rows of every tab from the bundled defaults.
 | `services` | Services: `slug`, `group` (`injectors`, `pumps`, `turbo`, `testing`), `priceFrom`, calculator quantities, texts | `priceFrom`: live; the rest: rebuild |
 | `faq` | Questions by page `slug` (a service, brand or vehicle page); `*` = on every service page | rebuild |
 | `addons` | Calculator extras (express service, return shipping) | live |
-| `pages` | Delivery & payment and About us texts | rebuild |
+| `pages` | Delivery & payment, About us and Privacy policy (`konfidentsiinist`) texts | rebuild |
 | `stats`, `reviews` | Home page numbers and customer reviews (optional) | rebuild |
 | `series`, `vehicles` | Brand/series and vehicle pages: same fields as services plus `services` (related service slugs, the first gives the price and the calculator) and `units` (calculator quantity) | rebuild |
 | `articles` | Articles: `slug`, `date` (`YYYY-MM-DD`), `kind` (`case` for a case study), `services`, `image`, texts | rebuild |
