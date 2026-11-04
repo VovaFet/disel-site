@@ -2,6 +2,7 @@ import Link from "next/link";
 import { landingSections, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { HeaderShell } from "./HeaderShell";
+import { IntentLink } from "./IntentLink";
 import { LangSwitcher } from "./LangSwitcher";
 import { Logo } from "./Logo";
 import { HoursList, MessengerLink, PhoneLink } from "./Live";
@@ -21,12 +22,12 @@ export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: S
   return (
     <HeaderShell>
       <div className="container header-inner">
-        <Link href={p("/")} className="logo">
+        <IntentLink href={p("/")} className="logo">
           <Logo name={config.texts.name[lang]} />
-        </Link>
+        </IntentLink>
         <nav aria-label={d.mainMenu} className="nav">
           <Link href={p("/poslugy/")}>{d.nav.services}</Link>
-          <Link href={`${p("/")}#calculator`}>{d.nav.calculator}</Link>
+          <IntentLink href={`${p("/")}#calculator`}>{d.nav.calculator}</IntentLink>
           <Link href={p("/kontakty/")}>{d.nav.contacts}</Link>
           <PhoneLink className="btn btn-small" />
         </nav>
