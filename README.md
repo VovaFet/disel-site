@@ -83,7 +83,8 @@ This is Next.js 16: read `node_modules/next/dist/docs/` before relying on older 
 - `src/views/` — page bodies shared by both route trees (pages, landings, articles, link preview images)
 - `src/components/` — UI pieces; `Live*` and the calculator use the values the browser refreshes
 - `src/i18n/` — interface strings in three languages
-- `scripts/` — sheet seed, the build adapter that writes per-language 404 pages
+- `scripts/` — sheet seed, the build adapter that writes per-language 404 pages, `make-icons.ts` (favicons and
+  `public/logo.png` from the logo mark in `src/lib/logo.ts`: `npx tsx scripts/make-icons.ts`)
 
 ## Branches
 

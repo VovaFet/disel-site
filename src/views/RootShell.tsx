@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Fira_Sans_Extra_Condensed, Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import { JsonLd } from "@/components/JsonLd";
 import { LiveConfigProvider } from "@/components/LiveConfig";
@@ -12,6 +12,8 @@ import { businessSchema } from "@/lib/schema";
 import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"], display: "swap" });
+// Only for the logo wordmark (Latin caps)
+const logoFont = Fira_Sans_Extra_Condensed({ weight: "800", subsets: ["latin"], display: "swap", variable: "--font-logo" });
 
 export async function rootMetadata(lang: Locale): Promise<Metadata> {
   const c = await getConfig();
@@ -50,7 +52,7 @@ export function pageMetadata(lang: Locale, path: string, meta: { title?: string;
 export async function RootShell({ lang, notFound, children }: { lang: Locale; notFound?: boolean; children: ReactNode }) {
   const config = await getConfig();
   return (
-    <html lang={lang} className={inter.className}>
+    <html lang={lang} className={`${inter.className} ${logoFont.variable}`}>
       <body>
         <MouseBackground />
         <JsonLd data={businessSchema(config, lang)} />
