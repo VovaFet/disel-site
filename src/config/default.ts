@@ -13,7 +13,8 @@ export const defaultConfig: SiteConfig = {
   telegram: "https://t.me/username",
   viber: "viber://chat?number=%2B380000000000",
   timeZone: "Europe/Kyiv",
-  novaPoshta: { recipient: "Прізвище Ім'я По батькові", phone: "+380000000000", branch: "Київ, відділення №1" },
+  // Empty = the Nova Poshta details block is hidden until the sheet has real ones
+  novaPoshta: { show: true, recipient: "", phone: "", branch: "" },
   gaId: "",
   adsId: "",
   pulseInterval: 10,
