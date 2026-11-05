@@ -66,8 +66,16 @@ export function pageMetadata(
 export async function RootShell({ lang, notFound, children }: { lang: Locale; notFound?: boolean; children: ReactNode }) {
   const config = await getConfig();
   return (
-    // suppressHydrationWarning: themeScript may set data-theme on <html> before React hydrates
-    <html lang={lang} className={`${inter.className} ${logoFont.variable}`} suppressHydrationWarning>
+    // suppressHydrationWarning: themeScript may set data-theme on <html> before React hydrates.
+    // data-scroll-behavior: Next.js turns the smooth scrolling of globals.css off while it moves to the top of a
+    // new page; otherwise its scroll calls animate over each other and the page stops halfway (Next.js 16 upgrade
+    // guide, "Scroll Behavior Override")
+    <html
+      lang={lang}
+      className={`${inter.className} ${logoFont.variable}`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       {/* eslint-disable-next-line @next/next/no-head-element -- this is the App Router root layout (rendered from app/), where <head> is right; the rule targets pages/ */}
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
