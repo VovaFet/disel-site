@@ -74,6 +74,7 @@ async function LandingIndex({ lang, section }: { lang: Locale; section: LandingS
       <p className="lead">{d.sections[section].intro}</p>
       {list.length > 0 ? (
         <LinkCards
+          level={2}
           items={list.map((l) => ({
             href: localePath(lang, sectionPath(section, l.slug)),
             title: l.title[lang],
