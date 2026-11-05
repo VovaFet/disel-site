@@ -15,7 +15,7 @@ every tab from the bundled defaults (`src/config/default.ts`), which is how the 
   **Rebuild site** → Run workflow (a few minutes), or with the next release.
 
 Live values: contacts (`phone`, `phoneDisplay`, `telegram`, `viber`), `timeZone`, Nova Poshta details,
-`pulseInterval`, `cursorGlow` (tab `settings`), opening hours (`schedule`), prices (`services` → `priceFrom`) and
+`pulseInterval`, `pulseSpeed`, `cursorGlow` (tab `settings`), opening hours (`schedule`), prices (`services` → `priceFrom`) and
 calculator extras (`addons`). Everything else needs a rebuild. Even live values reach search engines, page
 titles and link previews only with a rebuild (a price in a page title, the phone in the structured data).
 
@@ -76,6 +76,7 @@ Ukrainian, and `коли діє` is a dropdown, highlighted green for "Одра�
 | `protocolImage` | Sample test report photo on the home page; empty = hidden | rebuild |
 | `gaId` | Google Analytics 4 ID (`G-…`). Turns on the cookie consent banner; empty = no banner. An ID in another format is ignored with a build warning. | rebuild |
 | `pulseInterval` | Background pulse: average pause between runs, seconds (each pause is 60–140% of it, at least 1 s). `0` = off, empty = 10. | live |
+| `pulseSpeed` | Background pulse speed, a multiplier: `1` or empty = normal (across the screen in about 2.4 s), `2` = twice as fast, `0.5` = twice as slow; limited to 0.2–5 | live |
 | `cursorGlow` | Background dots and glow following the pointer: `1` or empty = on; `0` (or `ні`, `no`, `off`, `false`) = off, only the plain dot grid is left | live |
 
 ### `texts`: key | uk | ru | en
@@ -186,8 +187,8 @@ cover photo. An empty tab hides the section.
 - **Show a discount**: `texts` → `discount`, then rebuild; empty it to hide.
 - **Hide a block**: empty its tab or setting, then rebuild.
 - **Turn on the cookie banner**: `settings` → `gaId`, then rebuild.
-- **Tune the background**: `settings` → `pulseInterval` (`0` = no pulse) and `cursorGlow` (`0` = no pointer glow).
-  Live.
+- **Tune the background**: `settings` → `pulseInterval` (`0` = no pulse), `pulseSpeed` (`2` = twice as fast) and
+  `cursorGlow` (`0` = no pointer glow). Live.
 
 ## Writing guidelines
 

@@ -16,6 +16,7 @@ export const defaultConfig: SiteConfig = {
   novaPoshta: { recipient: "Прізвище Ім'я По батькові", phone: "+380000000000", branch: "Київ, відділення №1" },
   gaId: "",
   pulseInterval: 10,
+  pulseSpeed: 1,
   cursorGlow: true,
   schedule: [
     { days: [1, 2, 3, 4, 5], from: "09:00", to: "18:00" },

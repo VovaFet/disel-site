@@ -5,9 +5,10 @@ import { logoPulse } from "@/lib/logo";
 import { useLive } from "./LiveConfig";
 
 // Now and then the logo's pulse runs across the background dot grid like a heart monitor trace:
-// left to right along a random row (at any height), lighting the dots it passes, which then fade. The average pause
-// between runs comes from the sheet (settings → pulseInterval, seconds; 0 = off). Off with reduced
-// motion; nothing is drawn between runs.
+// left to right along a random row (at any height), lighting the dots it passes, which then fade. The sheet
+// sets the average pause between runs (settings → pulseInterval, seconds; 0 = off) and the speed
+// (pulseSpeed, a multiplier; 1 = across the screen in about 2.4 s). Off with reduced motion; nothing is
+// drawn between runs.
 
 // The dot grid of .mouse-bg (globals.css): a dot in the middle of every 24px tile
 const GRID = 24;
@@ -42,10 +43,11 @@ type Run = { start: number; dots: Dot[]; end: number };
 
 // One run: the trace as a polyline across the screen, sampled into the grid dots it passes.
 // Each dot lights up when the sweep reaches it (t, s) and is brighter the closer the trace runs (w).
-function makeRun(width: number, height: number, start: number): Run {
+function makeRun(width: number, height: number, start: number, pace: number): Run {
   // any row of the screen; near the top or bottom the spikes may run off the edge
   const y0 = GRID / 2 + Math.floor(Math.random() * Math.max(1, Math.floor(height / GRID))) * GRID;
-  const speed = Math.min(600, Math.max(220, width / 2.4));
+  // px/s: across the screen in ~2.4 s at pace 1, but not too fast on wide or too slow on narrow screens
+  const speed = Math.min(600, Math.max(220, width / 2.4)) * pace;
 
   const trace: [number, number][] = [[-GRID, y0]];
   for (let x = 60 + Math.random() * BEAT_GAP; x < width; x += BEAT_GAP) {
@@ -76,6 +78,7 @@ function makeRun(width: number, height: number, start: number): Run {
 export function PulseBackground() {
   const { live } = useLive();
   const interval = live.pulseInterval;
+  const pace = live.pulseSpeed;
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -122,7 +125,7 @@ export function PulseBackground() {
       }
       // the accent of the current theme
       color = getComputedStyle(canvas).getPropertyValue("--accent").trim();
-      runs.push(makeRun(width, height, performance.now()));
+      runs.push(makeRun(width, height, performance.now(), pace));
       if (!frame) frame = requestAnimationFrame(draw);
     };
 
@@ -140,7 +143,7 @@ export function PulseBackground() {
       cancelAnimationFrame(frame);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, [interval]);
+  }, [interval, pace]);
 
   return <canvas ref={ref} className="pulse-bg" aria-hidden="true" />;
 }

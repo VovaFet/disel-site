@@ -75,6 +75,8 @@ export type LiveConfig = {
   addons: Addon[];
   // Average pause between the background pulse runs, seconds; 0 = off (see PulseBackground)
   pulseInterval: number;
+  // Background pulse speed multiplier: 1 = normal, 2 = twice as fast
+  pulseSpeed: number;
   // Background dots and glow follow the pointer (see MouseBackground)
   cursorGlow: boolean;
 };
@@ -95,6 +97,8 @@ export type SiteConfig = {
   gaId: string;
   // Average pause between the background pulse runs, seconds; 0 = off
   pulseInterval: number;
+  // Background pulse speed multiplier: 1 = normal, 2 = twice as fast
+  pulseSpeed: number;
   // Background dots and glow follow the pointer
   cursorGlow: boolean;
   texts: {
@@ -162,5 +166,6 @@ export const toLive = (c: SiteConfig): LiveConfig => ({
   prices: Object.fromEntries(c.services.map((s) => [s.slug, s.priceFrom])),
   addons: c.addons,
   pulseInterval: c.pulseInterval,
+  pulseSpeed: c.pulseSpeed,
   cursorGlow: c.cursorGlow,
 });

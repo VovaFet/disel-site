@@ -55,7 +55,7 @@ The whole site is driven by one object, `SiteConfig` (`src/config/types.ts`).
    rows and invalid values.
 
 2. **In the browser.** The frequently changing values form `LiveConfig`: contacts, time zone, opening hours, Nova
-   Poshta details, prices, calculator extras, `pulseInterval` and `cursorGlow`. `LiveConfigProvider`
+   Poshta details, prices, calculator extras, `pulseInterval`, `pulseSpeed` and `cursorGlow`. `LiveConfigProvider`
    (`src/components/LiveConfig.tsx`) starts from the build-time values (already in the HTML) and then calls
    `loadLiveConfig()`, which re-reads the `settings`, `schedule`, `services` and `addons` tabs, so these edits
    show without a rebuild. Components read them with `useLive()`; `Live.tsx` has the ready-made pieces
@@ -119,8 +119,8 @@ start.
   leaves only the plain grid. With reduced motion the glow stays put.
 - **Pulse** (`PulseBackground.tsx`): now and then the logo's pulse (the beat parsed from `logoPulse` in
   `lib/logo.ts`) sweeps left to right along a random row of that grid, lighting dots that then fade. Drawn on a
-  canvas only while a run is on screen; the pause comes from `pulseInterval`. Off with reduced motion; runs don't
-  start while the tab is hidden.
+  canvas only while a run is on screen; the pause and speed come from `pulseInterval` and `pulseSpeed`. Off with
+  reduced motion; runs don't start while the tab is hidden.
 - **Cookie consent** (`CookieBanner.tsx`, `lib/consent.ts`): shown only when `settings` → `gaId` is set. The answer
   (`granted` / `denied`) is kept in `localStorage` (`cookie-consent`) and announced with a `cookie-consent` window
   event, which analytics will listen to; "Cookie settings" in the footer clears it. Analytics itself is not

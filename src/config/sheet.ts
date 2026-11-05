@@ -6,6 +6,7 @@
 //                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in,
 //                                              gaId — Google Analytics 4 ID "G-…"; it also turns on the cookie banner,
 //                                              pulseInterval — average pause between background pulses, s; 0 = off,
+//                                              pulseSpeed — pulse speed multiplier, 1 = normal (0.2–5),
 //                                              cursorGlow — 0 = the background doesn't follow the pointer)
 //   texts     key | uk | ru | en                (name, city, cityIn, area, street, region, description,
 //                                              shipping, discount, slogan, removedOnly)
@@ -173,6 +174,13 @@ const toPulseInterval = (v: string | undefined, fallback: number) => {
   return n <= 0 ? 0 : Math.max(1, n);
 };
 
+// A multiplier between 0.2 and 5 (slower than that looks frozen, faster is a flash); "0,5" works like "0.5";
+// 0, text or empty = the default
+const toPulseSpeed = (v: string | undefined, fallback: number) => {
+  const n = num(v?.replace(",", "."), fallback);
+  return n > 0 ? Math.min(5, Math.max(0.2, n)) : fallback;
+};
+
 // An on/off setting: 0 (or "ні", "no", "off", "false") = off, 1 or any other text = on, empty = the default
 const toSwitch = (v: string | undefined, fallback: boolean) => {
   const s = (v ?? "").trim().toLowerCase();
@@ -321,6 +329,7 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     novaPoshta: toNovaPoshta(s, d.novaPoshta),
     gaId: toGaId(s.gaId) || d.gaId,
     pulseInterval: toPulseInterval(s.pulseInterval, d.pulseInterval),
+    pulseSpeed: toPulseSpeed(s.pulseSpeed, d.pulseSpeed),
     cursorGlow: toSwitch(s.cursorGlow, d.cursorGlow),
     texts: {
       name: text("name"),
@@ -363,6 +372,7 @@ export async function loadLiveConfig(sheetId: string, fallback: LiveConfig): Pro
     prices: { ...fallback.prices, ...Object.fromEntries(services.map((r) => [r.slug, num(r.priceFrom, fallback.prices[r.slug] ?? 0)])) },
     addons: addons.length ? toAddons(addons) : fallback.addons,
     pulseInterval: toPulseInterval(s.pulseInterval, fallback.pulseInterval),
+    pulseSpeed: toPulseSpeed(s.pulseSpeed, fallback.pulseSpeed),
     cursorGlow: toSwitch(s.cursorGlow, fallback.cursorGlow),
   };
 }
