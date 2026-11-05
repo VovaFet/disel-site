@@ -74,7 +74,8 @@ Ukrainian, and `коли діє` is a dropdown, highlighted green for "Одра�
 | `brands` | "Brands we repair" chips on the home page, comma-separated; empty = hidden | rebuild |
 | `heroImage` | Photo next to the home page heading; empty = text only | rebuild |
 | `protocolImage` | Sample test report photo on the home page; empty = hidden | rebuild |
-| `gaId` | Google Analytics 4 ID (`G-…`). Turns on the cookie consent banner; empty = no banner. An ID in another format is ignored with a build warning. | rebuild |
+| `gaId` | Google Analytics 4 ID (`G-…`). Turns on the Google tag and the cookie consent banner (see [Analytics and ads](#analytics-and-ads)); with `adsId` also empty = no tag and no banner. An ID in another format is ignored with a build warning. | rebuild |
+| `adsId` | Google Ads tag ID (`AW-…`, from the Google tag code in the Ads account): conversions and remarketing audiences. Like `gaId`, turns on the tag and the banner; checked the same way. | rebuild |
 | `pulseInterval` | Background pulse: average pause between runs, seconds (each pause is 60–140% of it, at least 1 s). `0` = off, empty = 10. | live |
 | `pulseSpeed` | Background pulse speed, a multiplier: `1` or empty = normal (across the screen in about 2.4 s), `2` = twice as fast, `0.5` = twice as slow; limited to 0.2–5 | live |
 | `cursorGlow` | Background dots and glow following the pointer: `1` or empty = on; `0` (or `ні`, `no`, `off`, `false`) = off, only the plain dot grid is left | live |
@@ -174,6 +175,24 @@ Articles and repair case studies at `/statti/<slug>/`, newest first; the home pa
 case study, empty for an article. `services`: related service slugs, whose pages then link the article. `image`:
 cover photo. An empty tab hides the section.
 
+## Analytics and ads
+
+`gaId` (Google Analytics 4) and `adsId` (Google Ads) load as one Google tag, and either of them turns on the cookie
+banner. The tag loads only after a visitor accepts cookies, and only on the site's own domain (`settings` → `url`):
+previews and local builds show the banner but never count. Measured:
+
+- page views, scrolling and outbound clicks (Analytics enhanced measurement);
+- `contact`: a click on the phone, Telegram or Viber link, with `method` = `phone`, `telegram` or `viber`.
+
+One-time setup in Google:
+
+1. Analytics → Admin → Key events → New key event → `contact`.
+2. Analytics → Admin → Product links → Google Ads links: link the Ads account.
+3. Google Ads → Goals → Conversions: import the `contact` key event from Analytics, so campaigns optimise for
+   calls and messages.
+4. Optional: to see calls and messages apart in Analytics reports, register `method` as an event-scoped custom
+   dimension (Admin → Custom definitions).
+
 ## Common tasks
 
 - **Change a price**: `services` → `priceFrom`. Live; page titles and link previews update on the next rebuild.
@@ -186,7 +205,7 @@ cover photo. An empty tab hides the section.
 - **Publish an article**: a new `articles` row with a `date`, then rebuild.
 - **Show a discount**: `texts` → `discount`, then rebuild; empty it to hide.
 - **Hide a block**: empty its tab or setting, then rebuild.
-- **Turn on the cookie banner**: `settings` → `gaId`, then rebuild.
+- **Turn on analytics**: `settings` → `gaId` and/or `adsId`, then rebuild.
 - **Tune the background**: `settings` → `pulseInterval` (`0` = no pulse), `pulseSpeed` (`2` = twice as fast) and
   `cursorGlow` (`0` = no pointer glow). Live.
 

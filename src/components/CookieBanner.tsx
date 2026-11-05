@@ -6,9 +6,9 @@ import { localePath, t } from "@/i18n";
 import { readConsent, saveConsent, subscribeConsent } from "@/lib/consent";
 import { useLive } from "./LiveConfig";
 
-// Asks for consent to analytics cookies until the visitor answers. Rendered only when analytics is
-// configured (settings → gaId). Not in the static HTML: the answer is known only in the browser, so a
-// visitor who already answered never sees it flash.
+// Asks for consent to analytics and ads cookies until the visitor answers. Rendered only when a Google
+// tag is configured (settings → gaId or adsId; see GoogleTags). Not in the static HTML: the answer is
+// known only in the browser, so a visitor who already answered never sees it flash.
 export function CookieBanner() {
   const { lang } = useLive();
   const consent = useSyncExternalStore(subscribeConsent, readConsent, () => undefined);

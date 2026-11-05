@@ -4,7 +4,8 @@
 // Tabs (first row = headers):
 //   settings  key | value                       (url, phone, phoneDisplay, telegram, viber, timeZone, lat, lng, postalCode, country,
 //                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in,
-//                                              gaId — Google Analytics 4 ID "G-…"; it also turns on the cookie banner,
+//                                              gaId — Google Analytics 4 ID "G-…", adsId — Google Ads tag ID "AW-…";
+//                                              either one turns on the tags and the cookie banner,
 //                                              pulseInterval — average pause between background pulses, s; 0 = off,
 //                                              pulseSpeed — pulse speed multiplier, 1 = normal (0.2–5),
 //                                              cursorGlow — 0 = the background doesn't follow the pointer)
@@ -158,11 +159,11 @@ const toNovaPoshta = (s: Record<string, string>, d: NovaPoshta): NovaPoshta => (
   branch: s.npBranch || d.branch,
 });
 
-// A malformed ID would load a broken tag behind a cookie banner, so it counts as no analytics
-function toGaId(v: string | undefined): string {
+// A malformed ID would load a broken tag behind a cookie banner, so it counts as no tag
+function toTagId(key: string, v: string | undefined, format: RegExp, kind: string): string {
   const id = (v ?? "").trim();
-  if (id && !/^G-[A-Z0-9]+$/.test(id)) {
-    console.warn(`[config] settings: gaId "${id}" is not a Google Analytics 4 ID (G-…), ignored`);
+  if (id && !format.test(id)) {
+    console.warn(`[config] settings: ${key} "${id}" is not a ${kind}, ignored`);
     return "";
   }
   return id;
@@ -327,7 +328,8 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     timeZone: s.timeZone || d.timeZone,
     schedule: schedule.length ? toSchedule(schedule) : d.schedule,
     novaPoshta: toNovaPoshta(s, d.novaPoshta),
-    gaId: toGaId(s.gaId) || d.gaId,
+    gaId: toTagId("gaId", s.gaId, /^G-[A-Z0-9]+$/, "Google Analytics 4 ID (G-…)") || d.gaId,
+    adsId: toTagId("adsId", s.adsId, /^AW-\d+$/, "Google Ads tag ID (AW-…)") || d.adsId,
     pulseInterval: toPulseInterval(s.pulseInterval, d.pulseInterval),
     pulseSpeed: toPulseSpeed(s.pulseSpeed, d.pulseSpeed),
     cursorGlow: toSwitch(s.cursorGlow, d.cursorGlow),

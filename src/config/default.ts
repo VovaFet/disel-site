@@ -15,6 +15,7 @@ export const defaultConfig: SiteConfig = {
   timeZone: "Europe/Kyiv",
   novaPoshta: { recipient: "Прізвище Ім'я По батькові", phone: "+380000000000", branch: "Київ, відділення №1" },
   gaId: "",
+  adsId: "",
   pulseInterval: 10,
   pulseSpeed: 1,
   cursorGlow: true,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fira_Sans_Extra_Condensed, Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import { CookieBanner } from "@/components/CookieBanner";
+import { GoogleTags } from "@/components/GoogleTags";
 import { JsonLd } from "@/components/JsonLd";
 import { LiveConfigProvider } from "@/components/LiveConfig";
 import { MouseBackground } from "@/components/MouseBackground";
@@ -79,7 +80,12 @@ export async function RootShell({ lang, notFound, children }: { lang: Locale; no
           <SiteHeader lang={lang} config={config} notFound={notFound} />
           <main>{children}</main>
           <SiteFooter lang={lang} config={config} />
-          {config.gaId && <CookieBanner />}
+          {(config.gaId || config.adsId) && (
+            <>
+              <GoogleTags gaId={config.gaId} adsId={config.adsId} host={new URL(config.url).hostname} />
+              <CookieBanner />
+            </>
+          )}
         </LiveConfigProvider>
       </body>
     </html>
