@@ -4,7 +4,15 @@ import { t } from "@/i18n";
 import { SheetImage } from "./SheetImage";
 
 export function HeroImage({ src, lang }: { src: string; lang: Locale }) {
-  return src ? <SheetImage src={src} alt={t(lang).heroImageAlt} className="hero-image" /> : null;
+  return src ? (
+    <SheetImage
+      src={src}
+      alt={t(lang).heroImageAlt}
+      className="hero-image"
+      priority
+      sizes="(min-width: 900px) 440px, calc(100vw - 32px)"
+    />
+  ) : null;
 }
 
 // A separate panel under the hero, full container width

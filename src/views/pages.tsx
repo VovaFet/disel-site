@@ -229,7 +229,14 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
           </p>
           {c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
         </div>
-        {s.image && <SheetImage src={s.image} alt={s.title[lang]} className="service-image" />}
+        {s.image && (
+          <SheetImage
+            src={s.image}
+            alt={s.title[lang]}
+            className="service-image"
+            sizes="(min-width: 900px) 360px, min(520px, calc(100vw - 32px))"
+          />
+        )}
       </div>
 
       <div className="service-layout">

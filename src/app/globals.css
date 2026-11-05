@@ -52,6 +52,8 @@
 }
 
 * { box-sizing: border-box; }
+/* <picture> (WebP with a JPEG fallback, see SheetImage) is the layout box; its <img> fills it */
+picture { display: block; }
 html, body { margin: 0; }
 body {
   background: var(--bg);
@@ -171,7 +173,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
   border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
 }
 @media (min-width: 900px) {
-  .service-head:has(> .service-image) { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 48px; align-items: center; }
+  .service-head:has(> .service-image, > picture > .service-image) { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 48px; align-items: center; }
   .service-image { margin: 0; }
 }
 /* Links from a service to its brand/series and vehicle pages */
