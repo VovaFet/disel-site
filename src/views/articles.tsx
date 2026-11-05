@@ -33,9 +33,10 @@ function ArticleMeta({ lang, article }: { lang: Locale; article: Article }) {
   );
 }
 
-export function ArticleCards({ lang, articles }: { lang: Locale; articles: Article[] }) {
+export function ArticleCards({ lang, articles, level }: { lang: Locale; articles: Article[]; level?: 2 | 3 }) {
   return (
     <LinkCards
+      level={level}
       items={articles.map((a) => ({
         href: localePath(lang, articlePath(a.slug)),
         title: a.title[lang],
@@ -69,7 +70,11 @@ async function ArticleIndex({ lang }: { lang: Locale }) {
     <section className="container section">
       <h1>{d.articles.title}</h1>
       <p className="lead">{d.articles.intro}</p>
-      {c.articles.length > 0 ? <ArticleCards lang={lang} articles={c.articles} /> : <p className="muted">{d.sectionEmpty}</p>}
+      {c.articles.length > 0 ? (
+        <ArticleCards lang={lang} articles={c.articles} level={2} />
+      ) : (
+        <p className="muted">{d.sectionEmpty}</p>
+      )}
     </section>
   );
 }
