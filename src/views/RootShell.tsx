@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Fira_Sans_Extra_Condensed, Inter } from "next/font/google";
 import type { ReactNode } from "react";
+import { CookieBanner } from "@/components/CookieBanner";
 import { JsonLd } from "@/components/JsonLd";
 import { LiveConfigProvider } from "@/components/LiveConfig";
 import { MouseBackground } from "@/components/MouseBackground";
+import { PulseBackground } from "@/components/PulseBackground";
 import { SiteFooter, SiteHeader } from "@/components/SiteHeader";
 import { getConfig, sheetId } from "@/config";
 import { toLive, type Locale, type SiteConfig } from "@/config/types";
@@ -70,12 +72,14 @@ export async function RootShell({ lang, notFound, children }: { lang: Locale; no
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
-        <MouseBackground />
         <JsonLd data={businessSchema(config, lang)} />
         <LiveConfigProvider initial={toLive(config)} lang={lang} sheetId={sheetId}>
+          <MouseBackground />
+          <PulseBackground />
           <SiteHeader lang={lang} config={config} notFound={notFound} />
           <main>{children}</main>
           <SiteFooter lang={lang} config={config} />
+          {config.gaId && <CookieBanner />}
         </LiveConfigProvider>
       </body>
     </html>

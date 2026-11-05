@@ -3,7 +3,10 @@
 //
 // Tabs (first row = headers):
 //   settings  key | value                       (url, phone, phoneDisplay, telegram, viber, timeZone, lat, lng, postalCode, country,
-//                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in)
+//                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in,
+//                                              gaId — Google Analytics 4 ID "G-…"; it also turns on the cookie banner,
+//                                              pulseInterval — average pause between background pulses, s; 0 = off,
+//                                              cursorGlow — 0 = the background doesn't follow the pointer)
 //   texts     key | uk | ru | en                (name, city, cityIn, area, street, region, description,
 //                                              shipping, discount, slogan, removedOnly)
 //   schedule  days | from | to                  (days: "1-5", "6" or "1,3"; 1 = Monday)
@@ -154,6 +157,28 @@ const toNovaPoshta = (s: Record<string, string>, d: NovaPoshta): NovaPoshta => (
   branch: s.npBranch || d.branch,
 });
 
+// A malformed ID would load a broken tag behind a cookie banner, so it counts as no analytics
+function toGaId(v: string | undefined): string {
+  const id = (v ?? "").trim();
+  if (id && !/^G-[A-Z0-9]+$/.test(id)) {
+    console.warn(`[config] settings: gaId "${id}" is not a Google Analytics 4 ID (G-…), ignored`);
+    return "";
+  }
+  return id;
+}
+
+// Seconds; 0 = off, empty = the default. At least 1 s, so pulses don't pile up.
+const toPulseInterval = (v: string | undefined, fallback: number) => {
+  const n = num(v, fallback);
+  return n <= 0 ? 0 : Math.max(1, n);
+};
+
+// An on/off setting: 0 (or "ні", "no", "off", "false") = off, 1 or any other text = on, empty = the default
+const toSwitch = (v: string | undefined, fallback: boolean) => {
+  const s = (v ?? "").trim().toLowerCase();
+  return s ? !["0", "ні", "no", "off", "false"].includes(s) : fallback;
+};
+
 const toSchedule = (rows: Row[]): ScheduleEntry[] =>
   rows.map((r) => ({ days: parseDays(r.days), from: r.from, to: r.to }));
 
@@ -294,6 +319,9 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     timeZone: s.timeZone || d.timeZone,
     schedule: schedule.length ? toSchedule(schedule) : d.schedule,
     novaPoshta: toNovaPoshta(s, d.novaPoshta),
+    gaId: toGaId(s.gaId) || d.gaId,
+    pulseInterval: toPulseInterval(s.pulseInterval, d.pulseInterval),
+    cursorGlow: toSwitch(s.cursorGlow, d.cursorGlow),
     texts: {
       name: text("name"),
       city: text("city"),
@@ -334,5 +362,7 @@ export async function loadLiveConfig(sheetId: string, fallback: LiveConfig): Pro
     novaPoshta: toNovaPoshta(s, fallback.novaPoshta),
     prices: { ...fallback.prices, ...Object.fromEntries(services.map((r) => [r.slug, num(r.priceFrom, fallback.prices[r.slug] ?? 0)])) },
     addons: addons.length ? toAddons(addons) : fallback.addons,
+    pulseInterval: toPulseInterval(s.pulseInterval, fallback.pulseInterval),
+    cursorGlow: toSwitch(s.cursorGlow, fallback.cursorGlow),
   };
 }

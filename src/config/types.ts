@@ -73,6 +73,10 @@ export type LiveConfig = {
   novaPoshta: NovaPoshta;
   prices: Record<string, number>;
   addons: Addon[];
+  // Average pause between the background pulse runs, seconds; 0 = off (see PulseBackground)
+  pulseInterval: number;
+  // Background dots and glow follow the pointer (see MouseBackground)
+  cursorGlow: boolean;
 };
 
 export type SiteConfig = {
@@ -87,6 +91,12 @@ export type SiteConfig = {
   timeZone: string;
   schedule: ScheduleEntry[];
   novaPoshta: NovaPoshta;
+  // Google Analytics 4 measurement ID ("G-XXXXXXXXXX"); empty = no analytics and no cookie banner
+  gaId: string;
+  // Average pause between the background pulse runs, seconds; 0 = off
+  pulseInterval: number;
+  // Background dots and glow follow the pointer
+  cursorGlow: boolean;
   texts: {
     name: L10n;
     city: L10n;
@@ -151,4 +161,6 @@ export const toLive = (c: SiteConfig): LiveConfig => ({
   novaPoshta: c.novaPoshta,
   prices: Object.fromEntries(c.services.map((s) => [s.slug, s.priceFrom])),
   addons: c.addons,
+  pulseInterval: c.pulseInterval,
+  cursorGlow: c.cursorGlow,
 });
