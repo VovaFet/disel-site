@@ -55,7 +55,7 @@ export function getOpenStatus(schedule: ScheduleEntry[], timeZone: string, lang:
     const wd = ((day - 1 + i) % 7) + 1;
     const s = entryFor(wd);
     if (!s || (i === 0 && minutes >= toMinutes(s.from))) continue;
-    const when = i === 0 ? d.today : i === 1 ? d.tomorrow : d.days[wd];
+    const when = i === 0 ? d.today : i === 1 ? d.tomorrow : d.onDay[wd];
     return { open: false, text: d.closed, next: d.opensAt(when, s.from) };
   }
   return { open: false, text: d.closed };
