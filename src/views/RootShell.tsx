@@ -72,9 +72,9 @@ export async function RootShell({ lang, notFound, children }: { lang: Locale; no
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
-        <MouseBackground />
         <JsonLd data={businessSchema(config, lang)} />
         <LiveConfigProvider initial={toLive(config)} lang={lang} sheetId={sheetId}>
+          <MouseBackground />
           <PulseBackground />
           <SiteHeader lang={lang} config={config} notFound={notFound} />
           <main>{children}</main>
