@@ -27,7 +27,7 @@ rows of every tab from the bundled defaults.
 
 | Tab | What it controls | When edits show |
 |---|---|---|
-| `settings` | Site url, phone, Telegram, Viber, time zone, map point; Nova Poshta details `npRecipient`, `npPhone`, `npBranch`; trust blocks `brands`, `heroImage`, `protocolImage`; `gaId` (Google Analytics, turns on the cookie banner); `pulseInterval` (background pulse) | contacts, Nova Poshta and `pulseInterval`: live; the rest: rebuild |
+| `settings` | Site url, phone, Telegram, Viber, time zone, map point; Nova Poshta details `npRecipient`, `npPhone`, `npBranch`; trust blocks `brands`, `heroImage`, `protocolImage`; `gaId` (Google Analytics, turns on the cookie banner); `pulseInterval` (background pulse); `cursorGlow` (background follows the pointer) | contacts, Nova Poshta, `pulseInterval` and `cursorGlow`: live; the rest: rebuild |
 | `texts` | Workshop name, city, `area` ("з усієї України", used in headings instead of the city), address, site description, shipping line, `discount`, `slogan`, `removedOnly` ("removed parts only" notice) | rebuild |
 | `schedule` | Opening hours (days `1-5`, `6`; 1 = Monday) | live |
 | `services` | Services: `slug`, `group` (`injectors`, `pumps`, `turbo`, `testing`), `priceFrom`, calculator quantities, texts | `priceFrom`: live; the rest: rebuild |
@@ -58,6 +58,8 @@ Common tasks:
 - **Background pulse** (the logo's pulse running across the dot grid along a random row): `settings` →
   `pulseInterval`, the average pause between runs in seconds (each pause is 60–140% of it, at least 1 s);
   `0` = off, empty = 10. Live, no rebuild needed. Visitors with reduced motion turned on never see it.
+- **Pointer glow** (the background dots and glow following the mouse or finger): `settings` → `cursorGlow`,
+  `0` = off (the background stays as it is before the pointer moves), `1` or empty = on. Live.
 - **Hide a section or block**: empty its tab (or `settings` value) and rebuild. Without `texts` → `street` the
   address line, the map and the directions button are hidden.
 - **Images** (`heroImage`, `protocolImage`, a service's or an article's `image`): a direct image URL or a `/path` of a file in
