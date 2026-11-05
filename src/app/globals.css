@@ -212,9 +212,9 @@ article > .article-meta { margin-bottom: 8px; }
   body { padding-bottom: 0; }
 }
 
-/* Cookie banner (see CookieBanner): above the mobile call bar, a corner card on wider screens */
+/* Cookie banner (see CookieBanner): centred at the bottom, above the mobile call bar */
 .cookie-banner {
-  position: fixed; left: 16px; right: 16px; bottom: 76px; z-index: 30; max-width: 520px;
+  position: fixed; left: 16px; right: 16px; bottom: 76px; z-index: 30; max-width: 520px; margin-inline: auto;
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 14px 16px;
   background: var(--surface); color: var(--fg); border: 1px solid var(--border); border-radius: var(--radius);
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
@@ -223,7 +223,7 @@ article > .article-meta { margin-bottom: 8px; }
 .cookie-banner a { color: var(--accent); }
 .cookie-actions { display: flex; gap: 8px; }
 @media (min-width: 768px) {
-  .cookie-banner { right: auto; left: 24px; bottom: 24px; }
+  .cookie-banner { left: 24px; right: 24px; bottom: 24px; max-width: 760px; }
 }
 /* A button that looks like the footer links (the "Cookie settings" link) */
 .link-button { padding: 0; border: 0; background: none; font: inherit; color: var(--muted); text-decoration: underline; cursor: pointer; }
