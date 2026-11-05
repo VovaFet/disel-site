@@ -533,6 +533,8 @@ p.discount-note { margin: -8px 0 16px; }
   background: radial-gradient(480px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 20%, transparent), transparent 70%);
 }
 .mouse-bg:not(.is-active)::before { opacity: 0.25; }
+/* Turned off in the sheet (cursorGlow = 0): no glow and no lit dots, just the grid */
+.mouse-bg.glow-off::before, .mouse-bg.glow-off::after { opacity: 0; }
 /* The pulse that runs across the dot grid now and then (see PulseBackground), over the same box */
 .pulse-bg { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
 body { background: var(--bg); isolation: isolate; }

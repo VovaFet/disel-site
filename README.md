@@ -59,7 +59,7 @@ Common tasks:
   `pulseInterval`, the average pause between runs in seconds (each pause is 60–140% of it, at least 1 s);
   `0` = off, empty = 10. Live, no rebuild needed. Visitors with reduced motion turned on never see it.
 - **Pointer glow** (the background dots and glow following the mouse or finger): `settings` → `cursorGlow`,
-  `0` = off (the background stays as it is before the pointer moves), `1` or empty = on. Live.
+  `0` = off (no glow at all, just the plain dot grid), `1` or empty = on. Live.
 - **Hide a section or block**: empty its tab (or `settings` value) and rebuild. Without `texts` → `street` the
   address line, the map and the directions button are hidden.
 - **Images** (`heroImage`, `protocolImage`, a service's or an article's `image`): a direct image URL or a `/path` of a file in
