@@ -26,6 +26,7 @@ const tabs: Record<string, (string | number)[][]> = {
     ["npPhone", c.novaPoshta.phone],
     ["npBranch", c.novaPoshta.branch],
     ["gaId", c.gaId],
+    ["adsId", c.adsId],
     ["pulseInterval", c.pulseInterval],
     ["pulseSpeed", c.pulseSpeed],
     ["cursorGlow", c.cursorGlow ? 1 : 0],
