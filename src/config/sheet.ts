@@ -4,7 +4,8 @@
 // Tabs (first row = headers):
 //   settings  key | value                       (url, phone, phoneDisplay, telegram, viber, timeZone, lat, lng, postalCode, country,
 //                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in,
-//                                              gaId — Google Analytics 4 ID "G-…"; it also turns on the cookie banner)
+//                                              gaId — Google Analytics 4 ID "G-…"; it also turns on the cookie banner,
+//                                              pulseInterval — average pause between background pulses, s; 0 = off)
 //   texts     key | uk | ru | en                (name, city, cityIn, area, street, region, description,
 //                                              shipping, discount, slogan, removedOnly)
 //   schedule  days | from | to                  (days: "1-5", "6" or "1,3"; 1 = Monday)
@@ -165,6 +166,12 @@ function toGaId(v: string | undefined): string {
   return id;
 }
 
+// Seconds; 0 = off, empty = the default. At least 1 s, so pulses don't pile up.
+const toPulseInterval = (v: string | undefined, fallback: number) => {
+  const n = num(v, fallback);
+  return n <= 0 ? 0 : Math.max(1, n);
+};
+
 const toSchedule = (rows: Row[]): ScheduleEntry[] =>
   rows.map((r) => ({ days: parseDays(r.days), from: r.from, to: r.to }));
 
@@ -306,6 +313,7 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     schedule: schedule.length ? toSchedule(schedule) : d.schedule,
     novaPoshta: toNovaPoshta(s, d.novaPoshta),
     gaId: toGaId(s.gaId) || d.gaId,
+    pulseInterval: toPulseInterval(s.pulseInterval, d.pulseInterval),
     texts: {
       name: text("name"),
       city: text("city"),
@@ -346,5 +354,6 @@ export async function loadLiveConfig(sheetId: string, fallback: LiveConfig): Pro
     novaPoshta: toNovaPoshta(s, fallback.novaPoshta),
     prices: { ...fallback.prices, ...Object.fromEntries(services.map((r) => [r.slug, num(r.priceFrom, fallback.prices[r.slug] ?? 0)])) },
     addons: addons.length ? toAddons(addons) : fallback.addons,
+    pulseInterval: toPulseInterval(s.pulseInterval, fallback.pulseInterval),
   };
 }

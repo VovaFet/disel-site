@@ -5,6 +5,7 @@ import { CookieBanner } from "@/components/CookieBanner";
 import { JsonLd } from "@/components/JsonLd";
 import { LiveConfigProvider } from "@/components/LiveConfig";
 import { MouseBackground } from "@/components/MouseBackground";
+import { PulseBackground } from "@/components/PulseBackground";
 import { SiteFooter, SiteHeader } from "@/components/SiteHeader";
 import { getConfig, sheetId } from "@/config";
 import { toLive, type Locale, type SiteConfig } from "@/config/types";
@@ -74,6 +75,7 @@ export async function RootShell({ lang, notFound, children }: { lang: Locale; no
         <MouseBackground />
         <JsonLd data={businessSchema(config, lang)} />
         <LiveConfigProvider initial={toLive(config)} lang={lang} sheetId={sheetId}>
+          <PulseBackground />
           <SiteHeader lang={lang} config={config} notFound={notFound} />
           <main>{children}</main>
           <SiteFooter lang={lang} config={config} />
