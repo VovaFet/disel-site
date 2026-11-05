@@ -3,7 +3,8 @@
 //
 // Tabs (first row = headers):
 //   settings  key | value                       (url, phone, phoneDisplay, telegram, viber, timeZone, lat, lng, postalCode, country,
-//                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in)
+//                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in,
+//                                              gaId — Google Analytics 4 ID "G-…"; it also turns on the cookie banner)
 //   texts     key | uk | ru | en                (name, city, cityIn, area, street, region, description,
 //                                              shipping, discount, slogan, removedOnly)
 //   schedule  days | from | to                  (days: "1-5", "6" or "1,3"; 1 = Monday)
@@ -154,6 +155,16 @@ const toNovaPoshta = (s: Record<string, string>, d: NovaPoshta): NovaPoshta => (
   branch: s.npBranch || d.branch,
 });
 
+// A malformed ID would load a broken tag behind a cookie banner, so it counts as no analytics
+function toGaId(v: string | undefined): string {
+  const id = (v ?? "").trim();
+  if (id && !/^G-[A-Z0-9]+$/.test(id)) {
+    console.warn(`[config] settings: gaId "${id}" is not a Google Analytics 4 ID (G-…), ignored`);
+    return "";
+  }
+  return id;
+}
+
 const toSchedule = (rows: Row[]): ScheduleEntry[] =>
   rows.map((r) => ({ days: parseDays(r.days), from: r.from, to: r.to }));
 
@@ -294,6 +305,7 @@ export async function loadSiteConfig(sheetId: string): Promise<SiteConfig> {
     timeZone: s.timeZone || d.timeZone,
     schedule: schedule.length ? toSchedule(schedule) : d.schedule,
     novaPoshta: toNovaPoshta(s, d.novaPoshta),
+    gaId: toGaId(s.gaId) || d.gaId,
     texts: {
       name: text("name"),
       city: text("city"),

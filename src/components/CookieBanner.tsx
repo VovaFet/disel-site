@@ -1,0 +1,42 @@
+"use client";
+
+import Link from "next/link";
+import { useSyncExternalStore } from "react";
+import { localePath, t } from "@/i18n";
+import { readConsent, saveConsent, subscribeConsent } from "@/lib/consent";
+import { useLive } from "./LiveConfig";
+
+// Asks for consent to analytics cookies until the visitor answers. Rendered only when analytics is
+// configured (settings → gaId). Not in the static HTML: the answer is known only in the browser, so a
+// visitor who already answered never sees it flash.
+export function CookieBanner() {
+  const { lang } = useLive();
+  const consent = useSyncExternalStore(subscribeConsent, readConsent, () => undefined);
+  if (consent !== null) return null;
+  const d = t(lang).cookies;
+  return (
+    <section className="cookie-banner" aria-label={d.label}>
+      <p>
+        {d.text} <Link href={localePath(lang, "/konfidentsiinist/")}>{d.policy}</Link>
+      </p>
+      <div className="cookie-actions">
+        <button type="button" className="btn btn-small" onClick={() => saveConsent("granted")}>
+          {d.accept}
+        </button>
+        <button type="button" className="btn btn-small btn-outline" onClick={() => saveConsent("denied")}>
+          {d.reject}
+        </button>
+      </div>
+    </section>
+  );
+}
+
+// Footer link that clears the answer, so the banner asks again
+export function CookieSettingsLink() {
+  const { lang } = useLive();
+  return (
+    <button type="button" className="link-button" onClick={() => saveConsent(null)}>
+      {t(lang).cookies.settings}
+    </button>
+  );
+}
