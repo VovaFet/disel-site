@@ -5,8 +5,8 @@ import { useLive } from "./LiveConfig";
 
 // Fixed decorative layer behind the page: a dot grid that lights up and a soft glow
 // that trail the pointer. Position goes into CSS variables, so React never re-renders.
-// With reduced motion, or with the effect turned off in the sheet (settings → cursorGlow = 0),
-// the glow stays put; without JS it sits in the centre.
+// With reduced motion the glow stays put; without JS it sits in the centre. Turned off in the
+// sheet (settings → cursorGlow = 0) only the plain dot grid is left.
 export function MouseBackground() {
   const enabled = useLive().live.cursorGlow;
   const ref = useRef<HTMLDivElement>(null);
@@ -56,5 +56,5 @@ export function MouseBackground() {
     };
   }, [enabled]);
 
-  return <div ref={ref} className="mouse-bg" aria-hidden="true" />;
+  return <div ref={ref} className={enabled ? "mouse-bg" : "mouse-bg glow-off"} aria-hidden="true" />;
 }
