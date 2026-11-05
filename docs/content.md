@@ -54,9 +54,11 @@ links, tables and emoji are not supported.
 
 ## Tabs
 
-### `settings`: key | value | опис
+### `settings`: key | value | опис | коли діє
 
-One setting per row. Column C (`опис`) explains each key in Ukrainian; the site ignores it.
+One setting per row. Columns C and D are for people and the site ignores them: `опис` explains each key in
+Ukrainian, and `коли діє` is a dropdown, highlighted green for "Одразу" (live) and orange for "Після збірки"
+(rebuild). A new setting gets its row there too.
 
 | Key | What it does | Shows |
 |---|---|---|

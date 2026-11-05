@@ -76,7 +76,8 @@ There are no automated tests; the checks above are the safety net.
    `console.warn("[config] …")`, not break the build.
 4. `scripts/sheet-seed.ts`: add the row.
 5. Use it: server components get `config` from `getConfig()`; client components read live values with `useLive()`.
-6. Add the row to the `settings` tab with a description in column C, and document it in [content.md](content.md).
+6. Add the row to the `settings` tab with a description in column C and "Одразу" or "Після збірки" in column D,
+   and document it in [content.md](content.md).
 
 ### A new page
 
