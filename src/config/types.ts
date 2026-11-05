@@ -93,8 +93,10 @@ export type SiteConfig = {
   timeZone: string;
   schedule: ScheduleEntry[];
   novaPoshta: NovaPoshta;
-  // Google Analytics 4 measurement ID ("G-XXXXXXXXXX"); empty = no analytics and no cookie banner
+  // Google tags: the Analytics 4 measurement ID ("G-XXXXXXXXXX") and the Google Ads tag ID ("AW-123456789").
+  // Either one turns on the cookie banner; both empty = no tags and no banner (see GoogleTags)
   gaId: string;
+  adsId: string;
   // Average pause between the background pulse runs, seconds; 0 = off
   pulseInterval: number;
   // Background pulse speed multiplier: 1 = normal, 2 = twice as fast

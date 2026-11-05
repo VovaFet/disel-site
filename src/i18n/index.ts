@@ -22,7 +22,7 @@ const dict = {
     footerInfo: "Інформація",
     cookies: {
       label: "Згода на cookies",
-      text: "Ми використовуємо cookies Google Analytics, щоб бачити, які сторінки корисні, і вмикаємо їх лише з вашої згоди.",
+      text: "Ми використовуємо cookies Google Analytics і Google Ads, щоб бачити, які сторінки корисні й яка реклама працює, і вмикаємо їх лише з вашої згоди.",
       policy: "Детальніше",
       accept: "Прийняти",
       reject: "Відхилити",
@@ -116,7 +116,7 @@ const dict = {
     footerInfo: "Информация",
     cookies: {
       label: "Согласие на cookies",
-      text: "Мы используем cookies Google Analytics, чтобы видеть, какие страницы полезны, и включаем их только с вашего согласия.",
+      text: "Мы используем cookies Google Analytics и Google Ads, чтобы видеть, какие страницы полезны и какая реклама работает, и включаем их только с вашего согласия.",
       policy: "Подробнее",
       accept: "Принять",
       reject: "Отклонить",
@@ -210,7 +210,7 @@ const dict = {
     footerInfo: "Information",
     cookies: {
       label: "Cookie consent",
-      text: "We use Google Analytics cookies to see which pages are useful, and only with your consent.",
+      text: "We use Google Analytics and Google Ads cookies to see which pages are useful and which ads work, and only with your consent.",
       policy: "Learn more",
       accept: "Accept",
       reject: "Decline",

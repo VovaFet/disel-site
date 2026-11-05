@@ -25,7 +25,7 @@ src/
   views/        page bodies shared by both route trees: pages.tsx (home, services, contacts, info pages),
                 landings.tsx (/marky, /avto), articles.tsx (/statti), RootShell.tsx (html, head, header, footer),
                 ogImage.tsx (link preview images)
-  components/   UI pieces (header, footer, calculator, trust blocks, background effects, cookie banner…)
+  components/   UI pieces (header, footer, calculator, trust blocks, background effects, cookie banner, Google tags…)
   config/       types.ts (config shape), default.ts (bundled defaults), sheet.ts (Google Sheet loader),
                 index.ts (getConfig for the build)
   i18n/         interface strings in three languages, localePath(), price and date formatting
@@ -121,10 +121,14 @@ start.
   `lib/logo.ts`) sweeps left to right along a random row of that grid, lighting dots that then fade. Drawn on a
   canvas only while a run is on screen; the pause and speed come from `pulseInterval` and `pulseSpeed`. Off with
   reduced motion; runs don't start while the tab is hidden.
-- **Cookie consent** (`CookieBanner.tsx`, `lib/consent.ts`): shown only when `settings` → `gaId` is set. The answer
-  (`granted` / `denied`) is kept in `localStorage` (`cookie-consent`) and announced with a `cookie-consent` window
-  event, which analytics will listen to; "Cookie settings" in the footer clears it. Analytics itself is not
-  connected yet.
+- **Cookie consent** (`CookieBanner.tsx`, `lib/consent.ts`): shown only when `settings` → `gaId` or `adsId` is set.
+  The answer (`granted` / `denied`) is kept in `localStorage` (`cookie-consent`) and announced with a
+  `cookie-consent` window event; "Cookie settings" in the footer clears it.
+- **Google tags** (`GoogleTags.tsx`): Analytics 4 and Ads as one `gtag.js`, injected only after consent is granted
+  ("basic" consent mode: before that nothing is sent and no script loads) and only on the `url` host, so previews
+  stay out of the statistics. Declining later sets consent to denied, turns the tags off (`ga-disable-<id>`) and
+  deletes the `_ga*` / `_gcl*` cookies. Clicks on `tel:`, Telegram and Viber links go out as the `contact` event
+  with `method`; client-side page views are counted by Analytics' history-change tracking.
 - **Reveal** (`Reveal.tsx`): content fades in when scrolled into view (shown at once without JS or with reduced
   motion).
 - **IntentLink** (`IntentLink.tsx`): links that prefetch a page only on hover, focus or touch, so a grid of service
