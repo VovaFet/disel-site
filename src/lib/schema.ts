@@ -32,6 +32,20 @@ export function businessSchema(c: SiteConfig, lang: Locale) {
   };
 }
 
+// Site name for Google results (shown above the title instead of the bare domain). Google reads it only
+// on the domain-level home page, so `url` is the site root on every language version (one node for all
+// of them, hence no inLanguage).
+export function websiteSchema(c: SiteConfig, lang: Locale) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${c.url}/#website`,
+    name: c.texts.name[lang],
+    url: `${c.url}/`,
+    publisher: { "@id": businessId(c) },
+  };
+}
+
 // Breadcrumbs from [name, path] pairs, home first
 export function breadcrumbSchema(c: SiteConfig, lang: Locale, items: [name: string, path: string][]) {
   return {
