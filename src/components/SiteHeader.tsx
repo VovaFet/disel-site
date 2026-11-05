@@ -3,7 +3,7 @@ import { landingSections, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { CookieSettingsLink } from "./CookieBanner";
 import { HeaderShell } from "./HeaderShell";
-import { IntentLink } from "./IntentLink";
+import { HomeLink, IntentLink } from "./IntentLink";
 import { LangSwitcher } from "./LangSwitcher";
 import { Logo } from "./Logo";
 import { HoursList, MessengerLink, PhoneLink } from "./Live";
@@ -25,9 +25,9 @@ export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: S
     <HeaderShell>
       <div className="container header-inner">
         <div className="brand">
-          <IntentLink href={p("/")} className="logo">
+          <HomeLink href={p("/")} className="logo">
             <Logo name={config.texts.name[lang]} />
-          </IntentLink>
+          </HomeLink>
           <div className="header-status">
             <OpenStatus />
           </div>
