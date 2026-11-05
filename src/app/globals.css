@@ -7,15 +7,35 @@
   --surface: #f4f5f7;
   --border: #e2e5ea;
   --radius: 10px;
+  --show-sun: block;
+  --show-moon: none;
+  --knob-on: 0;
+  color-scheme: light;
 }
 
+/* Dark theme: picked with the header toggle (data-theme on <html>), otherwise follows the system */
+:root[data-theme="dark"] {
+  --bg: #121417;
+  --fg: #eceff3;
+  --muted: #a2aab5;
+  --surface: #1c1f24;
+  --border: #2c3138;
+  --show-sun: none;
+  --show-moon: block;
+  --knob-on: 1;
+  color-scheme: dark;
+}
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #121417;
     --fg: #eceff3;
     --muted: #a2aab5;
     --surface: #1c1f24;
     --border: #2c3138;
+    --show-sun: none;
+    --show-moon: block;
+    --knob-on: 1;
+    color-scheme: dark;
   }
 }
 
@@ -65,10 +85,15 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .footer-logo .logo-word { font-size: 1.45rem; }
 @media (max-width: 420px) {
   .header .logo { gap: 8px; }
-  .header .logo-mark { width: 28px; height: 28px; }
-  .header .logo-word { font-size: 1.45rem; }
+  .header .logo-mark { width: 26px; height: 26px; }
+  .header .logo-word { font-size: 1.35rem; }
 }
-.nav { display: flex; align-items: center; gap: 20px; }
+@media (max-width: 359px) {
+  .header .logo { gap: 6px; }
+  .header .logo-mark { width: 22px; height: 22px; }
+  .header .logo-word { font-size: 1.15rem; }
+}
+.nav { display: flex; align-items: center; gap: 12px; }
 .nav a:not(.btn) { color: var(--fg); text-decoration: none; }
 
 .hero { padding: 28px 0 48px; }
@@ -176,7 +201,7 @@ article > .article-meta { margin-bottom: 8px; }
 .btn-outline:hover { background: var(--accent); color: var(--accent-fg); }
 .card { transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
 .card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 8px 24px rgb(0 0 0 / 0.12); }
-.btn:focus-visible, .chip:focus-visible, .burger:focus-visible, select:focus-visible {
+.btn:focus-visible, .chip:focus-visible, .burger:focus-visible, .theme-toggle:focus-visible, select:focus-visible {
   outline: 3px solid var(--accent); outline-offset: 2px;
 }
 
@@ -187,9 +212,9 @@ article > .article-meta { margin-bottom: 8px; }
 .status-open .status-dot { animation: pulse 2s infinite; }
 .status-closed { color: #c92a2a; }
 /* Next to the logo where the header has room, on two lines; the home hero shows it elsewhere */
-.brand { display: flex; align-items: center; gap: 14px; }
+.brand { display: flex; align-items: center; gap: 12px; }
 .header-status { display: none; }
-.header-status .status { margin: 0; padding-left: 14px; border-left: 1px solid var(--border); font-size: 0.78rem; line-height: 1.3; white-space: nowrap; }
+.header-status .status { margin: 0; padding-left: 12px; border-left: 1px solid var(--border); font-size: 0.75rem; line-height: 1.3; white-space: nowrap; }
 .header-status .status-pending { display: none; }
 .header-status .status-sep { display: none; }
 .header-status .status-next { display: block; color: var(--muted); font-weight: 500; }
@@ -393,7 +418,7 @@ p.discount-note { margin: -8px 0 16px; }
   .burger { display: flex; }
   .section { padding-top: 20px; padding-bottom: 20px; }
 }
-@media (min-width: 761px) {
+@media (min-width: 901px) {
   .mobile-menu { display: none !important; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -402,15 +427,49 @@ p.discount-note { margin: -8px 0 16px; }
 
 /* Language switcher */
 .lang { display: flex; gap: 2px; margin-left: auto; font-size: 0.85rem; font-weight: 600; }
-.lang a, .lang-current { padding: 4px 8px; border-radius: 6px; text-decoration: none; }
+.lang a, .lang-current { padding: 4px 6px; border-radius: 6px; text-decoration: none; }
 .lang a { color: var(--muted); }
 .lang a:hover { color: var(--fg); background: var(--surface); }
 .lang-current { color: var(--accent-fg); background: var(--accent); }
-.header-inner { gap: 12px; }
+/* Theme switch next to the languages: the knob carries a sun on the left in the light theme
+   and a moon on the right in the dark one */
+.theme-toggle {
+  --knob: 20px; --travel: 22px; /* travel = inner width − knob − 2 × 2px inset */
+  position: relative; flex: none; width: 48px; height: 26px; padding: 0;
+  border: 1px solid var(--border); border-radius: 999px; background: var(--surface); cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--muted); }
+.theme-knob {
+  position: absolute; top: 2px; left: 2px; display: grid; place-items: center; width: var(--knob); height: var(--knob);
+  border-radius: 50%; background: var(--accent); color: var(--accent-fg);
+  transform: translateX(calc(var(--knob-on) * var(--travel))); transition: transform 0.2s;
+}
+.theme-knob svg { width: 65%; height: 65%; }
+.theme-knob .icon-sun { display: var(--show-sun); }
+.theme-knob .icon-moon { display: var(--show-moon); }
+.header-inner { gap: 10px; }
 .nav { margin-left: auto; }
 .nav + .lang { margin-left: 0; }
 @media (max-width: 760px) {
   .nav + .lang { margin-left: auto; }
+}
+/* Phones: logo, languages, theme switch and menu button share one row */
+@media (max-width: 420px) {
+  .header-inner { gap: 6px; }
+  .lang { gap: 0; }
+  .lang a, .lang-current { padding: 4px 5px; }
+  .theme-toggle { --knob: 18px; --travel: 20px; width: 44px; height: 24px; }
+  .burger { padding: 8px 2px; }
+}
+@media (max-width: 359px) {
+  .lang a, .lang-current { padding: 4px 3px; }
+  .theme-toggle { --knob: 16px; --travel: 18px; width: 40px; height: 22px; }
+}
+/* Tablets: the full menu doesn't fit beside the languages and the theme switch, so its links move
+   to the burger menu and only the phone button stays */
+@media (min-width: 761px) and (max-width: 900px) {
+  .nav a:not(.btn) { display: none; }
+  .burger { display: flex; }
 }
 
 /* Long-form text */
