@@ -87,6 +87,8 @@ export type SiteConfig = {
   timeZone: string;
   schedule: ScheduleEntry[];
   novaPoshta: NovaPoshta;
+  // Google Analytics 4 measurement ID ("G-XXXXXXXXXX"); empty = no analytics and no cookie banner
+  gaId: string;
   texts: {
     name: L10n;
     city: L10n;

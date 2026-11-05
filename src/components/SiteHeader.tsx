@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { landingSections, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
+import { CookieSettingsLink } from "./CookieBanner";
 import { HeaderShell } from "./HeaderShell";
 import { IntentLink } from "./IntentLink";
 import { LangSwitcher } from "./LangSwitcher";
@@ -100,6 +101,11 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
             <li>
               <Link href={localePath(lang, "/konfidentsiinist/")}>{d.nav.privacy}</Link>
             </li>
+            {config.gaId && (
+              <li>
+                <CookieSettingsLink />
+              </li>
+            )}
           </ul>
         </nav>
         <div>
