@@ -70,7 +70,8 @@ Ukrainian, and `коли діє` is a dropdown, highlighted green for "Одра�
 | `timeZone` | Time zone for the open/closed badge (`Europe/Kyiv`). Don't change. | live |
 | `lat`, `lng` | Map point and coordinates in the structured data. The map shows only once `texts` → `street` is set. | rebuild |
 | `postalCode`, `country` | Postal address in the structured data (`country` = `UA`, don't change) | rebuild |
-| `npRecipient`, `npPhone`, `npBranch` | Nova Poshta recipient, phone and branch number in the "How to send parts" block, each with a copy button | live |
+| `npRecipient`, `npPhone`, `npBranch` | Nova Poshta recipient, phone and branch number in the "How to send parts" block, each with a copy button. An empty `npRecipient` or `npBranch` hides the block; an empty `npPhone` shows the workshop `phone`. | live |
+| `npDetails` | That Nova Poshta block: `1` or empty = shown, `0` (or `ні`, `no`, `off`, `false`) = hidden, the details stay in the sheet | live |
 | `brands` | "Brands we repair" chips on the home page, comma-separated; empty = hidden | rebuild |
 | `heroImage` | Photo next to the home page heading; empty = text only | rebuild |
 | `protocolImage` | Sample test report photo on the home page; empty = hidden | rebuild |
@@ -205,6 +206,7 @@ One-time setup in Google:
 - **Publish an article**: a new `articles` row with a `date`, then rebuild.
 - **Show a discount**: `texts` → `discount`, then rebuild; empty it to hide.
 - **Hide a block**: empty its tab or setting, then rebuild.
+- **Hide the Nova Poshta details**: `settings` → `npDetails` = `0` (`1` shows them again). Live.
 - **Turn on analytics**: `settings` → `gaId` and/or `adsId`, then rebuild.
 - **Tune the background**: `settings` → `pulseInterval` (`0` = no pulse), `pulseSpeed` (`2` = twice as fast) and
   `cursorGlow` (`0` = no pointer glow). Live.

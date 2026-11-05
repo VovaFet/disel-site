@@ -3,7 +3,8 @@
 //
 // Tabs (first row = headers):
 //   settings  key | value                       (url, phone, phoneDisplay, telegram, viber, timeZone, lat, lng, postalCode, country,
-//                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in,
+//                                              npRecipient, npPhone, npBranch — Nova Poshta details for shipping parts in
+//                                              (empty recipient or branch = block hidden), npDetails — 0 hides that block,
 //                                              gaId — Google Analytics 4 ID "G-…", adsId — Google Ads tag ID "AW-…";
 //                                              either one turns on the tags and the cookie banner,
 //                                              pulseInterval — average pause between background pulses, s; 0 = off,
@@ -153,10 +154,13 @@ const num = (s: string | undefined, fallback: number) => (s && !Number.isNaN(Num
 
 const toSettings = (rows: Row[]) => Object.fromEntries(rows.map((r) => [r.key, r.value]));
 
+// npDetails = 0 or an empty recipient or branch hides the details block, so an empty cell counts as a value
+// (only a missing row falls back); an empty phone means the workshop phone
 const toNovaPoshta = (s: Record<string, string>, d: NovaPoshta): NovaPoshta => ({
-  recipient: s.npRecipient || d.recipient,
-  phone: s.npPhone || d.phone,
-  branch: s.npBranch || d.branch,
+  show: toSwitch(s.npDetails, d.show),
+  recipient: s.npRecipient ?? d.recipient,
+  phone: s.npPhone || s.phone || d.phone,
+  branch: s.npBranch ?? d.branch,
 });
 
 // A malformed ID would load a broken tag behind a cookie banner, so it counts as no tag
