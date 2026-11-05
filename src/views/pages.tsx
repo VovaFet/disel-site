@@ -19,7 +19,7 @@ import { Brands, HeroImage, ProtocolSample, Reviews, Stats } from "@/components/
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { formatPrice, localePath, t } from "@/i18n";
-import { faqSchema, serviceSchema } from "@/lib/schema";
+import { faqSchema, serviceSchema, websiteSchema } from "@/lib/schema";
 import { ArticleCards } from "./articles";
 import { pageMetadata } from "./RootShell";
 
@@ -41,6 +41,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
   const d = t(lang);
   return (
     <>
+      <JsonLd data={websiteSchema(c, lang)} />
       <section className={`hero ${c.trust.heroImage ? "hero-with-image" : ""}`}>
         <div className="container hero-grid">
           <div>
