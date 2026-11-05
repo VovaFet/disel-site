@@ -477,8 +477,9 @@ p.discount-note { margin: -8px 0 16px; }
 .rich ul { padding-left: 20px; }
 .rich li { margin-bottom: 6px; }
 .footer nav ul li { margin-bottom: 4px; }
-.footer a { color: var(--muted); }
-.footer a:hover { color: var(--accent); }
+/* Plain footer links only: the mobile call bar's buttons are in the footer too and keep their own colors */
+.footer a:not(.btn) { color: var(--muted); }
+.footer a:not(.btn):hover { color: var(--accent); }
 
 /* Interactive background: faint dot grid everywhere, brighter dots and a glow around the pointer */
 .mouse-bg {
