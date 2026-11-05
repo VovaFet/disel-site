@@ -8,6 +8,7 @@ import { Logo } from "./Logo";
 import { HoursList, MessengerLink, PhoneLink } from "./Live";
 import { MobileMenu } from "./MobileMenu";
 import { OpenStatus } from "./OpenStatus";
+import { ThemeToggle } from "./ThemeToggle";
 
 // Brand/series, vehicle and article sections that have pages, for the mobile menu and the footer
 const sectionLinks = (lang: Locale, config: SiteConfig) =>
@@ -37,6 +38,7 @@ export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: S
           <PhoneLink className="btn btn-small" />
         </nav>
         <LangSwitcher notFound={notFound} />
+        <ThemeToggle />
         <MobileMenu
           links={[
             { href: p("/"), label: d.nav.home },

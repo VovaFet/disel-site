@@ -9,6 +9,7 @@ import { getConfig, sheetId } from "@/config";
 import { toLive, type Locale, type SiteConfig } from "@/config/types";
 import { languageAlternates, localePath, ogLocale, t } from "@/i18n";
 import { businessSchema } from "@/lib/schema";
+import { themeScript } from "@/lib/theme";
 import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"], display: "swap" });
@@ -62,7 +63,12 @@ export function pageMetadata(
 export async function RootShell({ lang, notFound, children }: { lang: Locale; notFound?: boolean; children: ReactNode }) {
   const config = await getConfig();
   return (
-    <html lang={lang} className={`${inter.className} ${logoFont.variable}`}>
+    // suppressHydrationWarning: themeScript may set data-theme on <html> before React hydrates
+    <html lang={lang} className={`${inter.className} ${logoFont.variable}`} suppressHydrationWarning>
+      {/* eslint-disable-next-line @next/next/no-head-element -- this is the App Router root layout (rendered from app/), where <head> is right; the rule targets pages/ */}
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <MouseBackground />
         <JsonLd data={businessSchema(config, lang)} />
