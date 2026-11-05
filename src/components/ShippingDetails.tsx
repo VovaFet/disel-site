@@ -5,9 +5,12 @@ import { t } from "@/i18n";
 import { useLive } from "./LiveConfig";
 
 // Nova Poshta recipient details, each with a copy button: customers paste them
-// into the Nova Poshta app field by field when sending parts in for repair.
+// into the Nova Poshta app field by field when sending parts in for repair. Hidden with
+// npDetails = 0 in the sheet or while the recipient or branch is empty.
 export function ShippingDetails() {
   const { live, lang } = useLive();
+  const np = live.novaPoshta;
+  if (!np.show || !np.recipient || !np.branch) return null;
   const d = t(lang);
   const rows = [
     { label: d.npRecipient, value: live.novaPoshta.recipient },

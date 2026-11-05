@@ -58,8 +58,9 @@ export type Landing = {
   faq: Faq[];
 };
 
-// Recipient details customers type into the Nova Poshta app when sending parts in
-export type NovaPoshta = { recipient: string; phone: string; branch: string };
+// Recipient details customers type into the Nova Poshta app when sending parts in. Shown when `show` is on
+// and both the recipient and the branch are filled in.
+export type NovaPoshta = { show: boolean; recipient: string; phone: string; branch: string };
 
 // Values that may change often (prices, contacts, hours). The browser re-reads
 // them from the remote config at runtime, so they update without a rebuild.
