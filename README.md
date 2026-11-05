@@ -27,7 +27,7 @@ rows of every tab from the bundled defaults.
 
 | Tab | What it controls | When edits show |
 |---|---|---|
-| `settings` | Site url, phone, Telegram, Viber, time zone, map point; Nova Poshta details `npRecipient`, `npPhone`, `npBranch`; trust blocks `brands`, `heroImage`, `protocolImage`; `gaId` (Google Analytics, turns on the cookie banner) | contacts and Nova Poshta: live; the rest: rebuild |
+| `settings` | Site url, phone, Telegram, Viber, time zone, map point; Nova Poshta details `npRecipient`, `npPhone`, `npBranch`; trust blocks `brands`, `heroImage`, `protocolImage`; `gaId` (Google Analytics, turns on the cookie banner); `pulseInterval` (background pulse) | contacts, Nova Poshta and `pulseInterval`: live; the rest: rebuild |
 | `texts` | Workshop name, city, `area` ("з усієї України", used in headings instead of the city), address, site description, shipping line, `discount`, `slogan`, `removedOnly` ("removed parts only" notice) | rebuild |
 | `schedule` | Opening hours (days `1-5`, `6`; 1 = Monday) | live |
 | `services` | Services: `slug`, `group` (`injectors`, `pumps`, `turbo`, `testing`), `priceFrom`, calculator quantities, texts | `priceFrom`: live; the rest: rebuild |
@@ -55,6 +55,9 @@ Common tasks:
 - **Cookie banner**: `settings` → `gaId`, the Google Analytics 4 ID (`G-…`), then rebuild. With it the site
   asks for cookie consent (Accept / Decline, remembered in the browser; "Cookie settings" in the footer asks
   again); empty = no banner. An ID in another format is ignored with a build warning.
+- **Background pulse** (the logo's pulse running across the dot grid along a random row): `settings` →
+  `pulseInterval`, the average pause between runs in seconds (each pause is 60–140% of it, at least 1 s);
+  `0` = off, empty = 10. Live, no rebuild needed. Visitors with reduced motion turned on never see it.
 - **Hide a section or block**: empty its tab (or `settings` value) and rebuild. Without `texts` → `street` the
   address line, the map and the directions button are hidden.
 - **Images** (`heroImage`, `protocolImage`, a service's or an article's `image`): a direct image URL or a `/path` of a file in
