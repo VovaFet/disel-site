@@ -52,6 +52,8 @@ export type Landing = {
   units?: number;
   // Own "from" price per unit; without it the page uses the first service's price
   priceFrom?: number;
+  // Car or equipment makes the home page picker lists the page under (Fiat, Peugeot… / Bosch, Denso…)
+  makes: string[];
   title: L10n;
   h1: L10n;
   short: L10n;

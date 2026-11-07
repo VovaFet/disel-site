@@ -21,6 +21,7 @@ import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "
 import { formatPrice, localePath, t } from "@/i18n";
 import { faqSchema, serviceSchema, websiteSchema } from "@/lib/schema";
 import { ArticleCards } from "./articles";
+import { LandingPicker } from "./landings";
 import { pageMetadata } from "./RootShell";
 
 export const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
@@ -68,6 +69,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
         <Stats stats={c.trust.stats} lang={lang} />
       </section>
       <Brands brands={c.trust.brands} lang={lang} />
+      <LandingPicker c={c} lang={lang} />
 
       <section className="container section">
         <h2>{d.servicesHeading}</h2>

@@ -27,10 +27,11 @@
 //   stats     value | label_uk | label_ru | label_en          ("12" | "років досвіду")
 //   reviews   name | car | rating | text                      (rating 1–5, may be empty; text as written)
 //   Landing pages (optional; empty tab = no section): series → /marky/<slug>/, vehicles → /avto/<slug>/
-//   series, vehicles   slug | services | units | priceFrom | <field>_uk | <field>_ru | <field>_en ...
+//   series, vehicles   slug | services | units | priceFrom | makes | <field>_uk | <field>_ru | <field>_en ...
 //             services: related service slugs, comma-separated (the first gives price and calculator)
 //             units: calculator quantity, e.g. 6 injectors; priceFrom: own price per unit (optional,
-//             overrides the first service's); fields: title, h1, short, description, body
+//             overrides the first service's); makes: comma-separated makes for the home page picker;
+//             fields: title, h1, short, description, body
 //             FAQ for these pages goes to the faq tab with the page slug
 //   articles  slug | date | kind | services | image | title_* | description_* | body_*   (optional; → /statti/<slug>/)
 //             date: YYYY-MM-DD; kind: "case" for a repair case study, empty for an article;
@@ -261,6 +262,7 @@ function toLandings(section: LandingSection, rows: Row[], faqRows: Row[], servic
         services: services.filter((x) => serviceSlugs.includes(x)),
         units: r.units && Number(r.units) > 0 ? Math.round(Number(r.units)) : undefined,
         priceFrom: r.priceFrom && Number(r.priceFrom) > 0 ? Number(r.priceFrom) : undefined,
+        makes: (r.makes ?? "").split(",").map((x) => x.trim()).filter(Boolean),
         title,
         h1: h1.uk ? h1 : title,
         short: l10n(r, "short"),
