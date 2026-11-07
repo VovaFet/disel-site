@@ -6,11 +6,13 @@ import { formatPrice, t } from "@/i18n";
 import { openingHoursDisplay } from "@/lib/hours";
 import { useLive } from "./LiveConfig";
 
-// `amount` replaces the service's live price (a landing page with its own price)
-export function Price({ slug, prefix = true, amount }: { slug: string; prefix?: boolean; amount?: number }) {
+// `amount` replaces the service's live price (a landing page with its own price); `perUnit` adds
+// "за шт." where the price is for one of several countable items
+export function Price({ slug, prefix = true, amount, perUnit }: { slug: string; prefix?: boolean; amount?: number; perUnit?: boolean }) {
   const { live, lang } = useLive();
+  const d = t(lang);
   const price = amount ?? live.prices[slug] ?? 0;
-  return <>{`${prefix ? `${t(lang).from} ` : ""}${formatPrice(lang, price)}`}</>;
+  return <>{`${prefix ? `${d.from} ` : ""}${formatPrice(lang, price)}${perUnit ? ` ${d.perUnit}` : ""}`}</>;
 }
 
 // "From" price for several items of a service, e.g. the set of 6 injectors on one engine
