@@ -280,11 +280,12 @@ article > .article-meta { margin-bottom: 8px; }
 .make-pages h3:focus { outline: none; }
 /* Quiet side note with an info icon (e.g. "the site is still being filled in") */
 .info-note {
-  display: flex; gap: 10px; align-items: flex-start; max-width: 640px; margin: 20px 0 0; padding: 10px 14px;
+  display: flex; gap: 10px; align-items: flex-start; margin: 20px 0 0; padding: 10px 14px;
   color: var(--muted); font-size: 0.95rem; border: 1px solid var(--border); border-radius: var(--radius);
 }
 .info-note svg { flex: none; margin-top: 2px; }
-.info-note a { color: inherit; }
+.info-note strong { color: var(--accent); font-weight: 600; }
+.info-note a { color: var(--accent); }
 
 /* Calculator */
 .calc { display: grid; gap: 24px; grid-template-columns: 1fr; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; background: var(--surface); }
