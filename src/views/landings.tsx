@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { LinkCards } from "@/components/LinkCards";
 import { ContactActions, Price, SetPrice } from "@/components/Live";
 import { PriceAside } from "@/components/PriceAside";
-import { PriceCalculator } from "@/components/PriceCalculator";
+import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { RichText } from "@/components/RichText";
 import { ServiceList } from "@/components/ServiceList";
 import { getConfig } from "@/config";
@@ -30,10 +30,25 @@ export async function landingParams(section: LandingSection) {
   return [{ slug: [] as string[] }, ...landingsIn(c, section).map((l) => ({ slug: [l.slug] }))];
 }
 
-// "From" price of the first related service, for the whole set when the page has a quantity
+// "From" price of the first related service (or the page's own price), for the whole set when the
+// page has a quantity
 function LandingPrice({ landing }: { landing: Landing }) {
   const slug = landing.services[0];
-  return landing.units && landing.units > 1 ? <SetPrice slug={slug} units={landing.units} /> : <Price slug={slug} />;
+  return landing.units && landing.units > 1 ? (
+    <SetPrice slug={slug} units={landing.units} amount={landing.priceFrom} />
+  ) : (
+    <Price slug={slug} amount={landing.priceFrom} />
+  );
+}
+
+// A page with its own price is added to the calculator as an item of its first service's group,
+// so the estimate starts from that price
+const pageCalcSlug = (l: Landing) => `${l.section}/${l.slug}`;
+function landingCalcItems(c: SiteConfig, lang: Locale, l: Landing): CalcItem[] {
+  const items = calcItems(c, lang);
+  const base = items.find((i) => i.slug === l.services[0]);
+  if (!l.priceFrom || !base) return items;
+  return [{ ...base, slug: pageCalcSlug(l), title: l.title[lang], price: l.priceFrom }, ...items];
 }
 
 export async function landingMetadata(lang: Locale, section: LandingSection, slug?: string[]): Promise<Metadata> {
@@ -48,8 +63,8 @@ export async function landingMetadata(lang: Locale, section: LandingSection, slu
   }
   const l = landingsIn(c, section).find((x) => x.slug === slug[0]);
   if (!l) return {};
-  const service = c.services.find((s) => s.slug === l.services[0]);
-  const price = service && service.priceFrom > 0 ? ` — ${d.from} ${formatPrice(lang, service.priceFrom)}` : "";
+  const from = l.priceFrom ?? c.services.find((s) => s.slug === l.services[0])?.priceFrom ?? 0;
+  const price = from > 0 ? ` — ${d.from} ${formatPrice(lang, from)}` : "";
   return pageMetadata(c, lang, sectionPath(section, l.slug), {
     title: `${l.title[lang]} ${c.texts.area[lang]}${price}`,
     description: l.description[lang] || l.short[lang],
@@ -140,8 +155,8 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
         <>
           <h2>{d.estimate}</h2>
           <PriceCalculator
-            items={calcItems(c, lang)}
-            initialSlug={l.services[0]}
+            items={landingCalcItems(c, lang, l)}
+            initialSlug={l.priceFrom ? pageCalcSlug(l) : l.services[0]}
             initialQty={l.units}
             discount={c.texts.discount[lang]}
           />

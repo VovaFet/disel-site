@@ -50,6 +50,8 @@ export type Landing = {
   slug: string;
   services: string[];
   units?: number;
+  // Own "from" price per unit; without it the page uses the first service's price
+  priceFrom?: number;
   title: L10n;
   h1: L10n;
   short: L10n;
