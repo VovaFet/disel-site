@@ -31,13 +31,14 @@ export async function landingParams(section: LandingSection) {
 }
 
 // "From" price of the first related service (or the page's own price), for the whole set when the
-// page has a quantity
-function LandingPrice({ landing }: { landing: Landing }) {
+// page has a quantity, otherwise per item when the service is priced per injector or part
+function LandingPrice({ c, landing }: { c: SiteConfig; landing: Landing }) {
   const slug = landing.services[0];
+  const countable = Boolean(c.services.find((s) => s.slug === slug)?.perUnitOptions);
   return landing.units && landing.units > 1 ? (
     <SetPrice slug={slug} units={landing.units} amount={landing.priceFrom} />
   ) : (
-    <Price slug={slug} amount={landing.priceFrom} />
+    <Price slug={slug} amount={landing.priceFrom} perUnit={countable} />
   );
 }
 
@@ -94,7 +95,7 @@ async function LandingIndex({ lang, section }: { lang: Locale; section: LandingS
             href: localePath(lang, sectionPath(section, l.slug)),
             title: l.title[lang],
             text: l.short[lang],
-            meta: l.services.length > 0 ? <LandingPrice landing={l} /> : undefined,
+            meta: l.services.length > 0 ? <LandingPrice c={c} landing={l} /> : undefined,
           }))}
         />
       ) : (
@@ -136,7 +137,7 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
       {l.description[lang] && <p className="lead">{l.description[lang]}</p>}
       {services.length > 0 && (
         <p className="price">
-          {d.priceLabel}: <LandingPrice landing={l} />
+          {d.priceLabel}: <LandingPrice c={c} landing={l} />
         </p>
       )}
       {services.length > 0 && c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
@@ -145,7 +146,7 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
         <div>{l.body[lang] && <RichText text={l.body[lang]} />}</div>
         <PriceAside
           lang={lang}
-          price={services.length > 0 ? <LandingPrice landing={l} /> : undefined}
+          price={services.length > 0 ? <LandingPrice c={c} landing={l} /> : undefined}
           note={c.texts.discount[lang]}
           footnote={c.texts.removedOnly[lang]}
         />
