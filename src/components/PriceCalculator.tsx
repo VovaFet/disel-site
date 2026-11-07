@@ -12,6 +12,8 @@ export type CalcItem = {
   title: string;
   perUnitOptions?: number[];
   perUnitLabel?: string;
+  // Fixed price instead of the service's live one (a landing page with its own price)
+  price?: number;
 };
 
 export function PriceCalculator({
@@ -43,7 +45,7 @@ export function PriceCalculator({
   const item = items.find((s) => s.slug === slug);
   if (!item) return null; // no services in the sheet: nothing to estimate
   const units = item.perUnitOptions ? qty : 1;
-  const price = (s: string) => live.prices[s] ?? 0;
+  const price = (s: string) => items.find((i) => i.slug === s)?.price ?? live.prices[s] ?? 0;
   const extras = live.addons.filter((a) => picked.includes(a.id));
   const total = price(slug) * units + extras.reduce((sum, a) => sum + a.price, 0);
   const groups = serviceGroups

@@ -161,6 +161,7 @@ menus and the sitemap, and its list page is `noindex`.
 | `slug` | Page address |
 | `services` | Related service slugs, comma-separated. The first one gives the price and the calculator preset; every listed service page links back to this page. |
 | `units` | Quantity for the price and calculator, e.g. `4` injectors: the page then shows "від 4 800 грн за 4 шт." Empty = the price per unit. |
+| `priceFrom` | Optional own price per unit when this car or series costs differently from its first service, e.g. `1800` for Mercedes OM642 injectors. The page title, price and calculator use it. Empty = the first service's price. Unlike service prices it is not live: rebuild after a change. |
 | `title_*` | Name on cards, in breadcrumbs and the page title (start with "Ремонт …": `area` and the price are appended to the title) |
 | `h1_*` | Page heading (`area` is appended) |
 | `short_*` | One line on the list page card |
