@@ -76,11 +76,17 @@ export function LandingPicker({ c, lang }: { c: SiteConfig; lang: Locale }) {
   );
 }
 
-// The picker and the section lists don't cover every car or pump yet: say so and give the phone
+// The picker and the section lists don't cover every car or pump yet: say so quietly and give the phone
 function NotFoundNote({ lang }: { lang: Locale }) {
   return (
-    <p className="notice">
-      {t(lang).picker.notFound} <PhoneLink />
+    <p className="info-note">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9.5" />
+        <path d="M12 11v6M12 7.5v.01" />
+      </svg>
+      <span>
+        {t(lang).picker.notFound} <PhoneLink />
+      </span>
     </p>
   );
 }
