@@ -278,6 +278,13 @@ article > .article-meta { margin-bottom: 8px; }
 .make-pages { margin: 20px 0; }
 .make-pages h3 { margin: 12px 0 16px; }
 .make-pages h3:focus { outline: none; }
+/* Quiet side note with an info icon (e.g. "the site is still being filled in") */
+.info-note {
+  display: flex; gap: 10px; align-items: flex-start; max-width: 640px; margin: 20px 0 0; padding: 10px 14px;
+  color: var(--muted); font-size: 0.95rem; border: 1px solid var(--border); border-radius: var(--radius);
+}
+.info-note svg { flex: none; margin-top: 2px; }
+.info-note a { color: inherit; }
 
 /* Calculator */
 .calc { display: grid; gap: 24px; grid-template-columns: 1fr; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; background: var(--surface); }
