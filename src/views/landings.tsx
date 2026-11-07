@@ -8,7 +8,7 @@ import { CarPicker, type PickerTab } from "@/components/CarPicker";
 import { FaqList } from "@/components/FaqList";
 import { JsonLd } from "@/components/JsonLd";
 import { LinkCards } from "@/components/LinkCards";
-import { ContactActions, Price, SetPrice } from "@/components/Live";
+import { ContactActions, PhoneLink, Price, SetPrice } from "@/components/Live";
 import { PriceAside } from "@/components/PriceAside";
 import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { RichText } from "@/components/RichText";
@@ -71,7 +71,17 @@ export function LandingPicker({ c, lang }: { c: SiteConfig; lang: Locale }) {
       <h2>{d.picker.heading}</h2>
       <p className="lead">{d.picker.lead}</p>
       <CarPicker tabs={tabs} back={d.picker.back} />
+      <NotFoundNote lang={lang} />
     </section>
+  );
+}
+
+// The picker and the section lists don't cover every car or pump yet: say so and give the phone
+function NotFoundNote({ lang }: { lang: Locale }) {
+  return (
+    <p className="notice">
+      {t(lang).picker.notFound} <PhoneLink />
+    </p>
   );
 }
 
@@ -134,6 +144,7 @@ async function LandingIndex({ lang, section }: { lang: Locale; section: LandingS
       ) : (
         <p className="muted">{d.sectionEmpty}</p>
       )}
+      <NotFoundNote lang={lang} />
     </section>
   );
 }
