@@ -73,10 +73,16 @@ const tabs: Record<string, (string | number)[][]> = {
     (["series", "vehicles"] as const).map((tab) => [
       tab,
       [
-        ["slug", "services", "units", ...landingFields.flatMap(l10nCols)],
+        ["slug", "services", "units", "priceFrom", ...landingFields.flatMap(l10nCols)],
         ...c.landings
           .filter((l) => l.section === (tab === "series" ? "marky" : "avto"))
-          .map((l) => [l.slug, l.services.join(","), l.units ?? "", ...landingFields.flatMap((f) => locales.map((lang) => l[f][lang]))]),
+          .map((l) => [
+            l.slug,
+            l.services.join(","),
+            l.units ?? "",
+            l.priceFrom ?? "",
+            ...landingFields.flatMap((f) => locales.map((lang) => l[f][lang])),
+          ]),
       ],
     ]),
   ),

@@ -6,17 +6,18 @@ import { formatPrice, t } from "@/i18n";
 import { openingHoursDisplay } from "@/lib/hours";
 import { useLive } from "./LiveConfig";
 
-export function Price({ slug, prefix = true }: { slug: string; prefix?: boolean }) {
+// `amount` replaces the service's live price (a landing page with its own price)
+export function Price({ slug, prefix = true, amount }: { slug: string; prefix?: boolean; amount?: number }) {
   const { live, lang } = useLive();
-  const price = live.prices[slug] ?? 0;
+  const price = amount ?? live.prices[slug] ?? 0;
   return <>{`${prefix ? `${t(lang).from} ` : ""}${formatPrice(lang, price)}`}</>;
 }
 
 // "From" price for several items of a service, e.g. the set of 6 injectors on one engine
-export function SetPrice({ slug, units }: { slug: string; units: number }) {
+export function SetPrice({ slug, units, amount }: { slug: string; units: number; amount?: number }) {
   const { live, lang } = useLive();
   const d = t(lang);
-  return <>{`${d.from} ${formatPrice(lang, (live.prices[slug] ?? 0) * units)} ${d.forUnits(units)}`}</>;
+  return <>{`${d.from} ${formatPrice(lang, (amount ?? live.prices[slug] ?? 0) * units)} ${d.forUnits(units)}`}</>;
 }
 
 export function PhoneLink({ className, children }: { className?: string; children?: ReactNode }) {
