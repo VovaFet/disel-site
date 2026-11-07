@@ -59,6 +59,11 @@ const dict = {
       marky: { title: "Марки й серії", intro: "Ремонт форсунок і ПНВТ за виробником і серією: що саме ремонтуємо, типові несправності й ціни." },
       avto: { title: "Авто й двигуни", intro: "Яка паливна апаратура стоїть на популярних дизелях, що в ній ламається і скільки коштує ремонт." },
     },
+    picker: {
+      heading: "Оберіть своє авто",
+      lead: "Натисніть марку — покажемо, яка апаратура на ній стоїть, що ламається і скільки коштує ремонт.",
+      back: "Усі марки",
+    },
     sectionEmpty: "Розділ наповнюється.",
     articles: { title: "Статті", intro: "Поради щодо паливної апаратури дизелів і реальні ремонти з протоколами до і після." },
     caseLabel: "Кейс",
@@ -153,6 +158,11 @@ const dict = {
       marky: { title: "Марки и серии", intro: "Ремонт форсунок и ТНВД по производителю и серии: что именно ремонтируем, типичные неисправности и цены." },
       avto: { title: "Авто и двигатели", intro: "Какая топливная аппаратура стоит на популярных дизелях, что в ней ломается и сколько стоит ремонт." },
     },
+    picker: {
+      heading: "Выберите своё авто",
+      lead: "Нажмите марку — покажем, какая аппаратура на ней стоит, что ломается и сколько стоит ремонт.",
+      back: "Все марки",
+    },
     sectionEmpty: "Раздел наполняется.",
     articles: { title: "Статьи", intro: "Советы по топливной аппаратуре дизелей и реальные ремонты с протоколами до и после." },
     caseLabel: "Кейс",
@@ -246,6 +256,11 @@ const dict = {
     sections: {
       marky: { title: "Brands & series", intro: "Injector and fuel pump repair by maker and series: what we repair, typical faults and prices." },
       avto: { title: "Vehicles & engines", intro: "Which fuel system parts popular diesel engines use, what fails in them and what the repair costs." },
+    },
+    picker: {
+      heading: "Find your vehicle",
+      lead: "Pick a make to see which fuel system it uses, what fails and what the repair costs.",
+      back: "All makes",
     },
     sectionEmpty: "This section is being filled in.",
     articles: { title: "Articles", intro: "Advice on diesel fuel systems and real repairs with before-and-after reports." },

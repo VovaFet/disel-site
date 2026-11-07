@@ -4,6 +4,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CarPicker, type PickerTab } from "@/components/CarPicker";
 import { FaqList } from "@/components/FaqList";
 import { JsonLd } from "@/components/JsonLd";
 import { LinkCards } from "@/components/LinkCards";
@@ -38,6 +39,39 @@ function LandingPrice({ landing }: { landing: Landing }) {
     <SetPrice slug={slug} units={landing.units} amount={landing.priceFrom} />
   ) : (
     <Price slug={slug} amount={landing.priceFrom} />
+  );
+}
+
+// Home page block: a tab per section (cars first), a tile per make, and the make's pages under it.
+// Pages without makes stay out of it; they are still in their section's list.
+export function LandingPicker({ c, lang }: { c: SiteConfig; lang: Locale }) {
+  const d = t(lang);
+  const tabs: PickerTab[] = (["avto", "marky"] as const)
+    .map((section) => {
+      const byMake = new Map<string, PickerTab["makes"][number]["items"]>();
+      for (const l of landingsIn(c, section)) {
+        for (const make of l.makes) {
+          const items = byMake.get(make) ?? [];
+          items.push({
+            href: localePath(lang, sectionPath(section, l.slug)),
+            title: l.title[lang],
+            text: l.short[lang],
+            price: l.services.length > 0 ? <LandingPrice landing={l} /> : undefined,
+          });
+          byMake.set(make, items);
+        }
+      }
+      const makes = [...byMake].map(([name, items]) => ({ name, items })).sort((a, b) => a.name.localeCompare(b.name, lang));
+      return { id: section, label: d.sections[section].title, href: localePath(lang, sectionPath(section)), makes };
+    })
+    .filter((tab) => tab.makes.length > 0);
+  if (!tabs.length) return null;
+  return (
+    <section className="container section">
+      <h2>{d.picker.heading}</h2>
+      <p className="lead">{d.picker.lead}</p>
+      <CarPicker tabs={tabs} back={d.picker.back} />
+    </section>
   );
 }
 
