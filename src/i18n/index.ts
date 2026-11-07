@@ -87,7 +87,7 @@ const dict = {
     features: [
       { title: "Стенд, а не здогадки", text: "Протокол тесту до і після ремонту" },
       { title: "Вся Україна", text: "Приймаємо й повертаємо деталі Новою поштою" },
-      { title: "Гарантія", text: "На роботи та встановлені деталі" },
+      { title: "Гарантія", text: "1 рік або 10 000 км на роботи та встановлені деталі" },
       { title: "Без сюрпризів", text: "Ціну узгоджуємо до початку ремонту" },
     ],
     contactsTitle: "Контакти та графік роботи",
@@ -181,7 +181,7 @@ const dict = {
     features: [
       { title: "Стенд, а не догадки", text: "Протокол теста до и после ремонта" },
       { title: "Вся Украина", text: "Принимаем и возвращаем детали Новой почтой" },
-      { title: "Гарантия", text: "На работы и установленные детали" },
+      { title: "Гарантия", text: "1 год или 10 000 км на работы и установленные детали" },
       { title: "Без сюрпризов", text: "Цену согласуем до начала ремонта" },
     ],
     contactsTitle: "Контакты и график работы",
@@ -275,7 +275,7 @@ const dict = {
     features: [
       { title: "Bench, not guesswork", text: "Test report before and after repair" },
       { title: "All of Ukraine", text: "We receive and return parts via Nova Poshta" },
-      { title: "Warranty", text: "On labour and installed parts" },
+      { title: "Warranty", text: "1 year or 10,000 km on labour and installed parts" },
       { title: "No surprises", text: "Price agreed before we start" },
     ],
     contactsTitle: "Contacts & opening hours",
