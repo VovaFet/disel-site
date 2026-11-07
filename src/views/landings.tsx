@@ -8,7 +8,7 @@ import { CarPicker, type PickerTab } from "@/components/CarPicker";
 import { FaqList } from "@/components/FaqList";
 import { JsonLd } from "@/components/JsonLd";
 import { LinkCards } from "@/components/LinkCards";
-import { ContactActions, Price, SetPrice } from "@/components/Live";
+import { ContactActions, MessengerLink, PhoneLink, Price, SetPrice } from "@/components/Live";
 import { PriceAside } from "@/components/PriceAside";
 import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
 import { RichText } from "@/components/RichText";
@@ -71,7 +71,29 @@ export function LandingPicker({ c, lang }: { c: SiteConfig; lang: Locale }) {
       <h2>{d.picker.heading}</h2>
       <p className="lead">{d.picker.lead}</p>
       <CarPicker tabs={tabs} back={d.picker.back} />
+      <NotFoundNote lang={lang} />
     </section>
+  );
+}
+
+// The picker and the section lists don't cover every car or pump yet: say so quietly, with the
+// question in the accent color, and offer a call or a messenger
+function NotFoundNote({ lang }: { lang: Locale }) {
+  const d = t(lang);
+  return (
+    <p className="info-note">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9.5" />
+        <path d="M12 11v6M12 7.5v.01" />
+      </svg>
+      <span>
+        <strong>{d.picker.notFoundQuestion}</strong> {d.picker.notFoundText}{" "}
+        <span className="nowrap">
+          <PhoneLink>{d.call}</PhoneLink> · <MessengerLink kind="viber">Viber</MessengerLink> ·{" "}
+          <MessengerLink kind="telegram">Telegram</MessengerLink>
+        </span>
+      </span>
+    </p>
   );
 }
 
@@ -134,6 +156,7 @@ async function LandingIndex({ lang, section }: { lang: Locale; section: LandingS
       ) : (
         <p className="muted">{d.sectionEmpty}</p>
       )}
+      <NotFoundNote lang={lang} />
     </section>
   );
 }
