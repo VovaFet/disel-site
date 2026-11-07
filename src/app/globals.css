@@ -124,16 +124,16 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 
 .cards { list-style: none; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 .card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; background: var(--surface); }
-/* Card titles are h3, or h2 on list pages (see LinkCards); both look like an h3 */
-.card :is(h2, h3) { margin-top: 0; }
-.card h2 { font-size: 1.17em; margin-bottom: 1em; }
-.card :is(h2, h3) a { color: var(--fg); text-decoration: none; }
+/* Card titles are h3, h2 on list pages or h4 in the home page picker (see LinkCards); all look like an h3 */
+.card :is(h2, h3, h4) { margin-top: 0; }
+.card :is(h2, h4) { font-size: 1.17em; margin-bottom: 1em; }
+.card :is(h2, h3, h4) a { color: var(--fg); text-decoration: none; }
 /* The whole card is clickable: the title link is stretched over it */
 .card { position: relative; }
-.card :is(h2, h3) a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
-.card:hover :is(h2, h3) a { color: var(--accent); }
-.card :is(h2, h3) a:focus-visible { outline: none; }
-.card:has(:is(h2, h3) a:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+.card :is(h2, h3, h4) a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.card:hover :is(h2, h3, h4) a { color: var(--accent); }
+.card :is(h2, h3, h4) a:focus-visible { outline: none; }
+.card:has(:is(h2, h3, h4) a:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
 .card-icon {
   display: inline-grid; place-items: center; width: 44px; height: 44px; margin-bottom: 12px;
   border-radius: 10px; color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent);
@@ -261,6 +261,23 @@ article > .article-meta { margin-bottom: 8px; }
   70% { box-shadow: 0 0 0 8px rgb(43 138 62 / 0); }
   100% { box-shadow: 0 0 0 0 rgb(43 138 62 / 0); }
 }
+
+/* Home page picker: a tile per make; a tile swaps the grid for that make's pages */
+.picker-panel[hidden], .make-grid[hidden], .make-pages[hidden] { display: none; }
+.make-grid {
+  list-style: none; padding: 0; margin: 20px 0; display: grid; gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); /* three a row on phones */
+}
+.make-tile {
+  width: 100%; min-height: 52px; padding: 12px 6px; font: inherit; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--fg);
+  transition: border-color 0.15s, color 0.15s, transform 0.15s;
+}
+.make-tile:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+.make-tile:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.make-pages { margin: 20px 0; }
+.make-pages h3 { margin: 12px 0 16px; }
+.make-pages h3:focus { outline: none; }
 
 /* Calculator */
 .calc { display: grid; gap: 24px; grid-template-columns: 1fr; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; background: var(--surface); }
