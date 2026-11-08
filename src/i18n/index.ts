@@ -17,7 +17,7 @@ export const isLocale = (v: string): v is Locale => (locales as readonly string[
 
 const dict = {
   uk: {
-    nav: { home: "Головна", services: "Послуги", servicesFull: "Послуги та ціни", calculator: "Калькулятор", contacts: "Контакти", delivery: "Доставка й оплата", about: "Про нас", privacy: "Політика конфіденційності" },
+    nav: { home: "Головна", services: "Послуги", servicesFull: "Послуги та ціни", calculator: "Калькулятор ремонту", contacts: "Контакти", delivery: "Доставка й оплата", about: "Про нас", privacy: "Політика конфіденційності" },
     groups: { injectors: "Форсунки", pumps: "ПНВТ (ТНВД)", turbo: "Турбіни", testing: "Перевірка" },
     footerInfo: "Інформація",
     cookies: {
@@ -43,7 +43,8 @@ const dict = {
     homeTitle: "ремонт ПНВТ, форсунок і турбін",
     servicesHeading: "Послуги та ціни",
     servicesDescription: "Ціни на ремонт знятих ПНВТ (ТНВД), дизельних форсунок і турбін",
-    calculatorHeading: "Калькулятор вартості",
+    calculatorHeading: "Калькулятор вартості ремонту",
+    calculatorLead: "Оберіть послугу й кількість деталей, щоб побачити орієнтовну вартість ремонту форсунок, ПНВТ і турбін.",
     service: "Послуга",
     extras: "Додатково",
     decreaseQty: "Зменшити кількість",
@@ -121,7 +122,7 @@ const dict = {
     toHome: "На головну",
   },
   ru: {
-    nav: { home: "Главная", services: "Услуги", servicesFull: "Услуги и цены", calculator: "Калькулятор", contacts: "Контакты", delivery: "Доставка и оплата", about: "О нас", privacy: "Политика конфиденциальности" },
+    nav: { home: "Главная", services: "Услуги", servicesFull: "Услуги и цены", calculator: "Калькулятор ремонта", contacts: "Контакты", delivery: "Доставка и оплата", about: "О нас", privacy: "Политика конфиденциальности" },
     groups: { injectors: "Форсунки", pumps: "ТНВД", turbo: "Турбины", testing: "Проверка" },
     footerInfo: "Информация",
     cookies: {
@@ -147,7 +148,8 @@ const dict = {
     homeTitle: "ремонт ТНВД, форсунок и турбин",
     servicesHeading: "Услуги и цены",
     servicesDescription: "Цены на ремонт снятых ТНВД, дизельных форсунок и турбин",
-    calculatorHeading: "Калькулятор стоимости",
+    calculatorHeading: "Калькулятор стоимости ремонта",
+    calculatorLead: "Выберите услугу и количество деталей, чтобы увидеть ориентировочную стоимость ремонта форсунок, ТНВД и турбин.",
     service: "Услуга",
     extras: "Дополнительно",
     decreaseQty: "Уменьшить количество",
@@ -225,7 +227,7 @@ const dict = {
     toHome: "На главную",
   },
   en: {
-    nav: { home: "Home", services: "Services", servicesFull: "Services & prices", calculator: "Calculator", contacts: "Contacts", delivery: "Delivery & payment", about: "About us", privacy: "Privacy policy" },
+    nav: { home: "Home", services: "Services", servicesFull: "Services & prices", calculator: "Repair calculator", contacts: "Contacts", delivery: "Delivery & payment", about: "About us", privacy: "Privacy policy" },
     groups: { injectors: "Injectors", pumps: "Fuel pumps", turbo: "Turbochargers", testing: "Testing" },
     footerInfo: "Information",
     cookies: {
@@ -251,7 +253,8 @@ const dict = {
     homeTitle: "diesel fuel pump, injector and turbo repair",
     servicesHeading: "Services & prices",
     servicesDescription: "Prices for repairing removed diesel fuel pumps, injectors and turbochargers",
-    calculatorHeading: "Cost calculator",
+    calculatorHeading: "Repair cost calculator",
+    calculatorLead: "Pick a service and the number of parts to see an estimate for repairing injectors, fuel pumps and turbochargers.",
     service: "Service",
     extras: "Extras",
     decreaseQty: "Decrease quantity",
