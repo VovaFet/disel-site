@@ -11,7 +11,7 @@ const daysToText = (days: number[]) =>
 const l10nCols = (field: string) => locales.map((l) => `${field}_${l}`);
 const articleFields = ["title", "description", "body"] as const;
 const landingFields = ["title", "h1", "short", "description", "body"] as const;
-const serviceFields = ["perUnitLabel", "title", "h1", "short", "description", "includes", "body"] as const;
+const serviceFields = ["perUnitLabel", "title", "h1", "short", "description", "includes", "body", "calcNote"] as const;
 
 const tabs: Record<string, (string | number)[][]> = {
   settings: [
