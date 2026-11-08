@@ -15,7 +15,8 @@
 //   schedule  days | from | to                  (days: "1-5", "6" or "1,3"; 1 = Monday)
 //   services  slug | group | priceFrom | perUnitOptions | <field>_uk | <field>_ru | <field>_en ...
 //             group: injectors | pumps | turbo | testing
-//             fields: perUnitLabel, title, h1, short, description, includes (one item per line), body
+//             fields: perUnitLabel, title, h1, short, description, includes (one item per line), body,
+//             calcNote (hint under the name in the calculator, optional)
 //             symptoms_uk | symptoms_ru | symptoms_en: signs of a fault, one per line (optional)
 //             image: photo for the service page, an image URL or a /path from public/ (optional)
 //   pages     slug | title_* | description_* | body_*   (slug: dostavka | pro-nas | konfidentsiinist)
@@ -290,6 +291,7 @@ function toServices(rows: Row[], faqRows: Row[]): Service[] {
       perUnitOptions: options,
       perUnitLabel: options ? l10n(r, "perUnitLabel") : undefined,
       title: l10n(r, "title"),
+      calcNote: l10n(r, "calcNote"),
       h1: l10n(r, "h1"),
       short: l10n(r, "short"),
       description: l10n(r, "description"),

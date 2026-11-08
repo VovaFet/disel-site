@@ -117,6 +117,7 @@ an entry in the calculator. Only `priceFrom` is live.
 | `perUnitOptions` | Quantities for the calculator, e.g. `1,2,3,4,6,8`: the price is then per unit. Empty = one price per service. |
 | `perUnitLabel_*` | Name of the quantity in the calculator, "Кількість форсунок" (needed with `perUnitOptions`) |
 | `title_*` | Short name: cards, menus, calculator, breadcrumbs |
+| `calcNote_*` | Short hint under the name in the calculator, "Рядні та інші типи", so similar services are easy to tell apart; empty = none |
 | `h1_*` | Page heading; `area` is appended ("… з усієї України") |
 | `short_*` | One line under the name on cards |
 | `description_*` | Page lead and search result snippet, 150–220 characters |

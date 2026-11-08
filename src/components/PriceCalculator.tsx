@@ -10,6 +10,8 @@ export type CalcItem = {
   slug: string;
   group: ServiceGroup;
   title: string;
+  // Hint under the name, to tell similar services apart
+  note?: string;
   perUnitOptions?: number[];
   perUnitLabel?: string;
   // Fixed price instead of the service's live one (a landing page with its own price)
@@ -66,7 +68,7 @@ export function PriceCalculator({
               <optgroup key={g} label={d.groups[g]}>
                 {list.map((s) => (
                   <option key={s.slug} value={s.slug}>
-                    {s.title}
+                    {s.note ? `${s.title} — ${s.note}` : s.title}
                   </option>
                 ))}
               </optgroup>
@@ -87,6 +89,7 @@ export function PriceCalculator({
                         onChange={() => setSlug(s.slug)}
                       />
                       <span className="svc-title">{s.title}</span>
+                      {s.note && <span className="svc-note">{s.note}</span>}
                       <span className="svc-price">
                         {d.from} {formatPrice(lang, price(s.slug))}
                       </span>

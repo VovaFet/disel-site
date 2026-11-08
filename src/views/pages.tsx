@@ -29,9 +29,27 @@ export const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
     slug: s.slug,
     group: s.group,
     title: s.title[lang],
+    note: s.calcNote?.[lang] || undefined,
     perUnitOptions: s.perUnitOptions,
     perUnitLabel: s.perUnitLabel?.[lang],
   }));
+
+// Makes whose car pages have their own price (Mercedes, Toyota) get an item of their own after the
+// pages' first service, at the lowest of those prices, so the home page estimate matches the car page.
+// Car pages leave them out: their own item already starts from that price.
+export const withMakeItems = (c: SiteConfig, lang: Locale, items: CalcItem[]): CalcItem[] =>
+  items.flatMap((item) => {
+    const byMake = new Map<string, number>();
+    for (const l of c.landings) {
+      const make = l.makes[0];
+      if (!l.priceFrom || !make || l.services[0] !== item.slug) continue;
+      byMake.set(make, Math.min(byMake.get(make) ?? l.priceFrom, l.priceFrom));
+    }
+    const makes = [...byMake]
+      .sort(([a], [b]) => a.localeCompare(b, lang))
+      .map(([make, price]) => ({ ...item, slug: `${item.slug}/${make}`, title: `${item.title} — ${make}`, price }));
+    return [item, ...makes];
+  });
 
 /* ---------- Home ---------- */
 
@@ -80,7 +98,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
         <section id="calculator" className="container section">
           <h2>{d.calculatorHeading}</h2>
           <Reveal>
-            <PriceCalculator items={calcItems(c, lang)} discount={c.texts.discount[lang]} />
+            <PriceCalculator items={withMakeItems(c, lang, calcItems(c, lang))} discount={c.texts.discount[lang]} />
           </Reveal>
         </section>
       )}
@@ -281,7 +299,11 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
       )}
 
       <h2>{d.estimate}</h2>
-      <PriceCalculator items={calcItems(c, lang)} initialSlug={s.slug} discount={c.texts.discount[lang]} />
+      <PriceCalculator
+        items={withMakeItems(c, lang, calcItems(c, lang))}
+        initialSlug={s.slug}
+        discount={c.texts.discount[lang]}
+      />
 
       {s.faq.length + c.commonFaq.length > 0 && (
         <>
