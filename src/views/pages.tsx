@@ -29,6 +29,7 @@ export const calcItems = (c: SiteConfig, lang: Locale): CalcItem[] =>
     slug: s.slug,
     group: s.group,
     title: s.title[lang],
+    note: s.calcNote?.[lang] || undefined,
     perUnitOptions: s.perUnitOptions,
     perUnitLabel: s.perUnitLabel?.[lang],
   }));

@@ -21,6 +21,8 @@ export type Service = {
   perUnitOptions?: number[];
   perUnitLabel?: L10n;
   title: L10n;
+  // Hint under the name in the price calculator, "Рядні та інші типи"; empty = none
+  calcNote?: L10n;
   h1: L10n;
   short: L10n;
   description: L10n;
