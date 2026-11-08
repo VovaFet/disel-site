@@ -553,11 +553,6 @@ export const defaultConfig: SiteConfig = {
       price: 500,
       label: { uk: "Термінове виконання (1 день)", ru: "Срочное выполнение (1 день)", en: "Express service (1 day)" },
     },
-    {
-      id: "return",
-      price: 150,
-      label: { uk: "Пакування й відправка назад", ru: "Упаковка и отправка обратно", en: "Packing and return shipping" },
-    },
   ],
 
   // Filled from the sheet only: these blocks stay hidden until there is real data
