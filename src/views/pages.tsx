@@ -16,6 +16,7 @@ import { SheetImage } from "@/components/SheetImage";
 import { ShippingDetails } from "@/components/ShippingDetails";
 import { SymptomList } from "@/components/SymptomList";
 import { Brands, HeroImage, ProtocolSample, Reviews, Stats } from "@/components/Trust";
+import { UkraineMap } from "@/components/UkraineMap";
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
 import { formatPrice, localePath, t } from "@/i18n";
@@ -102,6 +103,14 @@ export async function HomePage({ lang }: { lang: Locale }) {
           </Reveal>
         </section>
       )}
+
+      <section className="container section">
+        <h2>{d.mapHeading}</h2>
+        <p className="lead">{d.mapLead}</p>
+        <Reveal>
+          <UkraineMap lang={lang} />
+        </Reveal>
+      </section>
 
       <section className="container section">
         <h2>{d.shippingHeading}</h2>

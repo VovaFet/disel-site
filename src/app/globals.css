@@ -383,6 +383,57 @@ p.discount-note { margin: -8px 0 16px; }
   background: var(--accent-bg); color: var(--accent-fg); font-weight: 700;
 }
 
+/* Map of Ukraine on the home page (UkraineMap): SVG outline, flags and names placed on top in % */
+.ua-map { position: relative; max-width: 860px; margin: 8px auto 0; }
+.ua-map svg { display: block; width: 100%; height: auto; }
+.ua-map-land { fill: var(--surface); }
+.ua-map pattern circle { fill: var(--muted); opacity: 0.35; }
+.ua-map-border { fill: none; stroke: var(--brand); stroke-width: 2.5; stroke-linejoin: round; }
+.ua-map-cities { list-style: none; margin: 0; padding: 0; }
+/* Each city is a zero-size anchor on its point: the pole stands on it, the name sits beside the flag */
+.ua-city { position: absolute; width: 0; height: 0; }
+.ua-city::before { content: ""; position: absolute; left: -3px; top: -3px; width: 6px; height: 6px; border-radius: 50%; background: var(--fg); }
+.ua-flag { position: absolute; left: -1px; bottom: 0; width: 2px; height: 24px; background: var(--muted); }
+.ua-flag::after {
+  content: ""; position: absolute; left: 2px; top: 0; width: 14px; height: 10px; background: var(--brand);
+  clip-path: polygon(0 0, 100% 0, 72% 50%, 100% 100%, 0 100%);
+}
+.ua-city-name {
+  position: absolute; left: 20px; bottom: 6px; white-space: nowrap; font-size: 0.85rem; font-weight: 600; line-height: 1.2;
+  text-shadow: 0 0 3px var(--bg), 0 0 3px var(--bg), 0 0 3px var(--bg);
+}
+.ua-city-left .ua-city-name { left: auto; right: 8px; }
+.ua-city-high .ua-city-name { bottom: 13px; }
+/* The workshop: a bigger flag, a pulsing ring and a caption under the name */
+.ua-workshop::before { background: var(--brand); }
+.ua-workshop::after {
+  content: ""; position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--brand); animation: ua-pulse 2s ease-out infinite;
+}
+@keyframes ua-pulse { from { transform: scale(0.3); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+.ua-workshop .ua-flag { height: 32px; }
+.ua-workshop .ua-flag::after { width: 19px; height: 13px; }
+.ua-workshop .ua-city-name { left: 25px; bottom: 8px; font-size: 1.05rem; font-weight: 700; }
+.ua-workshop small { display: block; font-size: 0.75rem; font-weight: 600; color: var(--accent); }
+/* With scroll reveal on, the workshop shows up first and the flags follow one by one */
+.reveal .ua-city { opacity: 0; transform: translateY(-12px); transition: opacity 0.4s ease, transform 0.4s ease; transition-delay: calc(var(--i, -2) * 45ms + 300ms); }
+.reveal.is-visible .ua-city { opacity: 1; transform: none; }
+@media (max-width: 640px) {
+  .ua-map-border { stroke-width: 4; }
+  /* Phones keep the names of the big cities only; the rest show the flag */
+  .ua-city:not(.ua-city-major) .ua-city-name { display: none; }
+  .ua-city::before { left: -2px; top: -2px; width: 4px; height: 4px; }
+  .ua-flag { height: 14px; width: 1.5px; }
+  .ua-flag::after { left: 1.5px; width: 9px; height: 6px; }
+  .ua-city-name { left: 12px; bottom: 2px; font-size: 0.75rem; }
+  .ua-city-left .ua-city-name { right: 5px; }
+  .ua-workshop::after { left: -8px; top: -8px; width: 16px; height: 16px; }
+  .ua-workshop .ua-flag { height: 20px; }
+  .ua-workshop .ua-flag::after { width: 12px; height: 8px; }
+  .ua-workshop .ua-city-name { left: 15px; bottom: 3px; font-size: 0.8rem; }
+  .ua-workshop small { font-size: 0.65rem; }
+}
+
 /* Nova Poshta details card */
 .np-card { margin-top: 32px; padding: 20px 24px; max-width: 680px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
 .np-card h3 { margin: 0 0 8px; }
