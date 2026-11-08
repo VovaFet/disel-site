@@ -45,11 +45,8 @@ export const defaultConfig: SiteConfig = {
     // Filled in the sheet (texts → discount) when there is an offer
     discount: { uk: "", ru: "", en: "" },
     slogan: { uk: "Ваш дизель — наш пацієнт", ru: "Ваш дизель — наш пациент", en: "Your diesel is our patient" },
-    removedOnly: {
-      uk: "Працюємо лише зі знятими деталями. Автомобілі не приймаємо.",
-      ru: "Работаем только со снятыми деталями. Автомобили не принимаем.",
-      en: "We only work with removed parts and don't take cars in.",
-    },
+    // Filled in the sheet (texts → removedOnly) when the notice is wanted
+    removedOnly: { uk: "", ru: "", en: "" },
   },
 
   services: [

@@ -3,7 +3,7 @@ import { landingSections, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
 import { CookieSettingsLink } from "./CookieBanner";
 import { HeaderShell } from "./HeaderShell";
-import { HomeLink, IntentLink } from "./IntentLink";
+import { HomeLink } from "./IntentLink";
 import { LangSwitcher } from "./LangSwitcher";
 import { Logo } from "./Logo";
 import { HoursList, MessengerLink, PhoneLink } from "./Live";
@@ -34,7 +34,7 @@ export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: S
         </div>
         <nav aria-label={d.mainMenu} className="nav">
           <Link href={p("/poslugy/")}>{d.nav.services}</Link>
-          <IntentLink href={`${p("/")}#calculator`}>{d.nav.calculator}</IntentLink>
+          <Link href={p("/kalkulyator/")}>{d.nav.calculator}</Link>
           <Link href={p("/kontakty/")}>{d.nav.contacts}</Link>
           <PhoneLink className="btn btn-small" />
         </nav>
@@ -45,7 +45,7 @@ export function SiteHeader({ lang, config, notFound }: { lang: Locale; config: S
             { href: p("/"), label: d.nav.home },
             { href: p("/poslugy/"), label: d.nav.servicesFull },
             ...sectionLinks(lang, config),
-            { href: `${p("/")}#calculator`, label: d.nav.calculator },
+            { href: p("/kalkulyator/"), label: d.nav.calculator },
             { href: p("/dostavka/"), label: d.nav.delivery },
             { href: p("/pro-nas/"), label: d.nav.about },
             { href: p("/kontakty/"), label: d.nav.contacts },
@@ -83,6 +83,9 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
           <ul>
             <li>
               <Link href={localePath(lang, "/poslugy/")}>{d.nav.servicesFull}</Link>
+            </li>
+            <li>
+              <Link href={localePath(lang, "/kalkulyator/")}>{d.nav.calculator}</Link>
             </li>
             {sectionLinks(lang, config).map((l) => (
               <li key={l.href}>

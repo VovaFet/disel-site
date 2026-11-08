@@ -62,6 +62,12 @@ export async function HomePage({ lang }: { lang: Locale }) {
   return (
     <>
       <JsonLd data={websiteSchema(c, lang)} />
+      {/* Old links to the calculator that used to be here (#calculator: bookmarks, an ad sitelink) open its own page */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `if(location.hash==="#calculator")location.replace(${JSON.stringify(localePath(lang, "/kalkulyator/"))})`,
+        }}
+      />
       <section className={`hero ${c.trust.heroImage ? "hero-with-image" : ""}`}>
         <div className="container hero-grid">
           <div>
@@ -78,9 +84,9 @@ export async function HomePage({ lang }: { lang: Locale }) {
               <PhoneLink className="btn">
                 {d.book}: <PhoneText />
               </PhoneLink>
-              <a href="#calculator" className="btn btn-outline">
+              <Link href={localePath(lang, "/kalkulyator/")} className="btn btn-outline">
                 {d.estimate}
-              </a>
+              </Link>
             </div>
           </div>
           <HeroImage src={c.trust.heroImage} lang={lang} />
@@ -94,15 +100,6 @@ export async function HomePage({ lang }: { lang: Locale }) {
         <h2>{d.servicesHeading}</h2>
         <ServiceList lang={lang} services={c.services} />
       </section>
-
-      {c.services.length > 0 && (
-        <section id="calculator" className="container section">
-          <h2>{d.calculatorHeading}</h2>
-          <Reveal>
-            <PriceCalculator items={withMakeItems(c, lang, calcItems(c, lang))} discount={c.texts.discount[lang]} />
-          </Reveal>
-        </section>
-      )}
 
       <section className="container section">
         <h2>{d.mapHeading}</h2>
@@ -169,6 +166,31 @@ export async function HomePage({ lang }: { lang: Locale }) {
         </section>
       )}
     </>
+  );
+}
+
+/* ---------- Price calculator ---------- */
+
+export async function calculatorMetadata(lang: Locale): Promise<Metadata> {
+  const c = await getConfig();
+  const d = t(lang);
+  return pageMetadata(c, lang, "/kalkulyator/", {
+    title: d.calculatorHeading,
+    description: `${d.calculatorLead} ${c.texts.shipping[lang]}.`,
+  });
+}
+
+export async function CalculatorPage({ lang }: { lang: Locale }) {
+  const c = await getConfig();
+  const d = t(lang);
+  return (
+    <section className="container section">
+      <h1>{d.calculatorHeading}</h1>
+      <p className="lead">{d.calculatorLead}</p>
+      {c.services.length > 0 && (
+        <PriceCalculator items={withMakeItems(c, lang, calcItems(c, lang))} discount={c.texts.discount[lang]} />
+      )}
+    </section>
   );
 }
 
