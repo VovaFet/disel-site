@@ -1,18 +1,18 @@
 :root {
-  /* A soft grey page rather than pure white, with cards a shade lighter, like the dark theme in reverse */
-  --bg: #eceef1;
-  --fg: #1a1d21;
-  --muted: #5b6370;
+  /* A blue-grey page rather than pure white, with cards a shade lighter, like the dark theme in reverse */
+  --bg: #e4e8ee;
+  --fg: #18202a;
+  --muted: #525d6c;
   /* Text colors stay at 4.5:1 or more against --bg and --surface (WCAG AA). The logo keeps the brand
      orange; --accent is a deeper shade of it in the light theme, where the brand one is too pale for text. */
   --brand: #e8590c;
-  --accent: #b23b0b;
+  --accent: #a8380a;
   --accent-bg: #c2410c; /* fills under --accent-fg text (buttons, the current language); same in both themes */
   --accent-fg: #ffffff;
-  --ok: #28692f;
-  --closed: #c92a2a;
-  --surface: #f6f7f9;
-  --border: #d3d7de;
+  --ok: #245f2b;
+  --closed: #b42424;
+  --surface: #f0f3f7;
+  --border: #c9d1dc;
   --radius: 10px;
   --show-sun: block;
   --show-moon: none;
