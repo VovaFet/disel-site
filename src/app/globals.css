@@ -714,9 +714,10 @@ p.discount-note { margin: -8px 0 16px; }
 .rich { max-width: 760px; }
 .rich ul { padding-left: 20px; }
 .rich li { margin-bottom: 6px; }
-/* The footer's link list in two columns, so it isn't much taller than the contacts beside it */
+/* The footer's link list in two columns, so it isn't much taller than the contacts beside it. A word longer than a
+   column on a narrow phone ("конфиденциальности") is hyphenated or broken, so it can't widen the page. */
 .footer nav ul { columns: 2; column-gap: 24px; }
-.footer nav ul li { margin-bottom: 4px; break-inside: avoid; }
+.footer nav ul li { margin-bottom: 4px; break-inside: avoid; hyphens: auto; overflow-wrap: anywhere; }
 /* Plain footer links only: the mobile call bar's buttons are in the footer too and keep their own colors */
 .footer a:not(.btn) { color: var(--muted); }
 .footer a:not(.btn):hover { color: var(--accent); }
