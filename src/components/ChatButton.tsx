@@ -15,28 +15,15 @@ export const ChatIcon = () => (
   </svg>
 );
 
-// `icon`: just the chat icon, with the label for screen readers (the mobile call bar)
-export function ChatButton({
-  className,
-  icon,
-  topic,
-  children,
-}: {
-  className?: string;
-  icon?: boolean;
-  topic?: string;
-  children?: ReactNode;
-}) {
+export function ChatButton({ className, topic, children }: { className?: string; topic?: string; children?: ReactNode }) {
   const { lang } = useLive();
-  const label = t(lang).chat.open;
   return (
     <button
       type="button"
       className={className}
-      aria-label={icon ? label : undefined}
       onClick={() => window.dispatchEvent(new CustomEvent<ChatEventDetail>(chatEvent, { detail: { topic } }))}
     >
-      {icon ? <ChatIcon /> : (children ?? label)}
+      {children ?? t(lang).chat.open}
     </button>
   );
 }
