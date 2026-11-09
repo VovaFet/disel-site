@@ -235,8 +235,8 @@ article > .article-meta { margin-bottom: 8px; }
   .cookie-banner { left: 24px; right: 24px; bottom: 24px; max-width: 760px; }
 }
 /* Chat (see ChatWidget): on wide screens a "Message us" pill at the bottom right, above the cookie banner while
-   that is up (--cookie-banner-space, set by CookieBanner); phones have the button in the call bar instead. The
-   form opens in a panel at the same spot, over the banner. */
+   that is up and reaches it (--cookie-banner-space, set by CookieBanner; up to 1240px wide); phones have the button
+   in the call bar instead. The form opens in a panel at the same spot, over the banner. */
 .chat-fab {
   position: fixed; right: 24px; bottom: calc(24px + var(--cookie-banner-space, 0px)); z-index: 25;
   display: none; align-items: center; gap: 8px; height: 48px; padding: 0 20px 0 16px;
@@ -294,6 +294,10 @@ article > .article-meta { margin-bottom: 8px; }
   .chat-fab { display: inline-flex; }
   .chat-fab[hidden] { display: none; }
   .chat-panel { left: auto; right: 24px; bottom: max(24px, var(--keyboard, 0px) + 8px); width: 380px; max-height: calc(100dvh - max(48px, var(--keyboard, 0px) + 16px)); }
+}
+/* From here the centred cookie banner (760px) ends left of the button, so the button stays down */
+@media (min-width: 1240px) {
+  .chat-fab { bottom: 24px; }
 }
 /* A button that looks like the footer links (the "Cookie settings" link) */
 .link-button { padding: 0; border: 0; background: none; font: inherit; color: var(--muted); text-align: start; text-decoration: underline; cursor: pointer; }
