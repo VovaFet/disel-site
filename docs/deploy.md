@@ -1,7 +1,8 @@
 # Deploy
 
 The site is hosted on Cloudflare Workers as static assets: the Worker `disel-site` (note the spelling) serves the
-`out/` folder of `next build`, with no server code (`wrangler.jsonc`).
+`out/` folder of `next build` (`wrangler.jsonc`). The only server code, `worker/index.ts`, runs for `/api/*` (the
+chat form, see [Chat form](#chat-form)).
 
 ## Sites
 
@@ -17,9 +18,10 @@ The site is hosted on Cloudflare Workers as static assets: the Worker `disel-sit
 Cloudflare Workers Builds is connected to the GitHub repository (Workers → disel-site → Settings → Builds):
 
 - **Production**: every push to `main` (i.e. every merged release pull request) runs `npm run build` and
-  `npx wrangler deploy`. It takes about 3 minutes.
-- **Previews**: pushes to other branches build a preview version with its own URL (the defaults are on the
-  "Previews Base" tab; `dev` has its own preview settings). A branch's preview is deleted together with the branch.
+  `npx wrangler deploy --secrets-file worker/secrets.env`. It takes about 3 minutes.
+- **Previews**: pushes to other branches run `npx wrangler preview --secrets-file worker/secrets.env` and get a
+  preview with its own URL (the defaults are on the "Previews Base" tab; `dev` has its own preview settings). A
+  branch's preview is deleted together with the branch. For `--secrets-file` see [Chat form](#chat-form).
 
 **Build variables are set per trigger.** `NEXT_PUBLIC_SHEET_ID` (the Google Sheet ID, also in `.env.example`) must
 be set for Production, for the `dev` preview and in Previews Base. A build without it ignores the sheet and shows
@@ -60,10 +62,43 @@ push to `dev`.
   by the `from-dev` check.)
 - A deleted branch can be restored from its pull request page (Restore branch).
 
+## Chat form
+
+Messages from the site's chat form (see [architecture.md](architecture.md#chat-form)) go to a Telegram chat and to
+the Google Sheet "Заявки з сайту DieselMedic" (tab «Заявки»). Both are set up with four secrets, kept as **build**
+variables of type Secret (Workers → disel-site → Settings → Builds → Variables and secrets) in every build
+configuration: production and the previews (`dev` has its own). The deploy commands upload them to the Worker with
+each version:
+
+- production: `npx wrangler deploy --secrets-file worker/secrets.env`
+- previews: `npx wrangler preview --secrets-file worker/secrets.env`
+
+`worker/secrets.env` lists only the names; the build variables of the same names fill in the values. This is why
+the runtime "Variables and secrets" section isn't used: Cloudflare refuses it for a Worker that is only static
+assets, and previews wouldn't inherit it anyway. A deploy without these variables (e.g. a local `wrangler deploy`)
+would upload the names with empty values, so deploy only through Workers Builds. Preview messages arrive in the
+same chat and sheet, marked as tests.
+
+| Secret | Value |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | The bot's token from @BotFather (`/newbot`) |
+| `TELEGRAM_CHAT_ID` | The chat that receives messages: press Start in the bot (a private chat) or add the bot to a group and send `/start` there, then open `https://api.telegram.org/bot<token>/getUpdates` and copy `"chat":{"id":…}` (negative for a group) |
+| `LEADS_SHEET_URL` | The sheet's web app address, ending in `/exec` (below) |
+| `LEADS_SHEET_KEY` | The key printed by `setup()` (below) |
+
+The sheet's web app: open the sheet → Extensions → Apps Script, replace the code with `scripts/leads-sheet.gs`,
+save, run `setup` (allow access when asked) and copy the key from the log, then Deploy → New deployment → type Web
+app, Execute as: Me, Who has access: Anyone → Deploy, and copy the Web app URL. After editing the script, publish
+it with Deploy → Manage deployments → edit → Version: New version (the URL stays the same).
+
+Either pair of secrets is enough for the form to work. Failed deliveries are logged: Workers → disel-site →
+Observability.
+
 ## Static file details
 
 - `wrangler.jsonc`: `assets.directory` is `./out`; `not_found_handling: "404-page"` makes Cloudflare serve the
-  nearest `404.html` (root, `ru/404.html`, `en/404.html`) with status 404.
+  nearest `404.html` (root, `ru/404.html`, `en/404.html`) with status 404. `run_worker_first: ["/api/*"]` sends
+  only those paths to the Worker script.
 - `trailingSlash: true` in `next.config.ts`: every page is a folder with `index.html` (`/poslugy/`).
 - Robots allow indexing everywhere, including previews; every page's canonical URL points to
   dieselmedic.com.ua, so search engines treat previews as duplicates of production.

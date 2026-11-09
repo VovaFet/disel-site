@@ -8,6 +8,7 @@ import { CarPicker, type PickerTab } from "@/components/CarPicker";
 import { FaqList } from "@/components/FaqList";
 import { JsonLd } from "@/components/JsonLd";
 import { LinkCards } from "@/components/LinkCards";
+import { ChatButton } from "@/components/ChatButton";
 import { ContactActions, MessengerLink, PhoneLink, Price, SetPrice } from "@/components/Live";
 import { PriceAside } from "@/components/PriceAside";
 import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
@@ -88,9 +89,12 @@ function NotFoundNote({ lang }: { lang: Locale }) {
       </svg>
       <span>
         <strong>{d.picker.notFoundQuestion}</strong> {d.picker.notFoundText}{" "}
+        {/* two unbreakable halves: a phone screen fits each, not all four */}
         <span className="nowrap">
-          <PhoneLink>{d.call}</PhoneLink> · <MessengerLink kind="viber">Viber</MessengerLink> ·{" "}
-          <MessengerLink kind="telegram">Telegram</MessengerLink>
+          <PhoneLink>{d.call}</PhoneLink> · <MessengerLink kind="viber">Viber</MessengerLink> ·
+        </span>{" "}
+        <span className="nowrap">
+          <MessengerLink kind="telegram">Telegram</MessengerLink> · <ChatButton className="link-button" />
         </span>
       </span>
     </p>

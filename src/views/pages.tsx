@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { FaqList } from "@/components/FaqList";
 import { IntentLink } from "@/components/IntentLink";
 import { JsonLd } from "@/components/JsonLd";
+import { ChatButton } from "@/components/ChatButton";
 import { ContactActions, MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
 import { OpenStatus } from "@/components/OpenStatus";
 import { PriceAside } from "@/components/PriceAside";
@@ -87,6 +88,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
               <Link href={localePath(lang, "/kalkulyator/")} className="btn btn-outline">
                 {d.estimate}
               </Link>
+              <ChatButton className="btn btn-outline" />
             </div>
           </div>
           <HeroImage src={c.trust.heroImage} lang={lang} />
@@ -399,6 +401,9 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
         </p>
         <p>
           <MessengerLink kind="viber">{d.writeViber}</MessengerLink>
+        </p>
+        <p>
+          <ChatButton className="link-button">{d.chat.onSite}</ChatButton>
         </p>
         <OpenStatus />
         <HoursList />
