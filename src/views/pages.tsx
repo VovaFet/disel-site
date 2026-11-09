@@ -95,21 +95,8 @@ export async function HomePage({ lang }: { lang: Locale }) {
         <Stats stats={c.trust.stats} lang={lang} />
       </section>
       <Brands brands={c.trust.brands} lang={lang} />
-      <LandingPicker c={c} lang={lang} />
 
-      <section className="container section">
-        <h2>{d.servicesHeading}</h2>
-        <ServiceList lang={lang} services={c.services} />
-      </section>
-
-      <section className="container section">
-        <h2>{d.mapHeading}</h2>
-        <p className="lead">{d.mapLead}</p>
-        <Reveal>
-          <UkraineMap lang={lang} />
-        </Reveal>
-      </section>
-
+      {/* How it works and why us come first: most visitors arrive from ads on a phone, often from another city */}
       <section className="container section">
         <h2 id="how-to-send">{d.shippingHeading}</h2>
         <ol className="steps">
@@ -145,6 +132,21 @@ export async function HomePage({ lang }: { lang: Locale }) {
           ))}
         </ul>
         <ProtocolSample src={c.trust.protocolImage} lang={lang} />
+      </section>
+
+      <LandingPicker c={c} lang={lang} />
+
+      <section className="container section">
+        <h2>{d.servicesHeading}</h2>
+        <ServiceList lang={lang} services={c.services} />
+      </section>
+
+      <section className="container section">
+        <h2>{d.mapHeading}</h2>
+        <p className="lead">{d.mapLead}</p>
+        <Reveal>
+          <UkraineMap lang={lang} />
+        </Reveal>
       </section>
 
       <Reviews reviews={c.trust.reviews} lang={lang} />
