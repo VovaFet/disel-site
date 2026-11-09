@@ -83,9 +83,12 @@ export async function HomePage({ lang }: { lang: Locale }) {
             {c.texts.removedOnly[lang] && <p className="notice">{c.texts.removedOnly[lang]}</p>}
             {/* Calling and writing are in the header, the mobile call bar and the chat button */}
             <div className="actions">
-              <Link href={localePath(lang, "/kalkulyator/")} className="btn btn-outline">
+              <Link href={localePath(lang, "/kalkulyator/")} className="btn">
                 {d.estimate}
               </Link>
+              <a href="#how-to-send" className="hero-link">
+                {d.howToSend}
+              </a>
             </div>
           </div>
           <HeroImage src={c.trust.heroImage} lang={lang} />
@@ -109,7 +112,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
       </section>
 
       <section className="container section">
-        <h2>{d.shippingHeading}</h2>
+        <h2 id="how-to-send">{d.shippingHeading}</h2>
         <ol className="steps">
           {d.steps.map((s, i) => (
             <li key={s.title}>
