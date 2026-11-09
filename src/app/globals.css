@@ -320,6 +320,13 @@ article > .article-meta { margin-bottom: 8px; }
 /* A button that looks like the footer links (the "Cookie settings" link) */
 .link-button { padding: 0; border: 0; background: none; font: inherit; color: var(--muted); text-align: start; text-decoration: underline; cursor: pointer; }
 .link-button:hover { color: var(--accent); }
+/* The home hero's "Message us": an accent link with the chat icon under the two buttons */
+.link-button.hero-chat {
+  display: inline-flex; align-items: center; gap: 8px; align-self: center;
+  color: var(--accent); font-weight: 600; text-decoration: none;
+}
+.link-button.hero-chat:hover { text-decoration: underline; }
+.hero-chat svg { width: 20px; height: 20px; flex: none; }
 /* Next to accent-colored links (contacts page, notes) it takes their color */
 .contacts .link-button, .info-note .link-button { color: var(--accent); }
 /* <button class="btn"> looks like the <a class="btn"> links */
