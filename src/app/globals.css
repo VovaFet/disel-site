@@ -212,17 +212,12 @@ article > .article-meta { margin-bottom: 8px; }
 .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; }
 .footer ul { list-style: none; padding: 0; margin: 0; }
 
-/* Four buttons share a phone's width by the length of their labels; on the narrowest screens a label is cut
-   off rather than pushing the bar (and the page) wider than the screen */
+/* Two equal buttons on phones: Call, and Message us (WriteMenu, with Viber, Telegram and the chat above it) */
 .callbar {
-  position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 6px;
+  position: fixed; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
   padding: 8px 12px; background: var(--bg); border-top: 1px solid var(--border);
 }
-.callbar .btn {
-  flex: 1 1 auto; min-width: 0; padding: 10px 6px; text-align: center;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-@media (max-width: 359px) { .callbar .btn { font-size: 0.85rem; } }
+.callbar .btn { padding: 10px 6px; text-align: center; white-space: nowrap; }
 @media (min-width: 768px) {
   .callbar { display: none; }
   body { padding-bottom: 0; }
@@ -254,11 +249,8 @@ article > .article-meta { margin-bottom: 8px; }
   animation: chat-halo 2s ease-out infinite;
 }
 .chat-fab:hover { transform: translateY(-2px); }
-/* In the call bar the rings stay narrower, clear of the Telegram button beside it */
-.callbar .callbar-chat {
-  flex: 0 0 48px; display: grid; place-items: center; padding: 0;
-  --halo: 12px; animation: chat-halo 2s ease-out infinite;
-}
+/* The call bar's "Message us" pulses too, with narrower rings clear of the Call button beside it */
+.callbar .write-menu > .btn { --halo: 12px; animation: chat-halo 2s ease-out infinite; }
 /* Two rings of the button's color spreading out one after the other and fading, on top of the button's own shadow
    (--chat-shadow); --halo is how far the outer one goes */
 @keyframes chat-halo {
@@ -279,8 +271,27 @@ article > .article-meta { margin-bottom: 8px; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .chat-fab, .callbar .callbar-chat { animation: none; }
+  .chat-fab, .callbar .write-menu > .btn { animation: none; }
 }
+/* WriteMenu: the "Message us" button and its list of Viber, Telegram and the chat on the site, under the button
+   (above it in the call bar, write-menu-up) */
+.write-menu { position: relative; }
+.write-menu > .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+.write-menu > .btn svg { width: 20px; height: 20px; flex: none; }
+.write-menu-list {
+  position: absolute; left: 0; top: calc(100% + 6px); z-index: 35; display: grid; min-width: 210px; padding: 6px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 0.25);
+}
+.write-menu-up .write-menu-list { top: auto; bottom: calc(100% + 10px); left: auto; right: 0; }
+.write-option {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px;
+  background: none; color: var(--fg); font: inherit; font-weight: 600; text-align: start; text-decoration: none; cursor: pointer;
+}
+.write-option:hover, .write-option:focus-visible { background: var(--bg); }
+.write-option:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.write-option-chat { display: grid; place-items: center; width: 22px; height: 22px; color: var(--accent); }
+.write-option-chat svg { width: 20px; height: 20px; }
 /* --keyboard: the height an on-screen keyboard covers (set by ChatWidget) */
 .chat-panel {
   position: fixed; left: 16px; right: 16px; bottom: max(76px, var(--keyboard, 0px) + 8px); z-index: 31;
@@ -468,6 +479,7 @@ select {
 .calc-actions .btn { flex: 1 1 auto; }
 .calc-actions .btn:not(:first-child) { white-space: nowrap; }
 .calc-actions .btn:first-child { flex-basis: 100%; }
+.calc-actions > .write-menu { flex: 1 1 100%; }
 /* Breakdown under the total: base price × quantity and each picked extra */
 .calc-lines { list-style: none; margin: 0; padding: 8px 0 0; border-top: 1px solid var(--border); display: grid; gap: 4px; font-size: 0.9rem; }
 .calc-lines li { display: flex; justify-content: space-between; gap: 12px; }
@@ -738,9 +750,10 @@ p.discount-note { margin: -8px 0 16px; }
    column on a narrow phone ("конфиденциальности") is hyphenated or broken, so it can't widen the page. */
 .footer nav ul { columns: 2; column-gap: 24px; }
 .footer nav ul li { margin-bottom: 4px; break-inside: avoid; hyphens: auto; overflow-wrap: anywhere; }
-/* Plain footer links only: the mobile call bar's buttons are in the footer too and keep their own colors */
-.footer a:not(.btn) { color: var(--muted); }
-.footer a:not(.btn):hover { color: var(--accent); }
+/* Plain footer links only: the mobile call bar's buttons and its "Message us" list are in the footer too and keep
+   their own colors */
+.footer a:not(.btn, .write-option) { color: var(--muted); }
+.footer a:not(.btn, .write-option):hover { color: var(--accent); }
 
 /* Interactive background: faint dot grid everywhere, brighter dots and a glow around the pointer. --dot-grid is
    the tile with a dot in its middle (PulseBackground reads it too): finer on phones, so a small screen shows about

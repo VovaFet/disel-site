@@ -31,6 +31,7 @@ const dict = {
     chat: {
       open: "Написати нам",
       onSite: "Написати на сайті",
+      siteChat: "Чат на сайті",
       title: "Напишіть нам",
       close: "Закрити",
       note: "Залиште номер: передзвонимо або напишемо у Viber чи Telegram у робочий час.",
@@ -60,6 +61,7 @@ const dict = {
     book: "Записатися",
     estimate: "Розрахувати вартість",
     howToSend: "Як відправити деталі",
+    write: "Написати",
     setDiscount: "−10% за ремонт від 4 форсунок",
     setDiscountLine: "Знижка за комплект від 4 форсунок, 10%",
     setDiscountHint: "Від 4 форсунок — знижка 10%",
@@ -165,6 +167,7 @@ const dict = {
     chat: {
       open: "Написать нам",
       onSite: "Написать на сайте",
+      siteChat: "Чат на сайте",
       title: "Напишите нам",
       close: "Закрыть",
       note: "Оставьте номер: перезвоним или напишем в Viber или Telegram в рабочее время.",
@@ -194,6 +197,7 @@ const dict = {
     book: "Записаться",
     estimate: "Рассчитать стоимость",
     howToSend: "Как отправить детали",
+    write: "Написать",
     setDiscount: "−10% за ремонт от 4 форсунок",
     setDiscountLine: "Скидка за комплект от 4 форсунок, 10%",
     setDiscountHint: "От 4 форсунок — скидка 10%",
@@ -299,6 +303,7 @@ const dict = {
     chat: {
       open: "Message us",
       onSite: "Message us on the website",
+      siteChat: "Chat on the site",
       title: "Message us",
       close: "Close",
       note: "Leave your number: we'll call back or text you on Viber or Telegram during working hours.",
@@ -328,6 +333,7 @@ const dict = {
     book: "Book now",
     estimate: "Estimate the cost",
     howToSend: "How to send parts",
+    write: "Message us",
     setDiscount: "−10% for repairing 4 or more injectors",
     setDiscountLine: "Set discount, 4+ injectors, 10%",
     setDiscountHint: "4 or more injectors: 10% off",

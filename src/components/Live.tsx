@@ -4,8 +4,8 @@
 import type { ReactNode } from "react";
 import { formatPrice, t } from "@/i18n";
 import { openingHoursDisplay } from "@/lib/hours";
-import { ChatButton } from "./ChatButton";
 import { useLive } from "./LiveConfig";
+import { WriteMenu } from "./WriteMenu";
 
 // `amount` replaces the service's live price (a landing page with its own price)
 export function Price({ slug, prefix = true, amount }: { slug: string; prefix?: boolean; amount?: number }) {
@@ -44,7 +44,7 @@ export function MessengerLink({ kind, className, children }: { kind: "telegram" 
 }
 
 // Call button with the number spelled out (tel: links do nothing on most desktops)
-// plus messengers and the chat form, so every visitor has a way to get in touch.
+// plus a "Message us" button with Viber, Telegram and the chat form, so every visitor has a way to get in touch.
 // `topic`: the service or car the page is about, to start the chat message with
 export function ContactActions({ label, className = "actions", topic }: { label: string; className?: string; topic?: string }) {
   return (
@@ -55,13 +55,7 @@ export function ContactActions({ label, className = "actions", topic }: { label:
           <PhoneText />
         </span>
       </PhoneLink>
-      <MessengerLink kind="viber" className="btn btn-outline">
-        Viber
-      </MessengerLink>
-      <MessengerLink kind="telegram" className="btn btn-outline">
-        Telegram
-      </MessengerLink>
-      <ChatButton className="btn btn-outline" topic={topic} />
+      <WriteMenu className="btn btn-outline" topic={topic} />
     </div>
   );
 }
