@@ -116,6 +116,8 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .hero { padding: 28px 0 48px; }
 .lead { font-size: 1.15rem; color: var(--muted); max-width: 720px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+/* The home hero's quiet second action beside the main button ("How to send parts", down to the steps) */
+.hero-link { align-self: center; padding: 8px 4px; font-weight: 600; color: var(--accent); }
 
 .btn {
   display: inline-block; padding: 12px 20px; border-radius: var(--radius);
