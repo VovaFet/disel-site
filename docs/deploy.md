@@ -18,9 +18,10 @@ chat form, see [Chat form](#chat-form)).
 Cloudflare Workers Builds is connected to the GitHub repository (Workers → disel-site → Settings → Builds):
 
 - **Production**: every push to `main` (i.e. every merged release pull request) runs `npm run build` and
-  `npx wrangler deploy`. It takes about 3 minutes.
-- **Previews**: pushes to other branches build a preview version with its own URL (the defaults are on the
-  "Previews Base" tab; `dev` has its own preview settings). A branch's preview is deleted together with the branch.
+  `npx wrangler deploy --secrets-file worker/secrets.env`. It takes about 3 minutes.
+- **Previews**: pushes to other branches run `npx wrangler preview --secrets-file worker/secrets.env` and get a
+  preview with its own URL (the defaults are on the "Previews Base" tab; `dev` has its own preview settings). A
+  branch's preview is deleted together with the branch. For `--secrets-file` see [Chat form](#chat-form).
 
 **Build variables are set per trigger.** `NEXT_PUBLIC_SHEET_ID` (the Google Sheet ID, also in `.env.example`) must
 be set for Production, for the `dev` preview and in Previews Base. A build without it ignores the sheet and shows
@@ -64,14 +65,19 @@ push to `dev`.
 ## Chat form
 
 Messages from the site's chat form (see [architecture.md](architecture.md#chat-form)) go to a Telegram chat and to
-the Google Sheet "Заявки з сайту DieselMedic" (tab «Заявки»). Both are set up with four runtime secrets (type
-**Secret**, which survives deploys; not the build variables under Settings → Builds, which the Worker never sees):
+the Google Sheet "Заявки з сайту DieselMedic" (tab «Заявки»). Both are set up with four secrets, kept as **build**
+variables of type Secret (Workers → disel-site → Settings → Builds → Variables and secrets) in every build
+configuration: production and the previews (`dev` has its own). The deploy commands upload them to the Worker with
+each version:
 
-- **Production**: Workers → disel-site → Settings → Variables and secrets, with the **Production** toggle.
-- **Previews** (the `dev` preview and branch previews) don't inherit production settings. The same section with the
-  **Previews Base** toggle sets what *new* previews start with; a preview that already exists keeps what it had, so
-  give it the secrets itself: `npx wrangler@latest preview secret put TELEGRAM_BOT_TOKEN --name dev` (and the same
-  for the other three; `wrangler login` first). Preview messages arrive in the same chat and sheet, marked as tests.
+- production: `npx wrangler deploy --secrets-file worker/secrets.env`
+- previews: `npx wrangler preview --secrets-file worker/secrets.env`
+
+`worker/secrets.env` lists only the names; the build variables of the same names fill in the values. This is why
+the runtime "Variables and secrets" section isn't used: Cloudflare refuses it for a Worker that is only static
+assets, and previews wouldn't inherit it anyway. A deploy without these variables (e.g. a local `wrangler deploy`)
+would upload the names with empty values, so deploy only through Workers Builds. Preview messages arrive in the
+same chat and sheet, marked as tests.
 
 | Secret | Value |
 |---|---|
