@@ -471,8 +471,10 @@ p.discount-note { margin: -8px 0 16px; }
 .ua-city { position: absolute; width: 0; height: 0; }
 .ua-city::before { content: ""; position: absolute; left: -3px; top: -3px; width: 6px; height: 6px; border-radius: 50%; background: var(--fg); }
 .ua-flag { position: absolute; left: -1px; bottom: 0; width: 2px; height: 24px; background: var(--muted); }
+/* The flag cloth in Ukraine's colours: blue over yellow */
 .ua-flag::after {
-  content: ""; position: absolute; left: 2px; top: 0; width: 14px; height: 10px; background: var(--brand);
+  content: ""; position: absolute; left: 2px; top: 0; width: 14px; height: 10px;
+  background: linear-gradient(#0057b7 50%, #ffd700 50%);
   clip-path: polygon(0 0, 100% 0, 72% 50%, 100% 100%, 0 100%);
 }
 .ua-city-name {
@@ -481,11 +483,12 @@ p.discount-note { margin: -8px 0 16px; }
 }
 .ua-city-left .ua-city-name { left: auto; right: 8px; }
 .ua-city-high .ua-city-name { bottom: 13px; }
-/* The workshop: a bigger flag, a pulsing ring and a caption under the name */
+/* The workshop: a bigger flag, a pulsing ring and a caption under the name. The ring's border counts in its size
+   (pseudo-elements don't get the global border-box), so it stays centred on the point. */
 .ua-workshop::before { background: var(--brand); }
 .ua-workshop::after {
   content: ""; position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; border-radius: 50%;
-  border: 2px solid var(--brand); animation: ua-pulse 2s ease-out infinite;
+  box-sizing: border-box; border: 2px solid var(--brand); animation: ua-pulse 2s ease-out infinite;
 }
 @keyframes ua-pulse { from { transform: scale(0.3); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
 .ua-workshop .ua-flag { height: 32px; }
