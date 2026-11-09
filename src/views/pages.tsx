@@ -72,7 +72,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
       <section className={`hero ${c.trust.heroImage ? "hero-with-image" : ""}`}>
         <div className="container hero-grid">
           <div>
-            <OpenStatus />
+            <OpenStatus chat />
             {c.texts.slogan[lang] && <p className="slogan">{c.texts.slogan[lang]}</p>}
             <h1>
               {d.homeH1} {c.texts.area[lang]}
@@ -406,7 +406,7 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
         <p>
           <ChatButton className="link-button">{d.chat.onSite}</ChatButton>
         </p>
-        <OpenStatus />
+        <OpenStatus chat />
         <HoursList />
       </address>
       {street && (

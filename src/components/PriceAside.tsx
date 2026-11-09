@@ -26,7 +26,7 @@ export function PriceAside({
           {note && <span className="discount-note">{note}</span>}
         </>
       )}
-      <OpenStatus />
+      <OpenStatus chat />
       <ContactActions label={d.book} className="aside-actions" />
       {footnote && <span className="muted small">{footnote}</span>}
     </aside>
