@@ -23,12 +23,23 @@ type Context = { waitUntil(promise: Promise<unknown>): void };
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json; charset=utf-8" } });
 
-async function sendTelegram(env: Env, lead: Lead, host: string) {
-  const res = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+// The secrets as set, without the spaces or line breaks a pasted value can bring along; empty = not set
+const secrets = (env: Env) => {
+  const value = (v?: string) => v?.trim() || undefined;
+  return {
+    token: value(env.TELEGRAM_BOT_TOKEN),
+    chat: value(env.TELEGRAM_CHAT_ID),
+    sheetUrl: value(env.LEADS_SHEET_URL),
+    sheetKey: value(env.LEADS_SHEET_KEY),
+  };
+};
+
+async function sendTelegram(token: string, chat: string, lead: Lead, host: string) {
+  const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      chat_id: env.TELEGRAM_CHAT_ID,
+      chat_id: chat,
       text: telegramText(lead, host),
       link_preview_options: { is_disabled: true },
     }),
@@ -36,9 +47,9 @@ async function sendTelegram(env: Env, lead: Lead, host: string) {
   if (!res.ok) throw new Error(`Telegram ${res.status}: ${(await res.text()).slice(0, 200)}`);
 }
 
-async function saveToSheet(env: Env, lead: Lead, host: string) {
-  const url = new URL(env.LEADS_SHEET_URL!);
-  url.searchParams.set("key", env.LEADS_SHEET_KEY!);
+async function saveToSheet(sheetUrl: string, sheetKey: string, lead: Lead, host: string) {
+  const url = new URL(sheetUrl);
+  url.searchParams.set("key", sheetKey);
   // Apps Script answers a POST with a redirect to the result, which fetch follows
   const res = await fetch(url, {
     method: "POST",
@@ -49,13 +60,15 @@ async function saveToSheet(env: Env, lead: Lead, host: string) {
   if (!res.ok || answer !== "ok") throw new Error(`Sheet ${res.status}: ${answer.slice(0, 200)}`);
 }
 
-// true once the message is delivered; a failure is logged (Workers Logs) and gives false
-const settle = (p: Promise<void> | null, what: string) =>
+// true once the message is delivered; a failure is logged (Workers Logs), added to `errors` and gives false
+const settle = (p: Promise<void> | null, what: string, errors: string[]) =>
   p
     ? p.then(
         () => true,
         (e) => {
-          console.error(what, e instanceof Error ? e.message : e);
+          const error = `${what}: ${e instanceof Error ? e.message : e}`;
+          console.error(error);
+          errors.push(error);
           return false;
         },
       )
@@ -83,18 +96,22 @@ async function handleMessage(request: Request, env: Env, ctx: Context) {
   if (!lead) return json({ ok: false, error: "phone" }, 400);
 
   const host = url.hostname;
-  const telegram = env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID ? sendTelegram(env, lead, host) : null;
-  const sheet = env.LEADS_SHEET_URL && env.LEADS_SHEET_KEY ? saveToSheet(env, lead, host) : null;
+  const { token, chat, sheetUrl, sheetKey } = secrets(env);
+  const telegram = token && chat ? sendTelegram(token, chat, lead, host) : null;
+  const sheet = sheetUrl && sheetKey ? saveToSheet(sheetUrl, sheetKey, lead, host) : null;
   if (!telegram && !sheet) return json({ ok: false, error: "not configured" }, 503);
-  const telegramDone = settle(telegram, "telegram");
-  const sheetDone = settle(sheet, "sheet");
+  const errors: string[] = [];
+  const telegramDone = settle(telegram, "telegram", errors);
+  const sheetDone = settle(sheet, "sheet", errors);
 
   // Answer as soon as Telegram has the message; the sheet row may finish after the response
   if (await telegramDone) {
     ctx.waitUntil(sheetDone);
     return json({ ok: true });
   }
-  return (await sheetDone) ? json({ ok: true }) : json({ ok: false, error: "delivery" }, 502);
+  if (await sheetDone) return json({ ok: true });
+  // Previews say why, to set up the secrets; production keeps the answers of Telegram and the sheet to itself
+  return json({ ok: false, error: "delivery", ...(host !== PRODUCTION_HOST && { details: errors }) }, 502);
 }
 
 const worker = {
