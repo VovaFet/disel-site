@@ -116,6 +116,13 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .hero { padding: 28px 0 48px; }
 .lead { font-size: 1.15rem; color: var(--muted); max-width: 720px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+/* The home hero's four points with icons (HeroPoints), two a row where there is room */
+.hero-points { list-style: none; display: grid; gap: 10px 24px; margin: 4px 0 20px; padding: 0; }
+.hero-points li { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.hero-points svg { flex: none; color: var(--accent); }
+@media (min-width: 560px) { .hero-points { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* The home hero's quiet second action beside the main button ("How to send parts", down to the steps) */
+.hero-link { align-self: center; padding: 8px 4px; font-weight: 600; color: var(--accent); }
 
 .btn {
   display: inline-block; padding: 12px 20px; border-radius: var(--radius);
@@ -294,6 +301,9 @@ article > .article-meta { margin-bottom: 8px; }
 .chat-privacy { font-size: 0.8rem; }
 .chat-privacy a, .chat-error a { color: var(--accent); }
 .chat-error { color: var(--closed); }
+.chat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chat-chips .chip { min-width: 0; padding: 6px 12px; font-size: 0.85rem; text-align: start; }
+.chat-chips .chip:hover { border-color: var(--accent); color: var(--accent); }
 .chat-field { display: grid; gap: 4px; font-weight: 600; font-size: 0.95rem; }
 .chat-field small { color: var(--muted); font-weight: 400; font-size: inherit; }
 .chat-field input, .chat-field textarea {
@@ -341,6 +351,12 @@ button.btn { font-family: inherit; font-size: inherit; line-height: inherit; cur
 .status-open { color: var(--ok); }
 .status-open .status-dot { animation: pulse 2s infinite; }
 .status-closed { color: var(--closed); }
+/* OpenStatus chat: the "message us" link on its own line under a closed status; the dot stays level with the
+   first line */
+.status-chat { display: block; margin-top: 2px; font-weight: 500; }
+.status:has(.status-chat) { align-items: flex-start; }
+.status:has(.status-chat) .status-dot { margin-top: calc(0.8em - 5px); }
+.status-chat .link-button { color: var(--accent); }
 /* Next to the logo where the header has room, on two lines; the home hero shows it elsewhere */
 .brand { display: flex; align-items: center; gap: 10px; }
 .header-status { display: none; }
@@ -456,6 +472,8 @@ select {
 .calc-lines { list-style: none; margin: 0; padding: 8px 0 0; border-top: 1px solid var(--border); display: grid; gap: 4px; font-size: 0.9rem; }
 .calc-lines li { display: flex; justify-content: space-between; gap: 12px; }
 .calc-lines li > span:last-child { white-space: nowrap; font-weight: 600; }
+/* The set discount (−10% from 4 injectors): the saving in green */
+.calc-lines .calc-set-discount > span:last-child { color: var(--ok); }
 .calc-line-unit { display: block; white-space: nowrap; }
 /* The picker makes the left column tall: keep the total in view while choosing */
 @media (min-width: 800px) {

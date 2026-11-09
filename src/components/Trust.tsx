@@ -15,6 +15,29 @@ export function HeroImage({ src, lang }: { src: string; lang: Locale }) {
   ) : null;
 }
 
+// The hero's four points, each with its icon: bench test, repair time, warranty, Nova Poshta
+const pointIcons = [
+  <path key="gauge" d="M4 16a8 8 0 1 1 16 0M12 16l4-5M12 16h.01" />,
+  <path key="clock" d="M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />,
+  <path key="shield" d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3zM9 12l2 2 4-4" />,
+  <path key="box" d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8" />,
+];
+
+export function HeroPoints({ points }: { points: readonly string[] }) {
+  return (
+    <ul className="hero-points">
+      {points.map((p, i) => (
+        <li key={p}>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            {pointIcons[i]}
+          </svg>
+          {p}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 // A separate panel under the hero, full container width
 export function Stats({ stats, lang }: { stats: Stat[]; lang: Locale }) {
   if (!stats.length) return null;

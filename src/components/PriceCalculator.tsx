@@ -49,7 +49,11 @@ export function PriceCalculator({
   const units = item.perUnitOptions ? qty : 1;
   const price = (s: string) => items.find((i) => i.slug === s)?.price ?? live.prices[s] ?? 0;
   const extras = live.addons.filter((a) => picked.includes(a.id));
-  const total = price(slug) * units + extras.reduce((sum, a) => sum + a.price, 0);
+  // The workshop's set offer: −10% on repairing 4 or more injectors at once (extras not included; doesn't add up
+  // with other discounts)
+  const setOffer = item.group === "injectors" && !!item.perUnitOptions;
+  const setDiscount = setOffer && units >= 4 ? Math.round(price(slug) * units * 0.1) : 0;
+  const total = price(slug) * units - setDiscount + extras.reduce((sum, a) => sum + a.price, 0);
   const groups = serviceGroups
     .map((g) => ({ g, list: items.filter((s) => s.group === g) }))
     .filter((x) => x.list.length > 0);
@@ -177,6 +181,12 @@ export function PriceCalculator({
               </span>
               <span>{formatPrice(lang, price(slug) * units)}</span>
             </li>
+            {setDiscount > 0 && (
+              <li className="calc-set-discount">
+                <span>{d.setDiscountLine}</span>
+                <span>−{formatPrice(lang, setDiscount)}</span>
+              </li>
+            )}
             {extras.map((a) => (
               <li key={a.id}>
                 <span>{a.label[lang]}</span>
@@ -186,8 +196,18 @@ export function PriceCalculator({
           </ul>
         )}
         <span className="muted small">{d.estimateNote}</span>
-        {discount && <span className="discount-note">{discount}</span>}
-        <ContactActions label={d.book} className="calc-actions" />
+        {setOffer && setDiscount === 0 && <span className="discount-note">{d.setDiscountHint}</span>}
+        {discount && (
+          <span className="discount-note">
+            {discount}
+            {setDiscount > 0 && ` (${d.noStacking})`}
+          </span>
+        )}
+        <ContactActions
+          label={d.book}
+          className="calc-actions"
+          topic={`${item.title}${item.perUnitOptions ? ` × ${units}` : ""}${extras.map((a) => `, ${a.label[lang]}`).join("")} (${d.from} ${formatPrice(lang, total)})`}
+        />
       </div>
     </div>
   );

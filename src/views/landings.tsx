@@ -201,6 +201,7 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
         </p>
       )}
       {services.length > 0 && c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
+      {services.some((s) => s.group === "injectors") && <p className="discount-note">{d.setDiscount}</p>}
 
       <div className="service-layout">
         <div>{l.body[lang] && <RichText text={l.body[lang]} />}</div>
@@ -208,7 +209,9 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
           lang={lang}
           price={services.length > 0 ? <LandingPrice landing={l} /> : undefined}
           note={c.texts.discount[lang]}
+          setNote={services.some((s) => s.group === "injectors") ? d.setDiscount : undefined}
           footnote={c.texts.removedOnly[lang]}
+          topic={l.title[lang]}
         />
       </div>
 
@@ -231,7 +234,7 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
         </>
       )}
 
-      <ContactActions label={d.book} />
+      <ContactActions label={d.book} topic={l.title[lang]} />
 
       {services.length > 0 && (
         <section className="related">

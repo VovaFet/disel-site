@@ -16,7 +16,7 @@ import { ServiceList } from "@/components/ServiceList";
 import { SheetImage } from "@/components/SheetImage";
 import { ShippingDetails } from "@/components/ShippingDetails";
 import { SymptomList } from "@/components/SymptomList";
-import { Brands, HeroImage, ProtocolSample, Reviews, Stats } from "@/components/Trust";
+import { Brands, HeroImage, HeroPoints, ProtocolSample, Reviews, Stats } from "@/components/Trust";
 import { UkraineMap } from "@/components/UkraineMap";
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
@@ -72,20 +72,23 @@ export async function HomePage({ lang }: { lang: Locale }) {
       <section className={`hero ${c.trust.heroImage ? "hero-with-image" : ""}`}>
         <div className="container hero-grid">
           <div>
-            <OpenStatus />
+            <OpenStatus chat />
             {c.texts.slogan[lang] && <p className="slogan">{c.texts.slogan[lang]}</p>}
             <h1>
               {d.homeH1} {c.texts.area[lang]}
             </h1>
-            <p className="lead">{c.texts.description[lang]}</p>
-            <p className="badge">📦 {c.texts.shipping[lang]}</p>
+            <HeroPoints points={d.heroPoints} />
             {c.texts.discount[lang] && <p className="badge badge-discount">{c.texts.discount[lang]}</p>}
+            <p className="badge badge-discount">{d.setDiscount}</p>
             {c.texts.removedOnly[lang] && <p className="notice">{c.texts.removedOnly[lang]}</p>}
             {/* Calling and writing are in the header, the mobile call bar and the chat button */}
             <div className="actions">
-              <Link href={localePath(lang, "/kalkulyator/")} className="btn btn-outline">
+              <Link href={localePath(lang, "/kalkulyator/")} className="btn">
                 {d.estimate}
               </Link>
+              <a href="#how-to-send" className="hero-link">
+                {d.howToSend}
+              </a>
             </div>
           </div>
           <HeroImage src={c.trust.heroImage} lang={lang} />
@@ -93,23 +96,10 @@ export async function HomePage({ lang }: { lang: Locale }) {
         <Stats stats={c.trust.stats} lang={lang} />
       </section>
       <Brands brands={c.trust.brands} lang={lang} />
-      <LandingPicker c={c} lang={lang} />
 
+      {/* How it works and why us come first: most visitors arrive from ads on a phone, often from another city */}
       <section className="container section">
-        <h2>{d.servicesHeading}</h2>
-        <ServiceList lang={lang} services={c.services} />
-      </section>
-
-      <section className="container section">
-        <h2>{d.mapHeading}</h2>
-        <p className="lead">{d.mapLead}</p>
-        <Reveal>
-          <UkraineMap lang={lang} />
-        </Reveal>
-      </section>
-
-      <section className="container section">
-        <h2>{d.shippingHeading}</h2>
+        <h2 id="how-to-send">{d.shippingHeading}</h2>
         <ol className="steps">
           {d.steps.map((s, i) => (
             <li key={s.title}>
@@ -143,6 +133,21 @@ export async function HomePage({ lang }: { lang: Locale }) {
           ))}
         </ul>
         <ProtocolSample src={c.trust.protocolImage} lang={lang} />
+      </section>
+
+      <LandingPicker c={c} lang={lang} />
+
+      <section className="container section">
+        <h2>{d.servicesHeading}</h2>
+        <ServiceList lang={lang} services={c.services} />
+      </section>
+
+      <section className="container section">
+        <h2>{d.mapHeading}</h2>
+        <p className="lead">{d.mapLead}</p>
+        <Reveal>
+          <UkraineMap lang={lang} />
+        </Reveal>
       </section>
 
       <Reviews reviews={c.trust.reviews} lang={lang} />
@@ -278,6 +283,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
             {d.priceLabel}: <Price slug={s.slug} />
           </p>
           {c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
+          {s.group === "injectors" && <p className="discount-note">{d.setDiscount}</p>}
         </div>
         {s.image && (
           <SheetImage
@@ -311,7 +317,9 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
           lang={lang}
           price={<Price slug={s.slug} />}
           note={c.texts.discount[lang]}
+          setNote={s.group === "injectors" ? d.setDiscount : undefined}
           footnote={c.texts.removedOnly[lang]}
+          topic={s.title[lang]}
         />
       </div>
 
@@ -342,7 +350,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
         </>
       )}
 
-      <ContactActions label={d.book} />
+      <ContactActions label={d.book} topic={s.title[lang]} />
 
       {articleLinks.length > 0 && (
         <section className="related">
@@ -402,7 +410,7 @@ export async function ContactsPage({ lang }: { lang: Locale }) {
         <p>
           <ChatButton className="link-button">{d.chat.onSite}</ChatButton>
         </p>
-        <OpenStatus />
+        <OpenStatus chat />
         <HoursList />
       </address>
       {street && (
