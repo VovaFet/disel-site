@@ -5,8 +5,8 @@ How the site is put together: where the data comes from, how pages are built, an
 ## Overview
 
 - **Next.js 16 static export** (`output: "export"` in `next.config.ts`): `next build` writes plain HTML, CSS, JS
-  and images to `out/`. There is no server; Cloudflare Workers serves the files as static assets
-  (see [deploy.md](deploy.md)).
+  and images to `out/`. Cloudflare Workers serves the files as static assets (see [deploy.md](deploy.md)); the only
+  server code is a small Worker for the chat form's endpoint (see [Chat form](#chat-form)).
 - **Content from a Google Sheet** at build time, with a few values refreshed in the browser (see below and
   [content.md](content.md)).
 - **Three languages**: Ukrainian at the root (`/`), Russian at `/ru/`, English at `/en/`.
@@ -33,7 +33,9 @@ src/
                 consent.ts (cookie consent)
   assets/fonts/ fonts for link preview images
 public/         files served as is: photos (JPG + WebP copies), logo.png
-scripts/        build adapter for localized 404 pages, sheet seed, icon and WebP generators
+worker/         the Cloudflare Worker behind /api/* (the chat form's endpoint)
+scripts/        build adapter for localized 404 pages, sheet seed, icon and WebP generators, the leads sheet's
+                Apps Script (leads-sheet.gs)
 docs/           this documentation and the content brief
 ```
 
@@ -135,6 +137,25 @@ start.
 - **IntentLink** (`IntentLink.tsx`): links that prefetch a page only on hover, focus or touch, so a grid of service
   cards doesn't download every service photo up front.
 - **Nova Poshta details** (`ShippingDetails.tsx`): recipient, phone and branch with copy buttons.
+- **Chat form** (`ChatWidget.tsx`): see [Chat form](#chat-form).
+
+## Chat form
+
+A "Message us" button at the bottom right (above the mobile call bar) opens a form: message, phone (required) and
+name. While the cookie banner is up the button stays hidden, as both sit at the bottom of the screen.
+
+1. The form posts JSON to `/api/message` on the same host.
+2. `wrangler.jsonc` sends `/api/*` to `worker/index.ts` (`run_worker_first`); everything else is served from `out/`
+   without running it. The Worker accepts posts only from the site's own origin, allows 3 a minute from one address
+   (the `MESSAGE_LIMIT` rate limit), checks the phone with the same rule as the form (`worker/lead.ts`), and quietly
+   drops bots: a filled hidden field, or a form sent within 1.5 seconds of opening.
+3. It sends the message to the workshop's Telegram chat through a bot and adds a row to the leads sheet through its
+   Apps Script web app (`scripts/leads-sheet.gs`). The visitor sees "sent" once either of them has it; failures go to
+   the Worker's logs. Messages from any host other than dieselmedic.com.ua (previews) are marked as tests.
+4. On success the page sends the `contact` event with `method: "chat"`, which Ads counts as a conversion.
+
+The bot, the chat and the sheet are set up with Worker secrets: see [deploy.md](deploy.md#chat-form). Under
+`next dev` there is no Worker, so sending shows the error message.
 
 ## Styling
 

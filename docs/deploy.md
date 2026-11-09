@@ -1,7 +1,8 @@
 # Deploy
 
 The site is hosted on Cloudflare Workers as static assets: the Worker `disel-site` (note the spelling) serves the
-`out/` folder of `next build`, with no server code (`wrangler.jsonc`).
+`out/` folder of `next build` (`wrangler.jsonc`). The only server code, `worker/index.ts`, runs for `/api/*` (the
+chat form, see [Chat form](#chat-form)).
 
 ## Sites
 
@@ -60,10 +61,33 @@ push to `dev`.
   by the `from-dev` check.)
 - A deleted branch can be restored from its pull request page (Restore branch).
 
+## Chat form
+
+Messages from the site's chat form (see [architecture.md](architecture.md#chat-form)) go to a Telegram chat and to
+the Google Sheet "Заявки з сайту DieselMedic" (tab «Заявки»). Both are set up once, with secrets in Cloudflare →
+Workers → disel-site → Settings → Variables and Secrets (type **Secret**; they survive deploys, and branch
+previews use the same ones, so their test messages arrive in the same chat and sheet, marked as tests):
+
+| Secret | Value |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | The bot's token from @BotFather (`/newbot`) |
+| `TELEGRAM_CHAT_ID` | The chat that receives messages: press Start in the bot (a private chat) or add the bot to a group and send `/start` there, then open `https://api.telegram.org/bot<token>/getUpdates` and copy `"chat":{"id":…}` (negative for a group) |
+| `LEADS_SHEET_URL` | The sheet's web app address, ending in `/exec` (below) |
+| `LEADS_SHEET_KEY` | The key printed by `setup()` (below) |
+
+The sheet's web app: open the sheet → Extensions → Apps Script, replace the code with `scripts/leads-sheet.gs`,
+save, run `setup` (allow access when asked) and copy the key from the log, then Deploy → New deployment → type Web
+app, Execute as: Me, Who has access: Anyone → Deploy, and copy the Web app URL. After editing the script, publish
+it with Deploy → Manage deployments → edit → Version: New version (the URL stays the same).
+
+Either pair of secrets is enough for the form to work. Failed deliveries are logged: Workers → disel-site →
+Observability.
+
 ## Static file details
 
 - `wrangler.jsonc`: `assets.directory` is `./out`; `not_found_handling: "404-page"` makes Cloudflare serve the
-  nearest `404.html` (root, `ru/404.html`, `en/404.html`) with status 404.
+  nearest `404.html` (root, `ru/404.html`, `en/404.html`) with status 404. `run_worker_first: ["/api/*"]` sends
+  only those paths to the Worker script.
 - `trailingSlash: true` in `next.config.ts`: every page is a folder with `index.html` (`/poslugy/`).
 - Robots allow indexing everywhere, including previews; every page's canonical URL points to
   dieselmedic.com.ua, so search engines treat previews as duplicates of production.
