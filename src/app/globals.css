@@ -742,15 +742,19 @@ p.discount-note { margin: -8px 0 16px; }
 .footer a:not(.btn) { color: var(--muted); }
 .footer a:not(.btn):hover { color: var(--accent); }
 
-/* Interactive background: faint dot grid everywhere, brighter dots and a glow around the pointer */
+/* Interactive background: faint dot grid everywhere, brighter dots and a glow around the pointer. --dot-grid is
+   the tile with a dot in its middle (PulseBackground reads it too): finer on phones, so a small screen shows about
+   as dense a grid as a desktop does */
+:root { --dot-grid: 24px; }
+@media (max-width: 767px) { :root { --dot-grid: 14px; } }
 .mouse-bg {
   --mx: 50vw; --my: 33vh;
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background: radial-gradient(circle, color-mix(in srgb, var(--fg) 14%, transparent) 1.2px, transparent 1.6px) 0 0 / 24px 24px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--fg) 14%, transparent) 1.2px, transparent 1.6px) 0 0 / var(--dot-grid) var(--dot-grid);
 }
 .mouse-bg::before, .mouse-bg::after { content: ""; position: absolute; inset: 0; transition: opacity 0.6s; }
 .mouse-bg::before {
-  background: radial-gradient(circle, var(--accent) 1.4px, transparent 1.8px) 0 0 / 24px 24px;
+  background: radial-gradient(circle, var(--accent) 1.4px, transparent 1.8px) 0 0 / var(--dot-grid) var(--dot-grid);
   -webkit-mask: radial-gradient(260px circle at var(--mx) var(--my), #000, transparent 75%);
   mask: radial-gradient(260px circle at var(--mx) var(--my), #000, transparent 75%);
   opacity: 0.85;
