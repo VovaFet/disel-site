@@ -10,9 +10,9 @@ import { useLive } from "./LiveConfig";
 // (pulseSpeed, a multiplier; 1 = across the screen in about 2.4 s). Off with reduced motion; nothing is
 // drawn between runs.
 
-// The dot grid of .mouse-bg (globals.css): a dot in the middle of every 24px tile
-const GRID = 24;
-// Size of the logo's 64-unit grid on the page, in px per unit: the spike is ~4 dot rows tall
+// The dot grid of .mouse-bg (globals.css, --dot-grid): a dot in the middle of every tile, 24px (finer on phones)
+const gridSize = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--dot-grid")) || 24;
+// Size of the logo's 64-unit grid on the page, in px per unit at the 24px grid: the spike is ~4 dot rows tall
 const UNIT = 7;
 // Distance between beats along a run
 const BEAT_GAP = 340;
@@ -43,7 +43,9 @@ type Run = { start: number; dots: Dot[]; end: number };
 
 // One run: the trace as a polyline across the screen, sampled into the grid dots it passes.
 // Each dot lights up when the sweep reaches it (t, s) and is brighter the closer the trace runs (w).
-function makeRun(width: number, height: number, start: number, pace: number): Run {
+function makeRun(width: number, height: number, start: number, pace: number, GRID: number): Run {
+  // the spike stays ~4 dot rows tall on a finer grid
+  const unit = (UNIT * GRID) / 24;
   // any row of the screen; near the top or bottom the spikes may run off the edge
   const y0 = GRID / 2 + Math.floor(Math.random() * Math.max(1, Math.floor(height / GRID))) * GRID;
   // px/s: across the screen in ~2.4 s at pace 1, but not too fast on wide or too slow on narrow screens
@@ -51,7 +53,7 @@ function makeRun(width: number, height: number, start: number, pace: number): Ru
 
   const trace: [number, number][] = [[-GRID, y0]];
   for (let x = 60 + Math.random() * BEAT_GAP; x < width; x += BEAT_GAP) {
-    for (const [bx, by] of beat) trace.push([x + bx * UNIT, y0 + by * UNIT]);
+    for (const [bx, by] of beat) trace.push([x + bx * unit, y0 + by * unit]);
   }
   trace.push([width + GRID, y0]);
 
@@ -125,7 +127,7 @@ export function PulseBackground() {
       }
       // the accent of the current theme
       color = getComputedStyle(canvas).getPropertyValue("--accent").trim();
-      runs.push(makeRun(width, height, performance.now(), pace));
+      runs.push(makeRun(width, height, performance.now(), pace, gridSize()));
       if (!frame) frame = requestAnimationFrame(draw);
     };
 
