@@ -104,26 +104,14 @@ async function handleMessage(request: Request, env: Env, ctx: Context) {
   const telegramDone = settle(telegram, "telegram", errors);
   const sheetDone = settle(sheet, "sheet", errors);
 
-  // Previews wait for both and say what failed, to set up the secrets; production answers as soon as Telegram has
-  // the message (the sheet row may finish after the response) and keeps the failures in the logs
-  const preview = host !== PRODUCTION_HOST;
-  // With a failed sheet row, which key went out: its length and ends, to compare with KEY in the script's
-  // properties without showing it
-  const keyHint = () =>
-    sheetKey && errors.some((e) => e.startsWith("sheet"))
-      ? [`sheet key sent: ${sheetKey.length} chars, ${sheetKey.slice(0, 3)}…${sheetKey.slice(-3)}`]
-      : [];
-  const details = () => (preview && errors.length ? { details: [...errors, ...keyHint()] } : {});
+  // Answer as soon as Telegram has the message; the sheet row may finish after the response
   if (await telegramDone) {
-    if (!preview) {
-      ctx.waitUntil(sheetDone);
-      return json({ ok: true });
-    }
-    await sheetDone;
-    return json({ ok: true, ...details() });
+    ctx.waitUntil(sheetDone);
+    return json({ ok: true });
   }
-  if (await sheetDone) return json({ ok: true, ...details() });
-  return json({ ok: false, error: "delivery", ...details() }, 502);
+  if (await sheetDone) return json({ ok: true });
+  // Previews say why, to set up the secrets; production keeps the answers of Telegram and the sheet to itself
+  return json({ ok: false, error: "delivery", ...(host !== PRODUCTION_HOST && { details: errors }) }, 502);
 }
 
 const worker = {
