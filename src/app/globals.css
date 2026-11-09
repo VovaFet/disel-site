@@ -242,10 +242,20 @@ article > .article-meta { margin-bottom: 8px; }
   display: none; align-items: center; gap: 8px; height: 48px; padding: 0 20px 0 16px;
   border: 0; border-radius: 999px; cursor: pointer;
   background: var(--accent-bg); color: var(--accent-fg); font: inherit; font-weight: 600;
-  box-shadow: 0 6px 20px rgb(0 0 0 / 0.25); transition: transform 0.15s, bottom 0.2s;
+  --chat-shadow: 0 6px 20px rgb(0 0 0 / 0.25);
+  box-shadow: var(--chat-shadow); transition: transform 0.15s, bottom 0.2s;
+  animation: chat-halo 2.4s ease-out infinite;
 }
 .chat-fab:hover { transform: translateY(-2px); }
-.callbar .callbar-chat { flex: 0 0 48px; display: grid; place-items: center; padding: 0; }
+.callbar .callbar-chat { flex: 0 0 48px; display: grid; place-items: center; padding: 0; animation: chat-halo 2.4s ease-out infinite; }
+/* A ring of the button's color spreading out and fading, on top of the button's own shadow (--chat-shadow) */
+@keyframes chat-halo {
+  0% { box-shadow: var(--chat-shadow, 0 0 transparent), 0 0 0 0 color-mix(in srgb, var(--accent-bg) 55%, transparent); }
+  70%, 100% { box-shadow: var(--chat-shadow, 0 0 transparent), 0 0 0 16px color-mix(in srgb, var(--accent-bg) 0%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chat-fab, .callbar .callbar-chat { animation: none; }
+}
 /* --keyboard: the height an on-screen keyboard covers (set by ChatWidget) */
 .chat-panel {
   position: fixed; left: 16px; right: 16px; bottom: max(76px, var(--keyboard, 0px) + 8px); z-index: 31;
