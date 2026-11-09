@@ -229,7 +229,7 @@ article > .article-meta { margin-bottom: 8px; }
   .cookie-banner { left: 24px; right: 24px; bottom: 24px; max-width: 760px; }
 }
 /* A button that looks like the footer links (the "Cookie settings" link) */
-.link-button { padding: 0; border: 0; background: none; font: inherit; color: var(--muted); text-decoration: underline; cursor: pointer; }
+.link-button { padding: 0; border: 0; background: none; font: inherit; color: var(--muted); text-align: start; text-decoration: underline; cursor: pointer; }
 .link-button:hover { color: var(--accent); }
 /* Buttons & cards: hover feedback */
 .btn { transition: transform 0.15s, background 0.15s, color 0.15s; }
@@ -590,7 +590,9 @@ p.discount-note { margin: -8px 0 16px; }
 .rich { max-width: 760px; }
 .rich ul { padding-left: 20px; }
 .rich li { margin-bottom: 6px; }
-.footer nav ul li { margin-bottom: 4px; }
+/* The footer's link list in two columns, so it isn't much taller than the contacts beside it */
+.footer nav ul { columns: 2; column-gap: 24px; }
+.footer nav ul li { margin-bottom: 4px; break-inside: avoid; }
 /* Plain footer links only: the mobile call bar's buttons are in the footer too and keep their own colors */
 .footer a:not(.btn) { color: var(--muted); }
 .footer a:not(.btn):hover { color: var(--accent); }
