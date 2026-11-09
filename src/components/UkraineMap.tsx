@@ -1,10 +1,12 @@
 import type { CSSProperties } from "react";
 import type { L10n, Locale } from "@/config/types";
 import { t } from "@/i18n";
+import { MapCities } from "./MapCities";
 import { mapSize, outline, project } from "./ukraineOutline";
 
 // Cities with a flag on the map. "left" puts the name left of the flag and "high" level with its top, where it would
-// run into a neighbour; "major" keeps the name on phones, where the rest show only the flag.
+// run into a neighbour; "major" names are placed first (MapCities fits the names in the browser and hides those that
+// don't fit, shown on a tap) and are the only ones on phones until then.
 type City = { name: L10n; lat: number; lon: number; left?: boolean; high?: boolean; major?: boolean };
 
 const workshop: City = { name: { uk: "Київ", ru: "Киев", en: "Kyiv" }, lat: 50.45, lon: 30.523, major: true };
@@ -41,7 +43,7 @@ const place = ({ lat, lon }: City) => {
 };
 
 // Map of Ukraine with flags on the cities parts come from and the workshop in Kyiv. The outline is an inline
-// SVG; the flags and names are HTML on top, so they stay the same size on any screen.
+// SVG; the flags and names are HTML on top (MapCities), so they stay the same size on any screen.
 export function UkraineMap({ lang }: { lang: Locale }) {
   const d = t(lang);
   return (
@@ -57,25 +59,23 @@ export function UkraineMap({ lang }: { lang: Locale }) {
         <use href="#ua-map-outline" fill="url(#ua-map-dots)" />
         <use href="#ua-map-outline" className="ua-map-border" />
       </svg>
-      <ul className="ua-map-cities">
-        {cities.map((c, i) => (
-          <li
-            key={c.name.en}
-            className={`ua-city${c.left ? " ua-city-left" : ""}${c.high ? " ua-city-high" : ""}${c.major ? " ua-city-major" : ""}`}
-            style={{ ...place(c), "--i": i } as CSSProperties}
-          >
-            <span className="ua-flag" />
-            <span className="ua-city-name">{c.name[lang]}</span>
-          </li>
-        ))}
-        <li className="ua-city ua-city-major ua-workshop" style={place(workshop)}>
-          <span className="ua-flag" />
-          <span className="ua-city-name">
-            {workshop.name[lang]}
-            <small>{d.mapWorkshop}</small>
-          </span>
-        </li>
-      </ul>
+      <MapCities
+        cities={[
+          ...cities.map((c, i) => ({
+            key: c.name.en,
+            name: c.name[lang],
+            className: `ua-city${c.left ? " ua-city-left" : ""}${c.high ? " ua-city-high" : ""}${c.major ? " ua-city-major" : ""}`,
+            style: { ...place(c), "--i": i } as CSSProperties,
+          })),
+          {
+            key: workshop.name.en,
+            name: workshop.name[lang],
+            className: "ua-city ua-city-major ua-workshop",
+            style: place(workshop),
+            caption: d.mapWorkshop,
+          },
+        ]}
+      />
     </div>
   );
 }
