@@ -182,8 +182,9 @@ cover photo. An empty tab hides the section.
 ## Analytics and ads
 
 `gaId` (Google Analytics 4) and `adsId` (Google Ads) load as one Google tag, and either of them turns on the cookie
-banner. The tag loads only after a visitor accepts cookies, and only on the site's own domain (`settings` → `url`):
-previews and local builds show the banner but never count. Measured:
+banner. The tag loads only on the site's own domain (`settings` → `url`): previews and local builds show the banner
+but never count. Until a visitor accepts cookies it stores none and sends Google only cookieless pings, which Google
+uses for modelled statistics. Measured:
 
 - page views, scrolling and outbound clicks (Analytics enhanced measurement);
 - `contact`: a click on the phone, Telegram or Viber link, with `method` = `phone`, `telegram` or `viber`.
