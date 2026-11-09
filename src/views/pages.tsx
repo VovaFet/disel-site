@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { FaqList } from "@/components/FaqList";
 import { IntentLink } from "@/components/IntentLink";
 import { JsonLd } from "@/components/JsonLd";
-import { ChatButton } from "@/components/ChatButton";
+import { ChatButton, ChatIcon } from "@/components/ChatButton";
 import { ContactActions, MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
 import { OpenStatus } from "@/components/OpenStatus";
 import { PriceAside } from "@/components/PriceAside";
@@ -88,7 +88,11 @@ export async function HomePage({ lang }: { lang: Locale }) {
               <Link href={localePath(lang, "/kalkulyator/")} className="btn btn-outline">
                 {d.estimate}
               </Link>
-              <ChatButton className="btn btn-outline" />
+              {/* a quiet link rather than a third button, which wouldn't fit beside the other two */}
+              <ChatButton className="link-button hero-chat">
+                <ChatIcon />
+                {d.chat.open}
+              </ChatButton>
             </div>
           </div>
           <HeroImage src={c.trust.heroImage} lang={lang} />
