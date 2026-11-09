@@ -104,14 +104,20 @@ async function handleMessage(request: Request, env: Env, ctx: Context) {
   const telegramDone = settle(telegram, "telegram", errors);
   const sheetDone = settle(sheet, "sheet", errors);
 
-  // Answer as soon as Telegram has the message; the sheet row may finish after the response
+  // Previews wait for both and say what failed, to set up the secrets; production answers as soon as Telegram has
+  // the message (the sheet row may finish after the response) and keeps the failures in the logs
+  const preview = host !== PRODUCTION_HOST;
+  const details = () => (preview && errors.length ? { details: errors } : {});
   if (await telegramDone) {
-    ctx.waitUntil(sheetDone);
-    return json({ ok: true });
+    if (!preview) {
+      ctx.waitUntil(sheetDone);
+      return json({ ok: true });
+    }
+    await sheetDone;
+    return json({ ok: true, ...details() });
   }
-  if (await sheetDone) return json({ ok: true });
-  // Previews say why, to set up the secrets; production keeps the answers of Telegram and the sheet to itself
-  return json({ ok: false, error: "delivery", ...(host !== PRODUCTION_HOST && { details: errors }) }, 502);
+  if (await sheetDone) return json({ ok: true, ...details() });
+  return json({ ok: false, error: "delivery", ...details() }, 502);
 }
 
 const worker = {
