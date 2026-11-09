@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { localePath, t } from "@/i18n";
 import { maskPhone, phoneMask, phonePrefix, toUaPhone } from "@/lib/phone";
-import { chatEvent, ChatIcon } from "./ChatButton";
+import { chatEvent, ChatIcon, type ChatEventDetail } from "./ChatButton";
 import { PhoneLink } from "./Live";
 import { useLive } from "./LiveConfig";
 
@@ -31,21 +31,35 @@ export function ChatWidget() {
   // the button that opened the form gets the focus back
   const opener = useRef<HTMLElement | null>(null);
   const wasOpen = useRef(false);
+  // the page's service or car, put at the start of an empty message
+  const [topic, setTopic] = useState("");
   const id = useId();
 
   useEffect(() => {
-    const show = () => {
+    const show = (e: Event) => {
       firstOpened.current ||= Date.now();
       if (document.activeElement instanceof HTMLElement) opener.current = document.activeElement;
+      const pageTopic = (e as CustomEvent<ChatEventDetail>).detail?.topic;
+      if (pageTopic) {
+        setTopic(pageTopic);
+        setMessage((m) => (m.trim() ? m : `${pageTopic}\n`));
+      }
       setOpen(true);
     };
     window.addEventListener(chatEvent, show);
     return () => window.removeEventListener(chatEvent, show);
   }, []);
 
+  // The message field with the caret after what is already in it
+  const focusMessage = () => {
+    const field = messageField.current;
+    field?.focus();
+    field?.setSelectionRange(field.value.length, field.value.length);
+  };
+
   // Focus moves into the form on open and back to the button on close; Escape closes
   useEffect(() => {
-    if (open) messageField.current?.focus();
+    if (open) focusMessage();
     else if (wasOpen.current) opener.current?.focus();
     wasOpen.current = open;
     if (!open) return;
@@ -137,6 +151,24 @@ export function ChatWidget() {
           ) : (
             <form onSubmit={submit} noValidate>
               <p className="chat-note">{d.note}</p>
+              {/* Ready questions while nothing has been typed yet (the page's topic line doesn't count) */}
+              {(!message.trim() || message.trim() === topic) && (
+                <div className="chat-chips" role="group" aria-label={d.suggestions}>
+                  {d.chips.map((chip) => (
+                    <button
+                      key={chip}
+                      type="button"
+                      className="chip"
+                      onClick={() => {
+                        setMessage((m) => (m.trim() ? `${m.trimEnd()}\n${chip}` : chip));
+                        requestAnimationFrame(focusMessage);
+                      }}
+                    >
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+              )}
               <label className="chat-field">
                 <span>{d.message}</span>
                 <textarea

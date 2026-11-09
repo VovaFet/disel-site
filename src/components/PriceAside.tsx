@@ -10,11 +10,13 @@ export function PriceAside({
   price,
   note,
   footnote,
+  topic,
 }: {
   lang: Locale;
   price?: ReactNode;
   note?: string;
   footnote?: string;
+  topic?: string;
 }) {
   const d = t(lang);
   return (
@@ -27,7 +29,7 @@ export function PriceAside({
         </>
       )}
       <OpenStatus chat />
-      <ContactActions label={d.book} className="aside-actions" />
+      <ContactActions label={d.book} className="aside-actions" topic={topic} />
       {footnote && <span className="muted small">{footnote}</span>}
     </aside>
   );

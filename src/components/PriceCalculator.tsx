@@ -187,7 +187,11 @@ export function PriceCalculator({
         )}
         <span className="muted small">{d.estimateNote}</span>
         {discount && <span className="discount-note">{discount}</span>}
-        <ContactActions label={d.book} className="calc-actions" />
+        <ContactActions
+          label={d.book}
+          className="calc-actions"
+          topic={`${item.title}${item.perUnitOptions ? ` × ${units}` : ""}${extras.map((a) => `, ${a.label[lang]}`).join("")} (${d.from} ${formatPrice(lang, total)})`}
+        />
       </div>
     </div>
   );

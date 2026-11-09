@@ -316,6 +316,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
           price={<Price slug={s.slug} />}
           note={c.texts.discount[lang]}
           footnote={c.texts.removedOnly[lang]}
+          topic={s.title[lang]}
         />
       </div>
 
@@ -346,7 +347,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
         </>
       )}
 
-      <ContactActions label={d.book} />
+      <ContactActions label={d.book} topic={s.title[lang]} />
 
       {articleLinks.length > 0 && (
         <section className="related">
