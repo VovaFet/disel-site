@@ -144,7 +144,7 @@ start.
 One form (`ChatWidget.tsx`): message, phone (required, masked as `+38 (0XX) XXX-XX-XX` by `lib/phone.ts`) and
 name. It opens from a "Message us" pill at the bottom right on wide screens (lifted above the cookie banner while
 that is up, by the banner's height in `--cookie-banner-space`), from the chat icon in the mobile call bar, and from
-every `ChatButton` next to our contacts: `ContactActions`, the home hero, the footer, the contacts page and the
+every `ChatButton` next to our contacts: `ContactActions`, the footer, the contacts page and the
 "not found" note. The buttons open it through the `open-chat` window event.
 
 1. The form posts JSON to `/api/message` on the same host.
