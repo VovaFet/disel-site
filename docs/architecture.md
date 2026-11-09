@@ -150,9 +150,9 @@ every `ChatButton` next to our contacts: `ContactActions`, the home hero, the fo
 1. The form posts JSON to `/api/message` on the same host.
 2. `wrangler.jsonc` sends `/api/*` to `worker/index.ts` (`run_worker_first`); everything else is served from `out/`
    without running it. The Worker accepts posts only from the site's own origin, allows 3 a minute from one address
-   (the `MESSAGE_LIMIT` rate limit), checks the phone (`worker/lead.ts`; Ukrainian numbers go on as
-   `+380XXXXXXXXX`, a tap-to-call link in Telegram), and quietly drops bots: a filled hidden field, or a form sent
-   within 1.5 seconds of opening.
+   (the `MESSAGE_LIMIT` rate limit), accepts only a Ukrainian number, `+380` and 9 digits starting with 3–9
+   (`toUaPhone` in `lib/phone.ts`, the same check the form makes; it goes on as `+380XXXXXXXXX`, a tap-to-call link
+   in Telegram), and quietly drops bots: a filled hidden field, or a form sent within 1.5 seconds of opening.
 3. It sends the message to the workshop's Telegram chat through a bot and adds a row to the leads sheet through its
    Apps Script web app (`scripts/leads-sheet.gs`). The visitor sees "sent" once either of them has it; failures go to
    the Worker's logs. Messages from any host other than dieselmedic.com.ua (previews) are marked as tests.

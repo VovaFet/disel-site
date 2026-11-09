@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { localePath, t } from "@/i18n";
-import { isFullPhone, maskPhone, phoneMask } from "@/lib/phone";
+import { maskPhone, phoneMask, phonePrefix, toUaPhone } from "@/lib/phone";
 import { chatEvent, ChatIcon } from "./ChatButton";
 import { PhoneLink } from "./Live";
 import { useLive } from "./LiveConfig";
@@ -72,7 +72,8 @@ export function ChatWidget() {
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!isFullPhone(phone)) {
+    const fullPhone = toUaPhone(phone);
+    if (!fullPhone) {
       setPhoneError(true);
       phoneField.current?.focus();
       return;
@@ -85,7 +86,7 @@ export function ChatWidget() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           message,
-          phone,
+          phone: fullPhone,
           name,
           website,
           page: location.pathname,
@@ -160,6 +161,20 @@ export function ChatWidget() {
                   aria-describedby={phoneError ? `${id}-phone-error` : undefined}
                   value={phone}
                   onChange={(e) => setPhone(maskPhone(e.target.value))}
+                  onFocus={(e) => {
+                    const field = e.currentTarget;
+                    if (!phone) setPhone(phonePrefix);
+                    // after React has put the prefix in
+                    requestAnimationFrame(() => field.setSelectionRange(field.value.length, field.value.length));
+                  }}
+                  onSelect={(e) => {
+                    // the caret never goes inside the prefix
+                    const field = e.currentTarget;
+                    if ((field.selectionStart ?? 0) < phonePrefix.length) {
+                      field.setSelectionRange(field.value.length, field.value.length);
+                    }
+                  }}
+                  onBlur={() => phone === phonePrefix && setPhone("")}
                 />
               </label>
               {phoneError && (
