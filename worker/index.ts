@@ -107,7 +107,13 @@ async function handleMessage(request: Request, env: Env, ctx: Context) {
   // Previews wait for both and say what failed, to set up the secrets; production answers as soon as Telegram has
   // the message (the sheet row may finish after the response) and keeps the failures in the logs
   const preview = host !== PRODUCTION_HOST;
-  const details = () => (preview && errors.length ? { details: errors } : {});
+  // With a failed sheet row, which key went out: its length and ends, to compare with KEY in the script's
+  // properties without showing it
+  const keyHint = () =>
+    sheetKey && errors.some((e) => e.startsWith("sheet"))
+      ? [`sheet key sent: ${sheetKey.length} chars, ${sheetKey.slice(0, 3)}…${sheetKey.slice(-3)}`]
+      : [];
+  const details = () => (preview && errors.length ? { details: [...errors, ...keyHint()] } : {});
   if (await telegramDone) {
     if (!preview) {
       ctx.waitUntil(sheetDone);
