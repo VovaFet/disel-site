@@ -187,7 +187,8 @@ but never count. Until a visitor accepts cookies it stores none and sends Google
 uses for modelled statistics. Measured:
 
 - page views, scrolling and outbound clicks (Analytics enhanced measurement);
-- `contact`: a click on the phone, Telegram or Viber link, with `method` = `phone`, `telegram` or `viber`.
+- `contact`: a click on the phone, Telegram or Viber link, with `method` = `phone`, `telegram` or `viber`, or a
+  message sent through the chat form, with `method` = `chat`.
 
 One-time setup in Google:
 

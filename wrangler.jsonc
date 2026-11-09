@@ -1,13 +1,19 @@
-// Cloudflare Workers static assets deploy: the site is a pure static export (next build -> out/),
-// so no OpenNext/server runtime is needed.
+// Cloudflare Workers static assets deploy: the site is a static export (next build -> out/), served without
+// any server code. The only code is worker/index.ts, and it runs just for /api/* (the chat form's endpoint).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "disel-site",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-10-01",
   // required by `wrangler preview` (non-production branch builds)
   "previews": {},
   "assets": {
     "directory": "./out",
-    "not_found_handling": "404-page"
-  }
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  // At most 3 chat messages a minute from one address (counted per Cloudflare location)
+  "ratelimits": [{ "name": "MESSAGE_LIMIT", "namespace_id": "1001", "simple": { "limit": 3, "period": 60 } }],
+  // console.error from the Worker (failed deliveries) in Workers → disel-site → Observability
+  "observability": { "enabled": true }
 }

@@ -205,11 +205,17 @@ article > .article-meta { margin-bottom: 8px; }
 .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; }
 .footer ul { list-style: none; padding: 0; margin: 0; }
 
+/* Four buttons share a phone's width by the length of their labels; on the narrowest screens a label is cut
+   off rather than pushing the bar (and the page) wider than the screen */
 .callbar {
-  position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 8px;
-  padding: 8px 16px; background: var(--bg); border-top: 1px solid var(--border);
+  position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 6px;
+  padding: 8px 12px; background: var(--bg); border-top: 1px solid var(--border);
 }
-.callbar .btn { flex: 1; text-align: center; padding: 10px; }
+.callbar .btn {
+  flex: 1 1 auto; min-width: 0; padding: 10px 6px; text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+@media (max-width: 359px) { .callbar .btn { font-size: 0.85rem; } }
 @media (min-width: 768px) {
   .callbar { display: none; }
   body { padding-bottom: 0; }
@@ -228,9 +234,64 @@ article > .article-meta { margin-bottom: 8px; }
 @media (min-width: 768px) {
   .cookie-banner { left: 24px; right: 24px; bottom: 24px; max-width: 760px; }
 }
+/* Chat (see ChatWidget): on wide screens a "Message us" pill at the bottom right, above the cookie banner while
+   that is up (--cookie-banner-space, set by CookieBanner); phones have the button in the call bar instead. The
+   form opens in a panel at the same spot, over the banner. */
+.chat-fab {
+  position: fixed; right: 24px; bottom: calc(24px + var(--cookie-banner-space, 0px)); z-index: 25;
+  display: none; align-items: center; gap: 8px; height: 48px; padding: 0 20px 0 16px;
+  border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--accent-bg); color: var(--accent-fg); font: inherit; font-weight: 600;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.25); transition: transform 0.15s, bottom 0.2s;
+}
+.chat-fab:hover { transform: translateY(-2px); }
+.callbar .callbar-chat { flex: 0 0 48px; display: grid; place-items: center; padding: 0; }
+/* --keyboard: the height an on-screen keyboard covers (set by ChatWidget) */
+.chat-panel {
+  position: fixed; left: 16px; right: 16px; bottom: max(76px, var(--keyboard, 0px) + 8px); z-index: 31;
+  max-height: calc(100dvh - max(92px, var(--keyboard, 0px) + 16px)); overflow-y: auto; padding: 14px 16px 16px;
+  background: var(--surface); color: var(--fg); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.25);
+}
+.chat-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.chat-head h2 { margin: 0; font-size: 1.15rem; }
+.chat-close {
+  flex: none; display: grid; place-items: center; width: 36px; height: 36px; margin-right: -6px;
+  border: 0; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer;
+}
+.chat-close:hover { color: var(--accent); }
+.chat-panel form { display: grid; gap: 12px; }
+.chat-note, .chat-error, .chat-privacy { margin: 0; font-size: 0.9rem; }
+.chat-note, .chat-privacy { color: var(--muted); }
+.chat-privacy { font-size: 0.8rem; }
+.chat-privacy a, .chat-error a { color: var(--accent); }
+.chat-error { color: var(--closed); }
+.chat-field { display: grid; gap: 4px; font-weight: 600; font-size: 0.95rem; }
+.chat-field small { color: var(--muted); font-weight: 400; font-size: inherit; }
+.chat-field input, .chat-field textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg); color: var(--fg); font: inherit; font-weight: 400; resize: vertical;
+}
+.chat-field input[aria-invalid="true"] { border-color: var(--closed); }
+.chat-done p { margin: 0 0 16px; }
+/* The bots' field: out of sight and out of the tab order */
+.chat-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.btn:disabled { opacity: 0.6; cursor: default; transform: none; }
+.chat-fab:focus-visible, .chat-close:focus-visible, .chat-field input:focus-visible, .chat-field textarea:focus-visible {
+  outline: 3px solid var(--accent); outline-offset: 2px;
+}
+@media (min-width: 768px) {
+  .chat-fab { display: inline-flex; }
+  .chat-fab[hidden] { display: none; }
+  .chat-panel { left: auto; right: 24px; bottom: max(24px, var(--keyboard, 0px) + 8px); width: 380px; max-height: calc(100dvh - max(48px, var(--keyboard, 0px) + 16px)); }
+}
 /* A button that looks like the footer links (the "Cookie settings" link) */
 .link-button { padding: 0; border: 0; background: none; font: inherit; color: var(--muted); text-align: start; text-decoration: underline; cursor: pointer; }
 .link-button:hover { color: var(--accent); }
+/* Next to accent-colored links (contacts page, notes) it takes their color */
+.contacts .link-button, .info-note .link-button { color: var(--accent); }
+/* <button class="btn"> looks like the <a class="btn"> links */
+button.btn { font-family: inherit; font-size: inherit; line-height: inherit; cursor: pointer; }
 /* Buttons & cards: hover feedback */
 .btn { transition: transform 0.15s, background 0.15s, color 0.15s; }
 .btn:hover { transform: translateY(-1px); }
@@ -354,7 +415,10 @@ select {
 }
 /* Call button on its own row, messengers split the row below */
 .calc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.calc-actions .btn { flex: 1; }
+/* Under the full-width call button, labels stay on one line: a button that doesn't fit moves to the next row
+   and fills it */
+.calc-actions .btn { flex: 1 1 auto; }
+.calc-actions .btn:not(:first-child) { white-space: nowrap; }
 .calc-actions .btn:first-child { flex-basis: 100%; }
 /* Breakdown under the total: base price × quantity and each picked extra */
 .calc-lines { list-style: none; margin: 0; padding: 8px 0 0; border-top: 1px solid var(--border); display: grid; gap: 4px; font-size: 0.9rem; }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { localePath, t } from "@/i18n";
 import { readConsent, saveConsent, subscribeConsent } from "@/lib/consent";
 import { useLive } from "./LiveConfig";
@@ -12,10 +12,25 @@ import { useLive } from "./LiveConfig";
 export function CookieBanner() {
   const { lang } = useLive();
   const consent = useSyncExternalStore(subscribeConsent, readConsent, () => undefined);
+  const banner = useRef<HTMLElement>(null);
+
+  // While the banner is up, the chat button (ChatWidget) moves up above it by --cookie-banner-space
+  useEffect(() => {
+    const el = banner.current;
+    if (!el) return;
+    const root = document.documentElement;
+    const observer = new ResizeObserver(() => root.style.setProperty("--cookie-banner-space", `${el.offsetHeight + 12}px`));
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty("--cookie-banner-space");
+    };
+  }, [consent]);
+
   if (consent !== null) return null;
   const d = t(lang).cookies;
   return (
-    <section className="cookie-banner" aria-label={d.label}>
+    <section ref={banner} className="cookie-banner" aria-label={d.label}>
       <p>
         {d.text} <Link href={localePath(lang, "/konfidentsiinist/")}>{d.policy}</Link>
       </p>
