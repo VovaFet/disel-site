@@ -116,6 +116,11 @@ html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 .hero { padding: 28px 0 48px; }
 .lead { font-size: 1.15rem; color: var(--muted); max-width: 720px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+/* The home hero's four points with icons (HeroPoints), two a row where there is room */
+.hero-points { list-style: none; display: grid; gap: 10px 24px; margin: 4px 0 20px; padding: 0; }
+.hero-points li { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.hero-points svg { flex: none; color: var(--accent); }
+@media (min-width: 560px) { .hero-points { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 /* The home hero's quiet second action beside the main button ("How to send parts", down to the steps) */
 .hero-link { align-self: center; padding: 8px 4px; font-weight: 600; color: var(--accent); }
 

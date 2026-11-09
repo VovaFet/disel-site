@@ -16,7 +16,7 @@ import { ServiceList } from "@/components/ServiceList";
 import { SheetImage } from "@/components/SheetImage";
 import { ShippingDetails } from "@/components/ShippingDetails";
 import { SymptomList } from "@/components/SymptomList";
-import { Brands, HeroImage, ProtocolSample, Reviews, Stats } from "@/components/Trust";
+import { Brands, HeroImage, HeroPoints, ProtocolSample, Reviews, Stats } from "@/components/Trust";
 import { UkraineMap } from "@/components/UkraineMap";
 import { getConfig } from "@/config";
 import { serviceGroups, type InfoPageSlug, type Locale, type SiteConfig } from "@/config/types";
@@ -77,8 +77,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
             <h1>
               {d.homeH1} {c.texts.area[lang]}
             </h1>
-            <p className="lead">{c.texts.description[lang]}</p>
-            <p className="badge">📦 {c.texts.shipping[lang]}</p>
+            <HeroPoints points={d.heroPoints} />
             {c.texts.discount[lang] && <p className="badge badge-discount">{c.texts.discount[lang]}</p>}
             {c.texts.removedOnly[lang] && <p className="notice">{c.texts.removedOnly[lang]}</p>}
             {/* Calling and writing are in the header, the mobile call bar and the chat button */}
