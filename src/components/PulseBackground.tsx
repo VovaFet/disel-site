@@ -14,8 +14,8 @@ import { useLive } from "./LiveConfig";
 const gridSize = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--dot-grid")) || 24;
 // Size of the logo's 64-unit grid on the page, in px per unit at the 24px grid: the spike is ~4 dot rows tall
 const UNIT = 7;
-// Distance between beats along a run
-const BEAT_GAP = 340;
+// Beats along a run, on any screen: the gap between them is this share of the width
+const BEATS = 5;
 // How long a lit dot takes to fade, s
 const FADE = 1.1;
 
@@ -37,6 +37,8 @@ const beat = (() => {
   const [x0, y0] = inner[0];
   return inner.map(([x, y]) => [x - x0, y - y0] as [number, number]);
 })();
+// How wide one beat is, in logo units
+const beatWidth = Math.max(...beat.map(([x]) => x));
 
 type Dot = { x: number; y: number; t: number; w: number };
 type Run = { start: number; dots: Dot[]; end: number };
@@ -46,14 +48,17 @@ type Run = { start: number; dots: Dot[]; end: number };
 function makeRun(width: number, height: number, start: number, pace: number, GRID: number): Run {
   // the spike stays ~4 dot rows tall on a finer grid
   const unit = (UNIT * GRID) / 24;
+  // ~5 beats across the screen; where they don't fit (phones) the beat gets narrower, not lower, down to 60%
+  const gap = width / BEATS;
+  const unitX = Math.max(unit * 0.6, Math.min(unit, (gap - GRID) / beatWidth));
   // any row of the screen; near the top or bottom the spikes may run off the edge
   const y0 = GRID / 2 + Math.floor(Math.random() * Math.max(1, Math.floor(height / GRID))) * GRID;
   // px/s: across the screen in ~2.4 s at pace 1, but not too fast on wide or too slow on narrow screens
   const speed = Math.min(600, Math.max(220, width / 2.4)) * pace;
 
   const trace: [number, number][] = [[-GRID, y0]];
-  for (let x = 60 + Math.random() * BEAT_GAP; x < width; x += BEAT_GAP) {
-    for (const [bx, by] of beat) trace.push([x + bx * unit, y0 + by * unit]);
+  for (let x = 60 + Math.random() * gap; x < width; x += Math.max(gap, beatWidth * unitX + GRID)) {
+    for (const [bx, by] of beat) trace.push([x + bx * unitX, y0 + by * unit]);
   }
   trace.push([width + GRID, y0]);
 
