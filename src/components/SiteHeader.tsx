@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { landingSections, type Locale, type SiteConfig } from "@/config/types";
 import { localePath, t } from "@/i18n";
+import { ChatButton } from "./ChatButton";
 import { CookieSettingsLink } from "./CookieBanner";
 import { HeaderShell } from "./HeaderShell";
 import { HomeLink } from "./IntentLink";
@@ -75,7 +76,8 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
             <PhoneLink />
           </p>
           <p>
-            <MessengerLink kind="viber">Viber</MessengerLink> · <MessengerLink kind="telegram">Telegram</MessengerLink>
+            <MessengerLink kind="viber">Viber</MessengerLink> · <MessengerLink kind="telegram">Telegram</MessengerLink> ·{" "}
+            <ChatButton className="link-button" />
           </p>
         </div>
         <nav aria-label={d.footerInfo}>
@@ -125,6 +127,7 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
         <MessengerLink kind="telegram" className="btn btn-outline">
           Telegram
         </MessengerLink>
+        <ChatButton className="btn btn-outline callbar-chat" icon />
       </div>
     </footer>
   );

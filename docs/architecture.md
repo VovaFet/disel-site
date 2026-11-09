@@ -141,14 +141,18 @@ start.
 
 ## Chat form
 
-A "Message us" button at the bottom right (above the mobile call bar) opens a form: message, phone (required) and
-name. While the cookie banner is up the button stays hidden, as both sit at the bottom of the screen.
+One form (`ChatWidget.tsx`): message, phone (required, masked as `+38 (0XX) XXX-XX-XX` by `lib/phone.ts`) and
+name. It opens from a "Message us" pill at the bottom right on wide screens (lifted above the cookie banner while
+that is up, by the banner's height in `--cookie-banner-space`), from the chat icon in the mobile call bar, and from
+every `ChatButton` next to our contacts: `ContactActions`, the home hero, the footer, the contacts page and the
+"not found" note. The buttons open it through the `open-chat` window event.
 
 1. The form posts JSON to `/api/message` on the same host.
 2. `wrangler.jsonc` sends `/api/*` to `worker/index.ts` (`run_worker_first`); everything else is served from `out/`
    without running it. The Worker accepts posts only from the site's own origin, allows 3 a minute from one address
-   (the `MESSAGE_LIMIT` rate limit), checks the phone with the same rule as the form (`worker/lead.ts`), and quietly
-   drops bots: a filled hidden field, or a form sent within 1.5 seconds of opening.
+   (the `MESSAGE_LIMIT` rate limit), checks the phone (`worker/lead.ts`; Ukrainian numbers go on as
+   `+380XXXXXXXXX`, a tap-to-call link in Telegram), and quietly drops bots: a filled hidden field, or a form sent
+   within 1.5 seconds of opening.
 3. It sends the message to the workshop's Telegram chat through a bot and adds a row to the leads sheet through its
    Apps Script web app (`scripts/leads-sheet.gs`). The visitor sees "sent" once either of them has it; failures go to
    the Worker's logs. Messages from any host other than dieselmedic.com.ua (previews) are marked as tests.

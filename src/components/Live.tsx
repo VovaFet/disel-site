@@ -4,6 +4,7 @@
 import type { ReactNode } from "react";
 import { formatPrice, t } from "@/i18n";
 import { openingHoursDisplay } from "@/lib/hours";
+import { ChatButton } from "./ChatButton";
 import { useLive } from "./LiveConfig";
 
 // `amount` replaces the service's live price (a landing page with its own price)
@@ -43,7 +44,7 @@ export function MessengerLink({ kind, className, children }: { kind: "telegram" 
 }
 
 // Call button with the number spelled out (tel: links do nothing on most desktops)
-// plus messengers, so every visitor has a way to get in touch.
+// plus messengers and the chat form, so every visitor has a way to get in touch.
 export function ContactActions({ label, className = "actions" }: { label: string; className?: string }) {
   return (
     <div className={className}>
@@ -59,6 +60,7 @@ export function ContactActions({ label, className = "actions" }: { label: string
       <MessengerLink kind="telegram" className="btn btn-outline">
         Telegram
       </MessengerLink>
+      <ChatButton className="btn btn-outline" />
     </div>
   );
 }

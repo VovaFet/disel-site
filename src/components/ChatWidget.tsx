@@ -1,29 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { localePath, t } from "@/i18n";
-import { readConsent, subscribeConsent } from "@/lib/consent";
-import { isPhone } from "../../worker/lead";
+import { isFullPhone, maskPhone, phoneMask } from "@/lib/phone";
+import { chatEvent, ChatIcon } from "./ChatButton";
 import { PhoneLink } from "./Live";
 import { useLive } from "./LiveConfig";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-const ChatIcon = () => (
-  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" />
-  </svg>
-);
-
-// A "Message us" button at the bottom right and the form it opens. The message goes to the Worker's
-// /api/message (worker/index.ts), which passes it to the workshop's Telegram and the leads sheet; the visitor
-// needs no Telegram, the workshop answers on the phone number. `waitForConsent`: while the cookie banner is
-// up (no answer yet) the button stays hidden, as both sit at the bottom of the screen.
-export function ChatWidget({ waitForConsent }: { waitForConsent: boolean }) {
+// The chat form, opened by the "Message us" button at the bottom right (wide screens; phones have it in the
+// call bar) or any ChatButton on the page. The message goes to the Worker's /api/message (worker/index.ts),
+// which passes it to the workshop's Telegram and the leads sheet; the visitor needs no Telegram, the workshop
+// answers on the phone number.
+export function ChatWidget() {
   const { lang } = useLive();
   const d = t(lang).chat;
-  const consent = useSyncExternalStore(subscribeConsent, readConsent, () => undefined);
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
@@ -32,17 +25,28 @@ export function ChatWidget({ waitForConsent }: { waitForConsent: boolean }) {
   const [website, setWebsite] = useState(""); // hidden from people: only bots fill it in
   const [phoneError, setPhoneError] = useState(false);
   const firstOpened = useRef(0);
-  const fab = useRef<HTMLButtonElement>(null);
   const messageField = useRef<HTMLTextAreaElement>(null);
   const phoneField = useRef<HTMLInputElement>(null);
   const panel = useRef<HTMLElement>(null);
+  // the button that opened the form gets the focus back
+  const opener = useRef<HTMLElement | null>(null);
   const wasOpen = useRef(false);
   const id = useId();
+
+  useEffect(() => {
+    const show = () => {
+      firstOpened.current ||= Date.now();
+      if (document.activeElement instanceof HTMLElement) opener.current = document.activeElement;
+      setOpen(true);
+    };
+    window.addEventListener(chatEvent, show);
+    return () => window.removeEventListener(chatEvent, show);
+  }, []);
 
   // Focus moves into the form on open and back to the button on close; Escape closes
   useEffect(() => {
     if (open) messageField.current?.focus();
-    else if (wasOpen.current) fab.current?.focus();
+    else if (wasOpen.current) opener.current?.focus();
     wasOpen.current = open;
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -66,16 +70,9 @@ export function ChatWidget({ waitForConsent }: { waitForConsent: boolean }) {
     };
   }, [open]);
 
-  if (waitForConsent && (consent === undefined || consent === null)) return null;
-
-  const show = () => {
-    firstOpened.current ||= Date.now();
-    setOpen(true);
-  };
-
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!isPhone(phone.trim())) {
+    if (!isFullPhone(phone)) {
       setPhoneError(true);
       phoneField.current?.focus();
       return;
@@ -109,19 +106,15 @@ export function ChatWidget({ waitForConsent }: { waitForConsent: boolean }) {
   return (
     <>
       <button
-        ref={fab}
         type="button"
         className="chat-fab"
-        aria-label={d.open}
         aria-expanded={open}
         aria-controls={`${id}-panel`}
         hidden={open}
-        onClick={show}
+        onClick={() => window.dispatchEvent(new Event(chatEvent))}
       >
         <ChatIcon />
-        <span className="chat-fab-label" aria-hidden="true">
-          {d.open}
-        </span>
+        {d.open}
       </button>
       {open && (
         <section ref={panel} id={`${id}-panel`} className="chat-panel" role="dialog" aria-labelledby={`${id}-title`}>
@@ -161,12 +154,12 @@ export function ChatWidget({ waitForConsent }: { waitForConsent: boolean }) {
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel"
-                  maxLength={20}
+                  placeholder={phoneMask}
                   required
                   aria-invalid={phoneError}
                   aria-describedby={phoneError ? `${id}-phone-error` : undefined}
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(maskPhone(e.target.value))}
                 />
               </label>
               {phoneError && (

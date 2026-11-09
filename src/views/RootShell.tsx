@@ -89,7 +89,7 @@ export async function RootShell({ lang, notFound, children }: { lang: Locale; no
           <SiteHeader lang={lang} config={config} notFound={notFound} />
           <main>{children}</main>
           <SiteFooter lang={lang} config={config} />
-          <ChatWidget waitForConsent={Boolean(config.gaId || config.adsId)} />
+          <ChatWidget />
           {(config.gaId || config.adsId) && (
             <>
               <GoogleTags gaId={config.gaId} adsId={config.adsId} host={new URL(config.url).hostname} />
