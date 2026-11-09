@@ -139,6 +139,10 @@ export async function HomePage({ lang }: { lang: Locale }) {
 
       <section className="container section">
         <h2>{d.servicesHeading}</h2>
+        {/* Phones only: the discounts that sit in the hero on wider screens, here next to the prices */}
+        <p className="discount-line">
+          {[c.texts.discount[lang], d.setDiscount].filter(Boolean).join(" · ")}
+        </p>
         <ServiceList lang={lang} services={c.services} />
       </section>
 
