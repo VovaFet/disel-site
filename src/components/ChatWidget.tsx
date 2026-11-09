@@ -6,6 +6,7 @@ import { localePath, t } from "@/i18n";
 import { maskPhone, phoneMask, phonePrefix, toUaPhone } from "@/lib/phone";
 import { chatEvent, ChatIcon, type ChatEventDetail } from "./ChatButton";
 import { PhoneLink } from "./Live";
+import { OpenStatus } from "./OpenStatus";
 import { useLive } from "./LiveConfig";
 
 type Status = "idle" | "sending" | "sent" | "error";
@@ -150,6 +151,8 @@ export function ChatWidget() {
             </div>
           ) : (
             <form onSubmit={submit} noValidate>
+              {/* Open now, or when the workshop opens: when to expect the reply */}
+              <OpenStatus />
               <p className="chat-note">{d.note}</p>
               {/* Ready questions while nothing has been typed yet (the page's topic line doesn't count) */}
               {(!message.trim() || message.trim() === topic) && (

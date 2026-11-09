@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { t } from "@/i18n";
 import { useLive } from "./LiveConfig";
+import { OpenStatus } from "./OpenStatus";
 
 export function MobileMenu({ links }: { links: { href: string; label: string }[] }) {
   const { lang } = useLive();
@@ -30,6 +31,8 @@ export function MobileMenu({ links }: { links: { href: string; label: string }[]
         <span />
       </button>
       <div id="mobile-menu" className={`mobile-menu ${open ? "is-open" : ""}`} hidden={!open}>
+        {/* Phones don't show the open status in the hero; here it is one tap away */}
+        <OpenStatus />
         {links.map((l) => (
           <Link key={l.href} href={l.href} onClick={() => setOpen(false)}>
             {l.label}

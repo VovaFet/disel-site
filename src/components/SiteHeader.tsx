@@ -11,6 +11,7 @@ import { HoursList, MessengerLink, PhoneLink } from "./Live";
 import { MobileMenu } from "./MobileMenu";
 import { OpenStatus } from "./OpenStatus";
 import { ThemeToggle } from "./ThemeToggle";
+import { WriteMenu } from "./WriteMenu";
 
 // Brand/series, vehicle and article sections that have pages, for the mobile menu and the footer
 const sectionLinks = (lang: Locale, config: SiteConfig) =>
@@ -121,13 +122,7 @@ export function SiteFooter({ lang, config }: { lang: Locale; config: SiteConfig 
       {/* Sticky call/messenger bar on mobile: phone calls are the main conversion */}
       <div className="callbar">
         <PhoneLink className="btn">{d.call}</PhoneLink>
-        <MessengerLink kind="viber" className="btn btn-outline">
-          Viber
-        </MessengerLink>
-        <MessengerLink kind="telegram" className="btn btn-outline">
-          Telegram
-        </MessengerLink>
-        <ChatButton className="btn btn-outline callbar-chat" icon />
+        <WriteMenu className="btn btn-outline" up />
       </div>
     </footer>
   );

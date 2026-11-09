@@ -143,9 +143,11 @@ start.
 
 One form (`ChatWidget.tsx`): message, phone (required, masked as `+38 (0XX) XXX-XX-XX` by `lib/phone.ts`) and
 name. It opens from a "Message us" pill at the bottom right on wide screens (lifted above the cookie banner while
-that is up, by the banner's height in `--cookie-banner-space`), from the chat icon in the mobile call bar, and from
-every `ChatButton` next to our contacts: `ContactActions`, the footer, the contacts page and the
-"not found" note. The buttons open it through the `open-chat` window event.
+that is up, by the banner's height in `--cookie-banner-space`, until 1240px wide), from "Chat on the site" in the
+"Message us" menu (`WriteMenu.tsx`: Viber, Telegram and the chat, in the mobile call bar and in `ContactActions`), and
+from the `ChatButton` links in the footer, on the contacts page and in the "not found" note. The buttons open it
+through the `open-chat` window event; a `topic` (the page's service or car, or the calculator's estimate) starts the
+message, and while it is empty three ready questions sit above the field.
 
 1. The form posts JSON to `/api/message` on the same host.
 2. `wrangler.jsonc` sends `/api/*` to `worker/index.ts` (`run_worker_first`); everything else is served from `out/`
@@ -176,7 +178,7 @@ One stylesheet, `src/app/globals.css`, with colours as CSS variables on `:root` 
 | `--ok`, `--closed` | open/closed status |
 
 Text colours are kept at WCAG AA contrast (4.5:1) against `--bg` and `--surface` in both themes; check new colour
-pairs before using them. Mobile layout has a fixed call bar at the bottom (Call / Viber / Telegram), and fixed
+pairs before using them. Mobile layout has a fixed call bar at the bottom (Call / Message us, which lists Viber, Telegram and the chat), and fixed
 elements above it (the cookie banner) leave room for it.
 
 ## Images
