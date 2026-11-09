@@ -79,6 +79,7 @@ export async function HomePage({ lang }: { lang: Locale }) {
             </h1>
             <HeroPoints points={d.heroPoints} />
             {c.texts.discount[lang] && <p className="badge badge-discount">{c.texts.discount[lang]}</p>}
+            <p className="badge badge-discount">{d.setDiscount}</p>
             {c.texts.removedOnly[lang] && <p className="notice">{c.texts.removedOnly[lang]}</p>}
             {/* Calling and writing are in the header, the mobile call bar and the chat button */}
             <div className="actions">
@@ -282,6 +283,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
             {d.priceLabel}: <Price slug={s.slug} />
           </p>
           {c.texts.discount[lang] && <p className="discount-note">{c.texts.discount[lang]}</p>}
+          {s.group === "injectors" && <p className="discount-note">{d.setDiscount}</p>}
         </div>
         {s.image && (
           <SheetImage
@@ -315,6 +317,7 @@ export async function ServicePage({ lang, slug }: { lang: Locale; slug: string }
           lang={lang}
           price={<Price slug={s.slug} />}
           note={c.texts.discount[lang]}
+          setNote={s.group === "injectors" ? d.setDiscount : undefined}
           footnote={c.texts.removedOnly[lang]}
           topic={s.title[lang]}
         />

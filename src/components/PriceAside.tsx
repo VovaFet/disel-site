@@ -9,12 +9,15 @@ export function PriceAside({
   lang,
   price,
   note,
+  setNote,
   footnote,
   topic,
 }: {
   lang: Locale;
   price?: ReactNode;
   note?: string;
+  // the set offer (−10% from 4 injectors), on pages about injectors
+  setNote?: string;
   footnote?: string;
   topic?: string;
 }) {
@@ -26,6 +29,7 @@ export function PriceAside({
           <span className="muted">{d.priceLabel}</span>
           <strong className="aside-price">{price}</strong>
           {note && <span className="discount-note">{note}</span>}
+          {setNote && <span className="discount-note">{setNote}</span>}
         </>
       )}
       <OpenStatus chat />
