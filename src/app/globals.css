@@ -472,6 +472,8 @@ select {
 .calc-lines { list-style: none; margin: 0; padding: 8px 0 0; border-top: 1px solid var(--border); display: grid; gap: 4px; font-size: 0.9rem; }
 .calc-lines li { display: flex; justify-content: space-between; gap: 12px; }
 .calc-lines li > span:last-child { white-space: nowrap; font-weight: 600; }
+/* The set discount (−10% from 4 injectors): the saving in green */
+.calc-lines .calc-set-discount > span:last-child { color: var(--ok); }
 .calc-line-unit { display: block; white-space: nowrap; }
 /* The picker makes the left column tall: keep the total in view while choosing */
 @media (min-width: 800px) {
