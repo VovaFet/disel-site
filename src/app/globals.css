@@ -504,6 +504,8 @@ p.discount-note { margin: -8px 0 16px; }
 @media (max-width: 767px) {
   .hero .status, .hero .badge-discount { display: none; }
   .discount-line { display: block; }
+  /* without the status above it the slogan sat under a wide empty strip */
+  .hero { padding-top: 16px; }
 }
 .nowrap { white-space: nowrap; }
 .small { font-size: 0.85rem; }
