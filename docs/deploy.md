@@ -64,9 +64,14 @@ push to `dev`.
 ## Chat form
 
 Messages from the site's chat form (see [architecture.md](architecture.md#chat-form)) go to a Telegram chat and to
-the Google Sheet "Заявки з сайту DieselMedic" (tab «Заявки»). Both are set up once, with secrets in Cloudflare →
-Workers → disel-site → Settings → Variables and Secrets (type **Secret**; they survive deploys, and branch
-previews use the same ones, so their test messages arrive in the same chat and sheet, marked as tests):
+the Google Sheet "Заявки з сайту DieselMedic" (tab «Заявки»). Both are set up with four runtime secrets (type
+**Secret**, which survives deploys; not the build variables under Settings → Builds, which the Worker never sees):
+
+- **Production**: Workers → disel-site → Settings → Variables and secrets, with the **Production** toggle.
+- **Previews** (the `dev` preview and branch previews) don't inherit production settings. The same section with the
+  **Previews Base** toggle sets what *new* previews start with; a preview that already exists keeps what it had, so
+  give it the secrets itself: `npx wrangler@latest preview secret put TELEGRAM_BOT_TOKEN --name dev` (and the same
+  for the other three; `wrangler login` first). Preview messages arrive in the same chat and sheet, marked as tests.
 
 | Secret | Value |
 |---|---|
