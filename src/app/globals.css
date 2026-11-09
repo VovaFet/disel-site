@@ -235,8 +235,8 @@ article > .article-meta { margin-bottom: 8px; }
   .cookie-banner { left: 24px; right: 24px; bottom: 24px; max-width: 760px; }
 }
 /* Chat (see ChatWidget): on wide screens a "Message us" pill at the bottom right, above the cookie banner while
-   that is up (--cookie-banner-space, set by CookieBanner); phones have the button in the call bar instead. The
-   form opens in a panel at the same spot, over the banner. */
+   that is up and reaches it (--cookie-banner-space, set by CookieBanner; up to 1240px wide); phones have the button
+   in the call bar instead. The form opens in a panel at the same spot, over the banner. */
 .chat-fab {
   position: fixed; right: 24px; bottom: calc(24px + var(--cookie-banner-space, 0px)); z-index: 25;
   display: none; align-items: center; gap: 8px; height: 48px; padding: 0 20px 0 16px;
@@ -244,14 +244,32 @@ article > .article-meta { margin-bottom: 8px; }
   background: var(--accent-bg); color: var(--accent-fg); font: inherit; font-weight: 600;
   --chat-shadow: 0 6px 20px rgb(0 0 0 / 0.25);
   box-shadow: var(--chat-shadow); transition: transform 0.15s, bottom 0.2s;
-  animation: chat-halo 2.4s ease-out infinite;
+  animation: chat-halo 2s ease-out infinite;
 }
 .chat-fab:hover { transform: translateY(-2px); }
-.callbar .callbar-chat { flex: 0 0 48px; display: grid; place-items: center; padding: 0; animation: chat-halo 2.4s ease-out infinite; }
-/* A ring of the button's color spreading out and fading, on top of the button's own shadow (--chat-shadow) */
+/* In the call bar the rings stay narrower, clear of the Telegram button beside it */
+.callbar .callbar-chat {
+  flex: 0 0 48px; display: grid; place-items: center; padding: 0;
+  --halo: 12px; animation: chat-halo 2s ease-out infinite;
+}
+/* Two rings of the button's color spreading out one after the other and fading, on top of the button's own shadow
+   (--chat-shadow); --halo is how far the outer one goes */
 @keyframes chat-halo {
-  0% { box-shadow: var(--chat-shadow, 0 0 transparent), 0 0 0 0 color-mix(in srgb, var(--accent-bg) 55%, transparent); }
-  70%, 100% { box-shadow: var(--chat-shadow, 0 0 transparent), 0 0 0 16px color-mix(in srgb, var(--accent-bg) 0%, transparent); }
+  0% {
+    box-shadow: var(--chat-shadow, 0 0 transparent),
+      0 0 0 0 color-mix(in srgb, var(--accent-bg) 80%, transparent),
+      0 0 0 0 color-mix(in srgb, var(--accent-bg) 50%, transparent);
+  }
+  50% {
+    box-shadow: var(--chat-shadow, 0 0 transparent),
+      0 0 0 calc(var(--halo, 24px) * 0.6) color-mix(in srgb, var(--accent-bg) 30%, transparent),
+      0 0 0 calc(var(--halo, 24px) * 0.25) color-mix(in srgb, var(--accent-bg) 30%, transparent);
+  }
+  100% {
+    box-shadow: var(--chat-shadow, 0 0 transparent),
+      0 0 0 var(--halo, 24px) color-mix(in srgb, var(--accent-bg) 0%, transparent),
+      0 0 0 calc(var(--halo, 24px) * 0.5) color-mix(in srgb, var(--accent-bg) 0%, transparent);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .chat-fab, .callbar .callbar-chat { animation: none; }
@@ -294,6 +312,10 @@ article > .article-meta { margin-bottom: 8px; }
   .chat-fab { display: inline-flex; }
   .chat-fab[hidden] { display: none; }
   .chat-panel { left: auto; right: 24px; bottom: max(24px, var(--keyboard, 0px) + 8px); width: 380px; max-height: calc(100dvh - max(48px, var(--keyboard, 0px) + 16px)); }
+}
+/* From here the centred cookie banner (760px) ends left of the button, so the button stays down */
+@media (min-width: 1240px) {
+  .chat-fab { bottom: 24px; }
 }
 /* A button that looks like the footer links (the "Cookie settings" link) */
 .link-button { padding: 0; border: 0; background: none; font: inherit; color: var(--muted); text-align: start; text-decoration: underline; cursor: pointer; }
@@ -477,12 +499,29 @@ p.discount-note { margin: -8px 0 16px; }
   background: linear-gradient(#0057b7 50%, #ffd700 50%);
   clip-path: polygon(0 0, 100% 0, 72% 50%, 100% 100%, 0 100%);
 }
+/* --name-right / --name-left: how far the name sits from the pole on either side */
+.ua-city { --name-right: 20px; --name-left: 8px; }
 .ua-city-name {
-  position: absolute; left: 20px; bottom: 6px; white-space: nowrap; font-size: 0.85rem; font-weight: 600; line-height: 1.2;
+  position: absolute; left: var(--name-right); bottom: 6px; white-space: nowrap; font-size: 0.85rem; font-weight: 600; line-height: 1.2;
   text-shadow: 0 0 3px var(--bg), 0 0 3px var(--bg), 0 0 3px var(--bg);
 }
-.ua-city-left .ua-city-name { left: auto; right: 8px; }
+.ua-city-left .ua-city-name { left: auto; right: var(--name-left); }
 .ua-city-high .ua-city-name { bottom: 13px; }
+/* MapCities: a name moved to the other side of its flag to fit, and one hidden for lack of room (still read by
+   screen readers), which a tap on the flag shows over the map */
+.ua-city.is-flipped .ua-city-name { left: auto; right: var(--name-left); }
+.ua-city-left.is-flipped .ua-city-name { right: auto; left: var(--name-right); }
+.ua-city.is-hidden .ua-city-name { width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.ua-city-hit {
+  display: none; position: absolute; left: -10px; bottom: -10px; width: 34px; height: 44px;
+  padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.ua-city.is-hidden .ua-city-hit { display: block; }
+.ua-city.is-hidden[data-active] .ua-city-name {
+  width: auto; height: auto; overflow: visible; clip-path: none; z-index: 2;
+  margin: -3px -7px; padding: 2px 6px; border: 1px solid var(--border); border-radius: 6px;
+  background: var(--surface); text-shadow: none; box-shadow: 0 4px 12px rgb(0 0 0 / 0.2);
+}
 /* The workshop: a bigger flag, a pulsing ring and a caption under the name. The ring's border counts in its size
    (pseudo-elements don't get the global border-box), so it stays centred on the point. */
 .ua-workshop::before { background: var(--brand); }
@@ -500,13 +539,14 @@ p.discount-note { margin: -8px 0 16px; }
 .reveal.is-visible .ua-city { opacity: 1; transform: none; }
 @media (max-width: 640px) {
   .ua-map-border { stroke-width: 4; }
-  /* Phones keep the names of the big cities only; the rest show the flag */
-  .ua-city:not(.ua-city-major) .ua-city-name { display: none; }
+  /* Until MapCities has fitted the names, phones show the big cities' only */
+  .ua-map-cities:not(.is-fitted) .ua-city:not(.ua-city-major) .ua-city-name { display: none; }
+  .ua-city { --name-right: 12px; --name-left: 5px; }
   .ua-city::before { left: -2px; top: -2px; width: 4px; height: 4px; }
   .ua-flag { height: 14px; width: 1.5px; }
   .ua-flag::after { left: 1.5px; width: 9px; height: 6px; }
-  .ua-city-name { left: 12px; bottom: 2px; font-size: 0.75rem; }
-  .ua-city-left .ua-city-name { right: 5px; }
+  .ua-city-name { bottom: 2px; font-size: 0.75rem; }
+  .ua-city-hit { width: 32px; height: 34px; }
   .ua-workshop::after { left: -8px; top: -8px; width: 16px; height: 16px; }
   .ua-workshop .ua-flag { height: 20px; }
   .ua-workshop .ua-flag::after { width: 12px; height: 8px; }
@@ -667,9 +707,10 @@ p.discount-note { margin: -8px 0 16px; }
 .rich { max-width: 760px; }
 .rich ul { padding-left: 20px; }
 .rich li { margin-bottom: 6px; }
-/* The footer's link list in two columns, so it isn't much taller than the contacts beside it */
+/* The footer's link list in two columns, so it isn't much taller than the contacts beside it. A word longer than a
+   column on a narrow phone ("конфиденциальности") is hyphenated or broken, so it can't widen the page. */
 .footer nav ul { columns: 2; column-gap: 24px; }
-.footer nav ul li { margin-bottom: 4px; break-inside: avoid; }
+.footer nav ul li { margin-bottom: 4px; break-inside: avoid; hyphens: auto; overflow-wrap: anywhere; }
 /* Plain footer links only: the mobile call bar's buttons are in the footer too and keep their own colors */
 .footer a:not(.btn) { color: var(--muted); }
 .footer a:not(.btn):hover { color: var(--accent); }

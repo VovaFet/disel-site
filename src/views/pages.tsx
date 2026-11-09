@@ -6,7 +6,7 @@ import { FaqList } from "@/components/FaqList";
 import { IntentLink } from "@/components/IntentLink";
 import { JsonLd } from "@/components/JsonLd";
 import { ChatButton } from "@/components/ChatButton";
-import { ContactActions, MessengerLink, PhoneLink, Price, HoursList, PhoneText } from "@/components/Live";
+import { ContactActions, MessengerLink, PhoneLink, Price, HoursList } from "@/components/Live";
 import { OpenStatus } from "@/components/OpenStatus";
 import { PriceAside } from "@/components/PriceAside";
 import { PriceCalculator, type CalcItem } from "@/components/PriceCalculator";
@@ -81,14 +81,11 @@ export async function HomePage({ lang }: { lang: Locale }) {
             <p className="badge">📦 {c.texts.shipping[lang]}</p>
             {c.texts.discount[lang] && <p className="badge badge-discount">{c.texts.discount[lang]}</p>}
             {c.texts.removedOnly[lang] && <p className="notice">{c.texts.removedOnly[lang]}</p>}
+            {/* Calling and writing are in the header, the mobile call bar and the chat button */}
             <div className="actions">
-              <PhoneLink className="btn">
-                {d.book}: <PhoneText />
-              </PhoneLink>
               <Link href={localePath(lang, "/kalkulyator/")} className="btn btn-outline">
                 {d.estimate}
               </Link>
-              <ChatButton className="btn btn-outline" />
             </div>
           </div>
           <HeroImage src={c.trust.heroImage} lang={lang} />
