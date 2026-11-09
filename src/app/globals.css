@@ -506,12 +506,29 @@ p.discount-note { margin: -8px 0 16px; }
   background: linear-gradient(#0057b7 50%, #ffd700 50%);
   clip-path: polygon(0 0, 100% 0, 72% 50%, 100% 100%, 0 100%);
 }
+/* --name-right / --name-left: how far the name sits from the pole on either side */
+.ua-city { --name-right: 20px; --name-left: 8px; }
 .ua-city-name {
-  position: absolute; left: 20px; bottom: 6px; white-space: nowrap; font-size: 0.85rem; font-weight: 600; line-height: 1.2;
+  position: absolute; left: var(--name-right); bottom: 6px; white-space: nowrap; font-size: 0.85rem; font-weight: 600; line-height: 1.2;
   text-shadow: 0 0 3px var(--bg), 0 0 3px var(--bg), 0 0 3px var(--bg);
 }
-.ua-city-left .ua-city-name { left: auto; right: 8px; }
+.ua-city-left .ua-city-name { left: auto; right: var(--name-left); }
 .ua-city-high .ua-city-name { bottom: 13px; }
+/* MapCities: a name moved to the other side of its flag to fit, and one hidden for lack of room (still read by
+   screen readers), which a tap on the flag shows over the map */
+.ua-city.is-flipped .ua-city-name { left: auto; right: var(--name-left); }
+.ua-city-left.is-flipped .ua-city-name { right: auto; left: var(--name-right); }
+.ua-city.is-hidden .ua-city-name { width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.ua-city-hit {
+  display: none; position: absolute; left: -10px; bottom: -10px; width: 34px; height: 44px;
+  padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.ua-city.is-hidden .ua-city-hit { display: block; }
+.ua-city.is-hidden[data-active] .ua-city-name {
+  width: auto; height: auto; overflow: visible; clip-path: none; z-index: 2;
+  margin: -3px -7px; padding: 2px 6px; border: 1px solid var(--border); border-radius: 6px;
+  background: var(--surface); text-shadow: none; box-shadow: 0 4px 12px rgb(0 0 0 / 0.2);
+}
 /* The workshop: a bigger flag, a pulsing ring and a caption under the name. The ring's border counts in its size
    (pseudo-elements don't get the global border-box), so it stays centred on the point. */
 .ua-workshop::before { background: var(--brand); }
@@ -529,13 +546,14 @@ p.discount-note { margin: -8px 0 16px; }
 .reveal.is-visible .ua-city { opacity: 1; transform: none; }
 @media (max-width: 640px) {
   .ua-map-border { stroke-width: 4; }
-  /* Phones keep the names of the big cities only; the rest show the flag */
-  .ua-city:not(.ua-city-major) .ua-city-name { display: none; }
+  /* Until MapCities has fitted the names, phones show the big cities' only */
+  .ua-map-cities:not(.is-fitted) .ua-city:not(.ua-city-major) .ua-city-name { display: none; }
+  .ua-city { --name-right: 12px; --name-left: 5px; }
   .ua-city::before { left: -2px; top: -2px; width: 4px; height: 4px; }
   .ua-flag { height: 14px; width: 1.5px; }
   .ua-flag::after { left: 1.5px; width: 9px; height: 6px; }
-  .ua-city-name { left: 12px; bottom: 2px; font-size: 0.75rem; }
-  .ua-city-left .ua-city-name { right: 5px; }
+  .ua-city-name { bottom: 2px; font-size: 0.75rem; }
+  .ua-city-hit { width: 32px; height: 34px; }
   .ua-workshop::after { left: -8px; top: -8px; width: 16px; height: 16px; }
   .ua-workshop .ua-flag { height: 20px; }
   .ua-workshop .ua-flag::after { width: 12px; height: 8px; }
