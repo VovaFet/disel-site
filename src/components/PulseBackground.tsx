@@ -14,8 +14,9 @@ import { useLive } from "./LiveConfig";
 const gridSize = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--dot-grid")) || 24;
 // Size of the logo's 64-unit grid on the page, in px per unit at the 24px grid: the spike is ~4 dot rows tall
 const UNIT = 7;
-// Beats along a run, on any screen: the gap between them is this share of the width
-const BEATS = 5;
+// Beats along a run: the gap between them is this share of the width, so a run shows about 5 beats on wider
+// screens and 2–3 on phones (below 768px)
+const beatsAcross = (width: number) => (width < 768 ? 3 : 5);
 // How long a lit dot takes to fade, s
 const FADE = 1.1;
 
@@ -48,8 +49,8 @@ type Run = { start: number; dots: Dot[]; end: number };
 function makeRun(width: number, height: number, start: number, pace: number, GRID: number): Run {
   // the spike stays ~4 dot rows tall on a finer grid
   const unit = (UNIT * GRID) / 24;
-  // ~5 beats across the screen; where they don't fit (phones) the beat gets narrower, not lower, down to 60%
-  const gap = width / BEATS;
+  // where a beat doesn't fit in its gap it gets narrower, not lower, down to 60%
+  const gap = width / beatsAcross(width);
   const unitX = Math.max(unit * 0.6, Math.min(unit, (gap - GRID) / beatWidth));
   // any row of the screen; near the top or bottom the spikes may run off the edge
   const y0 = GRID / 2 + Math.floor(Math.random() * Math.max(1, Math.floor(height / GRID))) * GRID;
