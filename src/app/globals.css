@@ -301,6 +301,9 @@ article > .article-meta { margin-bottom: 8px; }
 .chat-privacy { font-size: 0.8rem; }
 .chat-privacy a, .chat-error a { color: var(--accent); }
 .chat-error { color: var(--closed); }
+.chat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chat-chips .chip { min-width: 0; padding: 6px 12px; font-size: 0.85rem; text-align: start; }
+.chat-chips .chip:hover { border-color: var(--accent); color: var(--accent); }
 .chat-field { display: grid; gap: 4px; font-weight: 600; font-size: 0.95rem; }
 .chat-field small { color: var(--muted); font-weight: 400; font-size: inherit; }
 .chat-field input, .chat-field textarea {

@@ -209,6 +209,7 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
           price={services.length > 0 ? <LandingPrice landing={l} /> : undefined}
           note={c.texts.discount[lang]}
           footnote={c.texts.removedOnly[lang]}
+          topic={l.title[lang]}
         />
       </div>
 
@@ -231,7 +232,7 @@ async function LandingPage({ lang, section, slug }: { lang: Locale; section: Lan
         </>
       )}
 
-      <ContactActions label={d.book} />
+      <ContactActions label={d.book} topic={l.title[lang]} />
 
       {services.length > 0 && (
         <section className="related">

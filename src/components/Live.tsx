@@ -45,7 +45,8 @@ export function MessengerLink({ kind, className, children }: { kind: "telegram" 
 
 // Call button with the number spelled out (tel: links do nothing on most desktops)
 // plus messengers and the chat form, so every visitor has a way to get in touch.
-export function ContactActions({ label, className = "actions" }: { label: string; className?: string }) {
+// `topic`: the service or car the page is about, to start the chat message with
+export function ContactActions({ label, className = "actions", topic }: { label: string; className?: string; topic?: string }) {
   return (
     <div className={className}>
       <PhoneLink className="btn">
@@ -60,7 +61,7 @@ export function ContactActions({ label, className = "actions" }: { label: string
       <MessengerLink kind="telegram" className="btn btn-outline">
         Telegram
       </MessengerLink>
-      <ChatButton className="btn btn-outline" />
+      <ChatButton className="btn btn-outline" topic={topic} />
     </div>
   );
 }
