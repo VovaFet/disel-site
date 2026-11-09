@@ -348,6 +348,12 @@ button.btn { font-family: inherit; font-size: inherit; line-height: inherit; cur
 .status-open { color: var(--ok); }
 .status-open .status-dot { animation: pulse 2s infinite; }
 .status-closed { color: var(--closed); }
+/* OpenStatus chat: the "message us" link on its own line under a closed status; the dot stays level with the
+   first line */
+.status-chat { display: block; margin-top: 2px; font-weight: 500; }
+.status:has(.status-chat) { align-items: flex-start; }
+.status:has(.status-chat) .status-dot { margin-top: calc(0.8em - 5px); }
+.status-chat .link-button { color: var(--accent); }
 /* Next to the logo where the header has room, on two lines; the home hero shows it elsewhere */
 .brand { display: flex; align-items: center; gap: 10px; }
 .header-status { display: none; }
